@@ -1,6 +1,6 @@
 package Forms;
 
-import Clases.Persona;
+import Clases.*;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -32,9 +32,9 @@ public final class Login extends javax.swing.JFrame {
         setLocationRelativeTo(null);//Posicion de la ventana en le medio de la ventana
         conexion();//Inicializamos el metodo de conexcion
         cargardatos();
-        mostrar();
+        //mostrar();
     }
-
+    
     //METODO PARA CONECTARME
     public void conexion() {
         try {
@@ -74,7 +74,6 @@ public final class Login extends javax.swing.JFrame {
     //Buscando en la base de datos si el usuario es un doctor 
     public String BuscandobsdDoctores(String usuario, String contraseña) {
         String busqueda_usuario_doctor = null;
-
         try {                                     //para buscar doctor tambien puede servir 
             String sentencia_buscar = ("SELECT nombre FROM doctor WHERE contraseña = '" + contraseña + "'");
             sentencia_preparada = Conectar.prepareStatement(sentencia_buscar);
@@ -95,7 +94,7 @@ public final class Login extends javax.swing.JFrame {
         return busqueda_usuario_doctor;
     }
     //Metodo para cargar las personas y guardar en un arrayList
-    public void cargardatos() {
+    public void cargardatos(){
         try {
             PreparedStatement datos = Conectar.prepareStatement("Select dni,usuario,contraseña,nombre,apellido,fecha_nac,telefono from paciente");
             ResultSet resultado = datos.executeQuery();
@@ -106,9 +105,9 @@ public final class Login extends javax.swing.JFrame {
                 nombre = resultado.getString("nombre");
                 apellido = resultado.getString("apellido");
                 fecha_nac = resultado.getString("fecha_nac");                
-                Date fecha_date = objSDF.parse(fecha_nac);
-                
+                Date fecha_date = objSDF.parse(fecha_nac);                
                 telefono = resultado.getString("telefono");
+                //OBjeto de tipo Cliente
                 Persona personas = new Persona(dni, usuario, contraseña, nombre, apellido, Integer.parseInt(telefono), fecha_date);
                 personas_array.add(personas);
             }
@@ -118,6 +117,8 @@ public final class Login extends javax.swing.JFrame {
     }
     //Metodo mostrar los datos del arrayList
     public void mostrar(){        
+        String usuario=txt_user.getText();
+        String contraseña=Jpf_pass.getText();
         for (Persona persona : personas_array) {         
             System.out.println(persona.getNombre());
             System.out.println(persona.getApellido());
@@ -126,6 +127,14 @@ public final class Login extends javax.swing.JFrame {
             System.out.println(persona.getDNI());
             System.out.println(persona.getFecha_naci());
             System.out.println("---------------------");
+        }
+        for (Persona persona : personas_array) {
+            if(persona instanceof Cliente){//if para ver si es cliente o doctor
+            if(persona.getUsuario().equalsIgnoreCase(usuario) && persona.getContraseña().equalsIgnoreCase(contraseña)){
+                JOptionPane.showMessageDialog(null, "Bienvenido " + persona.getNombre());
+                //Si puede ingresar
+            }
+          }
         }
     }
 
