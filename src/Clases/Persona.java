@@ -1,6 +1,6 @@
 package Clases;
 
-import java.sql.Date;
+import java.util.Date;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 
