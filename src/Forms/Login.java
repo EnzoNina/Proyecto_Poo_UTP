@@ -116,6 +116,8 @@ public final class Login extends javax.swing.JFrame {
         }
     }
     //Metodo mostrar los datos del arrayList
+    //Hola prueba
+    //asdasd
     public void mostrar(){        
         String usuario=txt_user.getText();
         String contraseña=Jpf_pass.getText();
@@ -128,13 +130,14 @@ public final class Login extends javax.swing.JFrame {
             System.out.println(persona.getFecha_naci());
             System.out.println("---------------------");
         }
+        //Verificar si la cuenta existe
         for (Persona persona : personas_array) {
             if(persona instanceof Cliente){//if para ver si es cliente o doctor
             if(persona.getUsuario().equalsIgnoreCase(usuario) && persona.getContraseña().equalsIgnoreCase(contraseña)){
                 JOptionPane.showMessageDialog(null, "Bienvenido " + persona.getNombre());
                 //Si puede ingresar
             }
-          }
+          }            
         }
     }
 
