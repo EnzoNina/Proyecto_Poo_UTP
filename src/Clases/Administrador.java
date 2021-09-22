@@ -5,14 +5,14 @@ public class Administrador {
 
     public Administrador() {
     }
-
-    public void Registar() {
+                                        //claro enviar en un arreglo de arrays list todas las actividades que debe hacer el administrador 
+    public void Registar() {            //que se como un agregacion 
         // TODO implement here
     }
 
 
     public void Ingresar() {
-        // TODO implement here
+        // TODO implement here      ´//personal tega acceso a registrar cita 
     }
 
     public void Mantenimiento_Doctores() {

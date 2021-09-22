@@ -1,7 +1,7 @@
 package Clases;
 import java.util.*;
 
-public class Cliente {
+public class Cliente extends Persona {
 
     public Cliente() {
     }

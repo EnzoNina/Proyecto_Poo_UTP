@@ -1,27 +1,38 @@
 package Clases;
-import java.util.*;
 
-public class Persona {    
+import java.sql.Date;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+
+public class Persona {
+    private String DNI;
     private String Usuario;
     private String Contraseña;
     private String Nombre;
-    private String Apellido;
-    private String Direccion;
+    private String Apellido;    
     private int Numero;
     private Date fecha_naci;
+
     //Constructores
     public Persona() {
-    }  
-    public Persona(String Usuario, String Contraseña, String Nombre, String Apellido, String Direccion, int Numero, Date fecha_naci) {
+    }
+    public Persona(String DNI, String Usuario, String Contraseña, String Nombre, String Apellido, int Numero, Date fecha_naci) {
+        this.DNI = DNI;
         this.Usuario = Usuario;
         this.Contraseña = Contraseña;
         this.Nombre = Nombre;
         this.Apellido = Apellido;
-        this.Direccion = Direccion;
         this.Numero = Numero;
         this.fecha_naci = fecha_naci;
-    }  
+    }      
     //Getter and Setter
+    public String getDNI() {
+        return DNI;
+    }
+
+    public void setDNI(String DNI) {
+        this.DNI = DNI;
+    }
 
     public String getUsuario() {
         return Usuario;
@@ -55,14 +66,6 @@ public class Persona {
         this.Apellido = Apellido;
     }
 
-    public String getDireccion() {
-        return Direccion;
-    }
-
-    public void setDireccion(String Direccion) {
-        this.Direccion = Direccion;
-    }
-
     public int getNumero() {
         return Numero;
     }
@@ -77,10 +80,23 @@ public class Persona {
 
     public void setFecha_naci(Date fecha_naci) {
         this.fecha_naci = fecha_naci;
-    }      
+    }
     //Metodos
-    public void Registrar() {
-        // TODO implement here
+    public void Registrar(String DNI, String Usuario, String Contraseña, String Nombre, String Apellido, String Numero, String fecha_naci) {
+        ResultSet resultado=null;
+        try {                        
+            /*PreparedStatement instruccion = conexion.prepareStatement("INSERT INTO paciente VALUES (?,?,?,?,?,?,?)");
+            instruccion.setString(1, DNI);
+            instruccion.setString(2, Usuario);
+            instruccion.setString(3, Contraseña);
+            instruccion.setString(4, Nombre);
+            instruccion.setString(5, Apellido);
+            instruccion.setString(6, fecha_naci);
+            instruccion.setString(7, Numero);
+            instruccion.executeUpdate();*/
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
     }
 
     public void Ingresar() {

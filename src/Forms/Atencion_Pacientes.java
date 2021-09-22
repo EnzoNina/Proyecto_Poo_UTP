@@ -1,11 +1,18 @@
 package Forms;
+
+import java.sql.Connection;
+
 /**
  -Pensaba que la historia clinica podria ser un arraylist,
  Para ir guardando cada receta y diagnostico
- -Las cuentas tambien podrian ir en un arraylist*/
+ -Las cuentas tambien podrian ir en un arraylist
+ -Creo que este form solo es para ver las citas, al hacer clic a una cita de la jtable te abrira la parte de historia Clinica
+ para que puedas ver la historia clinica y puedas agregar una adicional
+ la parte de fecha supongo que seria la fecha Actual*/
 public class Atencion_Pacientes extends javax.swing.JFrame {
-
-    public Atencion_Pacientes() {
+    static Connection conexion;
+    public Atencion_Pacientes(Connection conectar) {
+        conexion=conectar;
         initComponents();
     }
 
@@ -166,7 +173,7 @@ public class Atencion_Pacientes extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Atencion_Pacientes().setVisible(true);
+                new Atencion_Pacientes(conexion).setVisible(true);
             }
         });
     }

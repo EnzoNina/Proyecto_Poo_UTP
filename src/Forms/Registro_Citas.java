@@ -1,13 +1,18 @@
 package Forms;
+/*
+Estoy probando este codigo todavia
+*/
 
-
+import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Registro_Citas extends javax.swing.JFrame {
-    Date fecha,fecha1,fecha2;
-    SimpleDateFormat objSDF = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-    public Registro_Citas() {
+    static Connection conexion;//por se a acaso para que este en sincronia pongo en statico el objeto conexion para que puede accederlo desde cualquier parte
+    Date fecha,fecha1,fecha2;//objeto de 3 fechas 
+    SimpleDateFormat objSDF = new SimpleDateFormat("yyyy/MM/dd HH:mm");//objeto Data format
+    public Registro_Citas(Connection conectar) {
+        conexion=conectar;//nos conectaamos
         initComponents();
     }
 
@@ -166,7 +171,7 @@ public class Registro_Citas extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Registro_Citas().setVisible(true);
+                new Registro_Citas(conexion).setVisible(true);
             }
         });
     }
