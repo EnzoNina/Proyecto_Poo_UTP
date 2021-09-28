@@ -13,7 +13,7 @@ public class Doctor extends Persona{
     }
 
     public void Ingresar() {
-        
+        //ACA QUE VAYA AL MENU 
     }
 
     public void Busqueda_Atencion_Citas() {
