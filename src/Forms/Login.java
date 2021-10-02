@@ -11,34 +11,32 @@ import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JOptionPane;
 
-public final class Login extends javax.swing.JFrame {
-    SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy");//Creo que se deberia de cambiar el tipo de date en el objeto persona a String para pover ver la fecha en formato 11/10/2018
+public  class Login extends javax.swing.JFrame {
+    //SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy");//Creo que se deberia de cambiar el tipo de date en el objeto persona a String para pover ver la fecha en formato 11/10/2018
     //Atributos
-    ArrayList<Persona> personas_array = new ArrayList<Persona>();//creo lista de personas 
-    String dni, usuario, contraseña, nombre, apellido, fecha_nac, telefono;//datos importantes de la persona 
-    String correcto;
-//DECLARANDO OBJETOS 
+    //String dni, usuario, contraseña, nombre, apellido, fecha_nac, telefono;//datos importantes de la persona 
+    
+//DECLARANDO OBJETOS y datos para conectarme con la bsd 
     public static PreparedStatement sentencia_preparada;
     public static ResultSet resultado;
-    boolean Esdoctor=false;
-    boolean Espaci=false;
-    boolean EsAdmi=false;
-    //
+    static Connection conexion;
+    /**
     String barra = File.separator;    //Separador de ubicacion
     //Direccion de la base de datos
     String url = System.getProperty("user.dir") + barra + "Datos" + barra + "consulta.db";//Get property sirve para obtener la ubicacion el proyecto
     Connection Conectar; //Objeto de conexion para conectarnos con la base de datos  UBICA DONDE ESTA UBICADO LA BASE DE DATOS 
+    **/
     //CONSTRCUTOR 
 
-    public Login() {
+    public Login(Connection conectar) {
         initComponents();
         setLocationRelativeTo(null);//Posicion de la ventana en le medio de la ventana
-        conexion();//Inicializamos el metodo de conexcion
-        //cargardatos();
-        //mostrar();
+        conexion=conectar;
+        
     }
     
     //METODO PARA CONECTARME
+    /**
     public void conexion() {
         try {
             Class.forName("org.sqlite.JDBC");//Clase para corregir el error de la base de datos //este da a entender más la unión a la base de datos para que el prigrma nose paltee
@@ -50,56 +48,64 @@ public final class Login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e.getMessage().toString());
         }
     }
+    * */
 
     //buscando usuario en la base de datos VERIFICANDO 
-    public String verificando_paciente(String usuario, String contraseña) {//verifico si es un paciente 
+    public void verificando_paciente(String usuario, String contraseña) {//verifico si es un paciente 
         String busqueda_usuario = null;
 
         try {//para buscar doctor tambien puede servir 
-            String Buscando_usuario = ("SELECT usuario FROM paciente WHERE contraseña = '" + contraseña + "'");
-            sentencia_preparada = Conectar.prepareStatement(Buscando_usuario);//preparandpsentencia buscando
+            String Buscando_paciente = ("SELECT usuario FROM paciente WHERE contraseña = '" + contraseña + "'");
+            sentencia_preparada = conexion.prepareStatement(Buscando_paciente);//preparandpsentencia buscando
             resultado = sentencia_preparada.executeQuery();//botamos el resultado
             //condicion 
             if (resultado.next()) {
 
-                String Nombre = resultado.getString("nombre");
-                busqueda_usuario = ("Bienvenido " + Nombre);
-                Espaci = true;
-            } else {
-                busqueda_usuario = verificando_Doctor(usuario, contraseña);
+                String Nombre_usuario = resultado.getString("usuario");
+                busqueda_usuario = ("Bienvenido " + Nombre_usuario);
+                JOptionPane.showMessageDialog(null, busqueda_usuario);
+                //INGRESA AL JFRAME 
+                Atencion_Pacientes objregistro = new Atencion_Pacientes(conexion);
+                objregistro.setVisible(true);
+                this.dispose();
             }
+            else
+                JOptionPane.showMessageDialog(null,"Usted no se encuentra registrado");
         } catch (Exception e) {
             System.out.println(e);
         }
-        return busqueda_usuario;
+        //return busqueda_usuario;
     }
 
     //Buscando en la base de datos si el usuario es un doctor 
-    public String verificando_Doctor(String usuario, String contraseña) {
+    public void verificando_Doctor(String usuario, String contraseña) {
         String busqueda_usuario_doctor = null;
         try {                                     //para buscar doctor tambien puede servir 
-            String sentencia_buscar = ("SELECT nombre FROM doctor WHERE usuario = '" + usuario + "' && contraseña = '"+contraseña+"'");
-            sentencia_preparada = Conectar.prepareStatement(sentencia_buscar);
+            String sentencia_buscar = ("SELECT usuario FROM doctor WHERE usuario = '" + usuario + "' AND contraseña = '"+contraseña+"'");
+            sentencia_preparada = conexion.prepareStatement(sentencia_buscar);
             resultado = sentencia_preparada.executeQuery();
             //condicion 
             if (resultado.next()) {
 
-                String Nombre = resultado.getString("nombre");
-                busqueda_usuario_doctor = ("Bienvenido Doctor " + Nombre);//CREO UN OBJETO DOCTOR ESTE DESPUE LLAMO AL METODO CARAGARDATOSDELDOCTOR Y PORFIN LO COMPLETO Y ASI ESTE PUEDE FUNCIONAR 
-                Esdoctor = true; 
+                String nombre = resultado.getString("usuario");
+                busqueda_usuario_doctor = ("Bienvenido Doctor " + nombre);//CREO UN OBJETO DOCTOR ESTE DESPUE LLAMO AL METODO CARAGARDATOSDELDOCTOR Y PORFIN LO COMPLETO Y ASI ESTE PUEDE FUNCIONAR 
+                JOptionPane.showMessageDialog(null,busqueda_usuario_doctor);
+                //ingresando al jframe
+                Registro_Citas objregistrar = new Registro_Citas(conexion);//si no es doctor ,es un paciente
+                objregistrar.setVisible(true);
+                this.dispose();
                 
-                //CLARO AQUI CREAR UN OBJETO QUE ES DE DOCTOR 
-            } else {
-                busqueda_usuario_doctor =  VerificandoAdministrador(usuario, contraseña);
-                
-            }
+            } 
+            else
+                JOptionPane.showMessageDialog(null,"Usted no se encuentra registrado");
 
         } catch (Exception e) {
             System.out.println(e);
         }
-        return busqueda_usuario_doctor;
+        
     }
     //Metodo para cargar las personas y guardar en un arrayList
+    /**
     public void cargardatos(){
         try {
             PreparedStatement datos = Conectar.prepareStatement("Select dni,usuario,contraseña,nombre,apellido,fecha_nac,telefono from paciente");//SELECCIONO LA TABLA Y LOS CAMPOS 
@@ -115,29 +121,34 @@ public final class Login extends javax.swing.JFrame {
                 telefono = resultado.getString("telefono");
                 //OBjeto de tipo Cliente
                 Persona personas = new Persona(dni, usuario, contraseña, nombre, apellido, Integer.parseInt(telefono), fecha_date);
-                personas_array.add(personas);
+               // personas_array.add(personas);
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage().toString());
         }
     }
+    * */
     //Metodo mostrar los datos del arrayList
     //Hola prueba
     //asdasd
     //MIRANDO SI ES UN Administrador 
-    public String VerificandoAdministrador(String usuario, String contraseña) {
+    public void VerificandoAdministrador(String usuario, String contraseña) {
         String busqueda_usuario_Administrador = null;
         try {                                     //para buscar Administrador puede servir 
-            String sentencia_buscar_Admin = ("SELECT nombre FROM doctor WHERE Administrador = '" + usuario + "' && contraseña = '"+contraseña+"'");
-            sentencia_preparada = Conectar.prepareStatement(sentencia_buscar_Admin);
+            String sentencia_buscar_Admin = ("SELECT usuario FROM Administrador WHERE usuario = '" + usuario + "' AND contraseña = '"+contraseña+"'");
+            sentencia_preparada = conexion.prepareStatement(sentencia_buscar_Admin);
             resultado = sentencia_preparada.executeQuery();
             //condicion 
             if (resultado.next()) {
 
-                String Nombreadmi = resultado.getString("nombre");
+                String Nombreadmi = resultado.getString("usuario");
                 busqueda_usuario_Administrador = ("Bienvenido Admi " + Nombreadmi);//CREO UN OBJETO DOCTOR ESTE DESPUE LLAMO AL METODO CARAGARDATOSDELDOCTOR Y PORFIN LO COMPLETO Y ASI ESTE PUEDE FUNCIONAR 
-                EsAdmi = true;                                            //CLARO AQUI CREAR UN OBJETO QUE ES DE DOCTOR 
-                                                                          //yase haga el metodo publico static  para oftewner el objeto que a entrado y poder usarlo identificado que usuarioe es
+                //mostrando mensaje
+                JOptionPane.showMessageDialog(null, busqueda_usuario_Administrador);                                                    //CLARO AQUI CREAR UN OBJETO QUE ES DE DOCTOR 
+                // ingresando  //yase haga el metodo publico static  para oftewner el objeto que a entrado y poder usarlo identificado que usuarioe es
+                Menu objmenu = new Menu(conexion);
+                objmenu.setVisible(true);
+                this.dispose(); 
             }                                                             //o lo creo defrente porque,ya lo identifque ya 
             else
             {
@@ -147,7 +158,7 @@ public final class Login extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println(e);
         }
-        return busqueda_usuario_Administrador;
+        
     }
     
     
@@ -266,7 +277,7 @@ public final class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_crear_cuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_crear_cuentaActionPerformed
-        Registrar ob_regis = new Registrar(Conectar);//Paamos el objeto conexion para no tener que repetir el codigo
+        Registrar ob_regis = new Registrar(conexion);//Paamos el objeto conexion para no tener que repetir el codigo
         ob_regis.setVisible(true); //Hacemos visible la ventand de Registrar
         this.dispose();//Cerramos esta ventana ademas ahorramos ram
     }//GEN-LAST:event_btn_crear_cuentaActionPerformed
@@ -276,22 +287,32 @@ public final class Login extends javax.swing.JFrame {
         //introduciendo datos 
         String usuario = txt_user.getText();
         String contraseña = Jpf_pass.getText();
+        //objpersona 
+        Persona objpersona1=new Persona();
+        
         //llamando metodos 
-        JOptionPane.showMessageDialog(null, verificando_paciente(usuario, contraseña));
+        //JOptionPane.showMessageDialog(null, verificando_paciente(usuario, contraseña));
         //condicionparaver si es doctor 
-        if (Espaci) {
-            Atencion_Pacientes objregistro = new Atencion_Pacientes(Conectar);
-            objregistro.setVisible(true);
-            this.dispose();
-        } else if (Esdoctor) {
-            Registro_Citas objregistrar = new Registro_Citas(Conectar);//si no es doctor ,es un paciente
-            objregistrar.setVisible(true);
-            this.dispose();
-        } else if(EsAdmi){
-           Menu objmenu = new Menu(Conectar);
-           objmenu.setVisible(true);
-           this.dispose(); 
+        
+        switch(PreguntandoUsuario.cadena)
+        {
+            case "Admi":this.VerificandoAdministrador(usuario, contraseña);break;
+            case "Doctor":this.verificando_Doctor(usuario, contraseña);break;
+            case "Paciente":this.verificando_paciente(usuario, contraseña);break;
+            default:System.out.println("nO SE ENCINTRO");
         }
+        /**if (objpersona1.getPaciente()) 
+            this.verificando_paciente(usuario, contraseña);
+            
+        if (objpersona1.getdoctor()) 
+            this.verificando_Doctor(usuario, contraseña);                                               //verifico si esta en la base de datos 
+            
+         if(objpersona1.getAdmi()){
+            //verifico si esta en la base de datos 
+            this.VerificandoAdministrador(usuario, contraseña);
+        }
+        **/
+        
        
         //*Registrar ob_registrar = new Registrar(Conectar);
         //ob_registrar.setVisible(true);
@@ -321,7 +342,7 @@ public final class Login extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Login().setVisible(true);
+                new Login(conexion).setVisible(true);
             }
         });
     }

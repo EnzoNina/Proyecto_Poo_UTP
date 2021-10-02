@@ -201,7 +201,7 @@ public class Registrar extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        Login ob_lo=new Login();
+        Login ob_lo=new Login(conexion);
         ob_lo.setVisible(true);//Regresar a la ventada de Login
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
