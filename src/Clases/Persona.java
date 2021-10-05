@@ -12,8 +12,8 @@ public class Persona {
     private String Apellido;    
     private int Numero;
     private Date fecha_naci;
-//las personas de este sistema pueden ser el siguiente 
-    private  boolean Esdoctor ; //primero son falsos 
+    //las personas de este sistema pueden ser el siguiente 
+    private boolean Esdoctor ; //primero son falsos 
     private boolean Espaciente=false;
     private boolean EsAdmi;
     //Constructores

@@ -16,16 +16,18 @@ public class Mante_doc extends javax.swing.JFrame {
     }
     public void agregar(){
         try {
-            PreparedStatement agregar= conexion.prepareCall("insert into doctor values (?,?,?,?,?,?)");//Sentencia para insertar nuevos doctores
+            PreparedStatement agregar= conexion.prepareStatement("insert into doctor values (?,?,?,?,?,?)");//Sentencia para insertar nuevos doctores
             agregar.setString(1, txt_mante_cod.getText());
             agregar.setString(2, txt_usuario.getText());
             agregar.setString(3, txt_contraseña.getText());
             agregar.setString(4, txt_mante_nombre.getText());
             agregar.setString(5, txt_mante_apell.getText());
             agregar.setString(6, txt_mante_distr.getText());
+            agregar.executeUpdate();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage().toString());
         }
+        mostrar();
     }
     public void mostrar()
     {        
@@ -61,6 +63,16 @@ public class Mante_doc extends javax.swing.JFrame {
                                           + "Inténtelo nuevamente.", "Error en la operación", 
                                           JOptionPane.ERROR_MESSAGE);        
         }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage().toString());
+        }
+        mostrar();
+    }
+    public void eliminar(){
+        try {
+            PreparedStatement eliminar=conexion.prepareStatement("delete from doctor where codigo=?");
+            eliminar.setString(1,txt_mante_cod.getText());
+            eliminar.executeUpdate();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage().toString());
         }
@@ -131,6 +143,11 @@ public class Mante_doc extends javax.swing.JFrame {
         });
 
         btn_eliminar.setText("Eliminar");
+        btn_eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_eliminarActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Usuario");
 
@@ -251,8 +268,12 @@ public class Mante_doc extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_editarActionPerformed
 
     private void btn_agregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_agregarActionPerformed
-        // TODO add your handling code here:
+        agregar();
     }//GEN-LAST:event_btn_agregarActionPerformed
+
+    private void btn_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminarActionPerformed
+        eliminar();
+    }//GEN-LAST:event_btn_eliminarActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

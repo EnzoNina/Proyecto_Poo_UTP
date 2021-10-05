@@ -1,5 +1,5 @@
 package Forms;
-
+//Adjuntar el scrip de la base de datos en un bloc de notas
 import Clases.*;
 import java.io.File;
 import java.sql.Connection;

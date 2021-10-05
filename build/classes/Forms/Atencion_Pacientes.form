@@ -65,8 +65,8 @@
                                   </Group>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="jDateChooser1" min="-2" pref="184" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="jdate_chooser" min="-2" pref="188" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -100,14 +100,18 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                          <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
                               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                              <Component id="jDateChooser1" min="-2" max="-2" attributes="0"/>
+                              <Component id="jdate_chooser" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="txt_ate_dni" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -133,7 +137,6 @@
                               <Component id="txt_ate_receta" min="-2" pref="107" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
                   <Component id="jButton1" min="-2" max="-2" attributes="0"/>
@@ -199,7 +202,7 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="com.toedter.calendar.JDateChooser" name="jDateChooser1">
+        <Component class="com.toedter.calendar.JDateChooser" name="jdate_chooser">
         </Component>
       </SubComponents>
     </Container>
