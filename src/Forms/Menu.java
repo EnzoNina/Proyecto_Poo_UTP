@@ -14,29 +14,14 @@ public class Menu extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        lbl_atencion_cliente = new javax.swing.JLabel();
-        lbl_registro_cita = new javax.swing.JLabel();
         lbl_mante_doctor = new javax.swing.JLabel();
         lbl_mante_cliente = new javax.swing.JLabel();
         btn_salir = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-
-        lbl_atencion_cliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/1.png"))); // NOI18N
-        lbl_atencion_cliente.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lbl_atencion_clienteMouseClicked(evt);
-            }
-        });
-
-        lbl_registro_cita.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/2.png"))); // NOI18N
-        lbl_registro_cita.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lbl_registro_citaMouseClicked(evt);
-            }
-        });
 
         lbl_mante_doctor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/3.png"))); // NOI18N
         lbl_mante_doctor.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -54,35 +39,33 @@ public class Menu extends javax.swing.JFrame {
 
         btn_salir.setText("SALIR");
 
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/5.png"))); // NOI18N
+        jLabel1.setText("jLabel1");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lbl_atencion_cliente)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lbl_registro_cita))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lbl_mante_doctor)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lbl_mante_cliente)))
-                .addContainerGap(12, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btn_salir)
                 .addGap(65, 65, 65))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lbl_mante_doctor)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbl_mante_cliente)
+                .addContainerGap(12, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbl_registro_cita)
-                    .addComponent(lbl_atencion_cliente))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(31, 31, 31)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lbl_mante_doctor)
                     .addComponent(lbl_mante_cliente))
@@ -104,18 +87,6 @@ public class Menu extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void lbl_atencion_clienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_atencion_clienteMouseClicked
-        Atencion_Pacientes ob_ate= new Atencion_Pacientes(conexion);
-        ob_ate.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_lbl_atencion_clienteMouseClicked
-
-    private void lbl_registro_citaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_registro_citaMouseClicked
-        Registro_Citas ob_cita= new Registro_Citas(conexion);
-        ob_cita.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_lbl_registro_citaMouseClicked
 
     private void lbl_mante_doctorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_mante_doctorMouseClicked
         Mante_doc ob_doc= new Mante_doc(conexion);
@@ -164,10 +135,9 @@ public class Menu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_salir;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel lbl_atencion_cliente;
     private javax.swing.JLabel lbl_mante_cliente;
     private javax.swing.JLabel lbl_mante_doctor;
-    private javax.swing.JLabel lbl_registro_cita;
     // End of variables declaration//GEN-END:variables
 }
