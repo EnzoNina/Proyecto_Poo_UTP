@@ -13,9 +13,9 @@ public class Persona {
     private int Numero;
     private Date fecha_naci;
     //las personas de este sistema pueden ser el siguiente 
-    private boolean Esdoctor ; //primero son falsos 
+    private boolean Esdoctor=false ; //primero son falsos 
     private boolean Espaciente=false;
-    private boolean EsAdmi;
+    private boolean EsAdmi=false;
     //Constructores
     public Persona() {
     }

@@ -81,13 +81,13 @@ public  class Login extends javax.swing.JFrame {
     public void verificando_Doctor(String usuario, String contraseña) {
         String busqueda_usuario_doctor = null;
         try {                                     //para buscar doctor tambien puede servir 
-            String sentencia_buscar = ("SELECT usuario FROM doctor WHERE usuario = '" + usuario + "' AND contraseña = '"+contraseña+"'");
+            String sentencia_buscar = ("SELECT Usuario FROM doctor WHERE Usuario = '" + usuario + "' AND Contraseña = '"+contraseña+"'");
             sentencia_preparada = conexion.prepareStatement(sentencia_buscar);
             resultado = sentencia_preparada.executeQuery();
             //condicion 
             if (resultado.next()) {
 
-                String nombre = resultado.getString("usuario");
+                String nombre = resultado.getString("Usuario");
                 busqueda_usuario_doctor = ("Bienvenido Doctor " + nombre);//CREO UN OBJETO DOCTOR ESTE DESPUE LLAMO AL METODO CARAGARDATOSDELDOCTOR Y PORFIN LO COMPLETO Y ASI ESTE PUEDE FUNCIONAR 
                 JOptionPane.showMessageDialog(null,busqueda_usuario_doctor);
                 //ingresando al jframe
@@ -105,29 +105,8 @@ public  class Login extends javax.swing.JFrame {
         
     }
     //Metodo para cargar las personas y guardar en un arrayList
-    /**
-    public void cargardatos(){
-        try {
-            PreparedStatement datos = Conectar.prepareStatement("Select dni,usuario,contraseña,nombre,apellido,fecha_nac,telefono from paciente");//SELECCIONO LA TABLA Y LOS CAMPOS 
-            ResultSet resultado = datos.executeQuery();//EXTRAIGO LOS DATOS DE LA BASE DE DATOS 
-            while (resultado.next()) {
-                dni = resultado.getString("dni");
-                usuario = resultado.getString("usuario");
-                contraseña = resultado.getString("contraseña");
-                nombre = resultado.getString("nombre");
-                apellido = resultado.getString("apellido");
-                fecha_nac = resultado.getString("fecha_nac");                
-                Date fecha_date = objSDF.parse(fecha_nac);                
-                telefono = resultado.getString("telefono");
-                //OBjeto de tipo Cliente
-                Persona personas = new Persona(dni, usuario, contraseña, nombre, apellido, Integer.parseInt(telefono), fecha_date);
-               // personas_array.add(personas);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage().toString());
-        }
-    }
-    * */
+   
+    
     //Metodo mostrar los datos del arrayList
     //Hola prueba
     //asdasd
