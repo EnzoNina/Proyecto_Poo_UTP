@@ -1,13 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Forms;
 //Importaciones
 import java.sql.Connection;
 import Clases.*;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -48,13 +45,35 @@ public final class PreguntandoUsuario extends javax.swing.JFrame {
     }
     
     //METODO PARA CONECTARME
-    public void conexion() {
+    public void conexion() {        
+        String nombre = System.getProperty("user.dir") + barra + "Datos" + barra + "base_datos_scrip.txt";
+        BufferedReader br = null;
         try {
+            //Crear un objeto BufferedReader al que se le pasa 
+           //   un objeto FileReader con el nombre del fichero
+           br = new BufferedReader(new FileReader(nombre));
+           //Leer la primera línea, guardando en un String
+           String texto = br.readLine();
+           //Repetir mientras no se llegue al final del fichero
+           while(texto != null)
+           {
+               //Hacer lo que sea con la línea leída
+               System.out.println(texto);
+               //Leer la siguiente línea
+               texto = br.readLine();
+           }
             Class.forName("org.sqlite.JDBC");//Clase para corregir el error de la base de datos //este da a entender más la unión a la base de datos para que el prigrma nose paltee
             Conectar = DriverManager.getConnection("jdbc:sqlite:" + url, "root", "");//Hacemos conexion con la base de datos, el root es para entrar como administrador
             if (Conectar != null) {
                 System.out.println("Conectado");//Si la conexcion es exitosa nos muestra el mensaje
             }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage().toString());
+        }
+    }
+    public void scrip(){
+        try {
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage().toString());
         }

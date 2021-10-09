@@ -1,0 +1,58 @@
+CREATE TABLE Administrador (
+    id         CHAR (3)  NOT NULL,
+    usuario    CHAR (12) NOT NULL,
+    contraseña CHAR (15) NOT NULL,
+    PRIMARY KEY (
+        id
+    )
+);
+CREATE TABLE cita (
+    nro_cita    [INT IDENTITY] (1, 1) PRIMARY KEY,
+    cod_doctor  CHAR (5)              NOT NULL,
+    dni_cliente CHAR (8)              NOT NULL,
+    fecha_hora  DATETIME              NOT NULL,
+    estado      BOOLEAN               NOT NULL,
+    CONSTRAINT fk_cliente_cita FOREIGN KEY (
+        dni_cliente
+    )
+    REFERENCES paciente (dni),
+    CONSTRAINT fk_doctor_cita FOREIGN KEY (
+        cod_doctor
+    )
+    REFERENCES doctor (codigo) 
+);
+CREATE TABLE doctor (
+    codigo     CHAR (5)     NOT NULL,
+    Usuario    INTEGER      NOT NULL,
+    Contraseña INTEGER      NOT NULL,
+    nombre     VARCHAR (20) NOT NULL,
+    apellido   VARCHAR (20) NOT NULL,
+    distrito   VARCHAR (20) NOT NULL,
+    PRIMARY KEY (
+        codigo
+    )
+);
+CREATE TABLE historia_clinica (
+    nro_historia [INT IDENTITY] (1, 1),
+    dni_cliente  CHAR (8)              NOT NULL,
+    diagnostico  VARCHAR (255)         NOT NULL,
+    receta       VARCHAR (255)         NOT NULL,
+    Fecha        DATE                  NOT NULL,
+    PRIMARY KEY (
+        nro_historia
+    ),
+    CONSTRAINT fk_cliente_cl FOREIGN KEY (
+        dni_cliente
+    )
+    REFERENCES paciente (dni) 
+);
+CREATE TABLE paciente (
+    dni        CHAR (8)     NOT NULL
+                            PRIMARY KEY,
+    usuario    VARCHAR (20) NOT NULL,
+    contraseña VARCHAR (20) NOT NULL,
+    nombre     VARCHAR (20) NOT NULL,
+    apellido   VARCHAR (20) NOT NULL,
+    fecha_nac  DATE         NOT NULL,
+    telefono   CHAR (9) 
+);
