@@ -76,9 +76,9 @@
                           <Component id="labelpaciente" min="-2" pref="248" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
-                  <Component id="labeldoctor" min="-2" pref="227" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
+                  <Component id="labeldoctor" min="-2" pref="230" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -89,9 +89,11 @@
                   <Component id="jLabel5" min="-2" pref="57" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="labeldoctor" min="-2" pref="233" max="-2" attributes="0"/>
-                      <Component id="labelpaciente" min="-2" pref="241" max="-2" attributes="0"/>
-                      <Component id="labelAdmi" alignment="0" max="32767" attributes="0"/>
+                      <Component id="labeldoctor" pref="0" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="labelpaciente" min="-2" pref="241" max="-2" attributes="0"/>
+                          <Component id="labelAdmi" alignment="0" max="32767" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace pref="169" max="32767" attributes="0"/>
               </Group>
@@ -124,7 +126,7 @@
         <Component class="javax.swing.JLabel" name="labeldoctor">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/Icon/pacient.jpg"/>
+              <Image iconType="3" name="/Icon/doctors.jpg"/>
             </Property>
           </Properties>
           <Events>
@@ -140,7 +142,7 @@
               <Color blue="33" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/Icon/doctors.jpg"/>
+              <Image iconType="3" name="/Icon/pacient.jpg"/>
             </Property>
           </Properties>
           <Events>

@@ -19,7 +19,7 @@ CREATE TABLE cita (
     CONSTRAINT fk_doctor_cita FOREIGN KEY (
         cod_doctor
     )
-    REFERENCES doctor (codigo) 
+    REFERENCES doctor (dni) 
 );
 CREATE TABLE doctor (
     codigo     CHAR (5)     NOT NULL,

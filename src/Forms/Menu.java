@@ -111,9 +111,9 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_lbl_mante_clienteMouseClicked
 
     private void Manteni_citasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Manteni_citasMouseClicked
-        // objeto 
-       // Manteni_cl objcita=Manteni_citas(conexion);
-        
+        Mante_Citas ob_mante=new Mante_Citas(conexion);
+        ob_mante.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_Manteni_citasMouseClicked
 
     public static void main(String args[]) {

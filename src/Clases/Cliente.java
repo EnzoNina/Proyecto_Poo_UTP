@@ -3,6 +3,10 @@ import java.util.*;
 
 public class Cliente extends Persona {
 
+    public Cliente(String DNI, String Usuario, String Contraseña, String Nombre, String Apellido, int Numero, Date fecha_naci) {
+        super(DNI, Usuario, Contraseña, Nombre, Apellido, Numero, fecha_naci);
+    }
+    
     public Cliente() {
     }
 

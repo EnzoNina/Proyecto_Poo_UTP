@@ -109,7 +109,7 @@ public final class PreguntandoUsuario extends javax.swing.JFrame {
             }
         });
 
-        labeldoctor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/pacient.jpg"))); // NOI18N
+        labeldoctor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/doctors.jpg"))); // NOI18N
         labeldoctor.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 labeldoctorMouseClicked(evt);
@@ -118,7 +118,7 @@ public final class PreguntandoUsuario extends javax.swing.JFrame {
 
         labelpaciente.setBackground(new java.awt.Color(255, 255, 0));
         labelpaciente.setForeground(new java.awt.Color(255, 255, 51));
-        labelpaciente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/doctors.jpg"))); // NOI18N
+        labelpaciente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/pacient.jpg"))); // NOI18N
         labelpaciente.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 labelpacienteMouseClicked(evt);
@@ -137,9 +137,9 @@ public final class PreguntandoUsuario extends javax.swing.JFrame {
                         .addComponent(labelAdmi, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(43, 43, 43)
                         .addComponent(labelpaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(41, 41, 41)
-                .addComponent(labeldoctor, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36))
+                .addGap(39, 39, 39)
+                .addComponent(labeldoctor, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(35, 35, 35))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -148,9 +148,10 @@ public final class PreguntandoUsuario extends javax.swing.JFrame {
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(labeldoctor, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelpaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelAdmi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(labeldoctor, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(labelpaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(labelAdmi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(169, Short.MAX_VALUE))
         );
 

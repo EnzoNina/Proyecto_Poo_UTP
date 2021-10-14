@@ -11,49 +11,26 @@ import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JOptionPane;
 
-public  class Login extends javax.swing.JFrame {
-    //SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy");//Creo que se deberia de cambiar el tipo de date en el objeto persona a String para pover ver la fecha en formato 11/10/2018
-    //Atributos
-    //String dni, usuario, contraseña, nombre, apellido, fecha_nac, telefono;//datos importantes de la persona 
-    
+public  class Login extends javax.swing.JFrame {        
 //DECLARANDO OBJETOS y datos para conectarme con la bsd 
     public static PreparedStatement sentencia_preparada;
     public static ResultSet resultado;
-    static Connection conexion;
-    /**
-    String barra = File.separator;    //Separador de ubicacion
-    //Direccion de la base de datos
-    String url = System.getProperty("user.dir") + barra + "Datos" + barra + "consulta.db";//Get property sirve para obtener la ubicacion el proyecto
-    Connection Conectar; //Objeto de conexion para conectarnos con la base de datos  UBICA DONDE ESTA UBICADO LA BASE DE DATOS 
-    **/
+    static Connection conexion;    
+    ArrayList<Persona> personas_array = new ArrayList<Persona>();
     //CONSTRCUTOR 
-
+    public void cargar(){
+        
+    }
     public Login(Connection conectar) {
         initComponents();
         setLocationRelativeTo(null);//Posicion de la ventana en le medio de la ventana
         conexion=conectar;
         
-    }
-    
-    //METODO PARA CONECTARME
-    /**
-    public void conexion() {
-        try {
-            Class.forName("org.sqlite.JDBC");//Clase para corregir el error de la base de datos //este da a entender más la unión a la base de datos para que el prigrma nose paltee
-            Conectar = DriverManager.getConnection("jdbc:sqlite:" + url, "root", "");//Hacemos conexion con la base de datos, el root es para entrar como administrador
-            if (Conectar != null) {
-                System.out.println("Conectado");//Si la conexcion es exitosa nos muestra el mensaje
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage().toString());
-        }
-    }
-    * */
-
+    }    
     //buscando usuario en la base de datos VERIFICANDO 
     public void verificando_paciente(String usuario, String contraseña) {//verifico si es un paciente 
         String busqueda_usuario = null;
-
+        //Verificar
         try {//para buscar doctor tambien puede servir 
             String Buscando_paciente = ("SELECT usuario FROM paciente WHERE contraseña = '" + contraseña + "'");
             sentencia_preparada = conexion.prepareStatement(Buscando_paciente);//preparandpsentencia buscando
@@ -65,7 +42,7 @@ public  class Login extends javax.swing.JFrame {
                 busqueda_usuario = ("Bienvenido " + Nombre_usuario);
                 JOptionPane.showMessageDialog(null, busqueda_usuario);
                 //INGRESA AL JFRAME 
-                Atencion_Pacientes objregistro = new Atencion_Pacientes(conexion);
+                Registro_Citas objregistro = new Registro_Citas(conexion);
                 objregistro.setVisible(true);
                 this.dispose();
             }
@@ -74,42 +51,74 @@ public  class Login extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println(e);
         }
-        //return busqueda_usuario;
+        //Agregar a ArrayList
+        try {
+            PreparedStatement datos = conexion.prepareStatement("Select dni,usuario,contraseña,nombre,apellido,fecha_nac,telefono from paciente");
+            ResultSet resultado=datos.executeQuery();
+            while(resultado.next())
+            {
+                String dni=resultado.getString("dni");
+                String usuario_lista=resultado.getString("usuario");
+                String contraseña_lista=resultado.getString("contraseña");
+                String nombre=resultado.getString("nombre");
+                String apellido=resultado.getString("apellido");
+                String fecha_nac=resultado.getString("fecha_nac");
+                SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy");
+                Date fecha_date=objSDF.parse(fecha_nac);
+                String telefono=resultado.getString("telefono");
+                Cliente personas =new Cliente(dni, usuario, contraseña, nombre, apellido,Integer.parseInt(telefono), fecha_date);
+                personas_array.add(personas);                
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage().toString());
+        }
     }
-
+    
     //Buscando en la base de datos si el usuario es un doctor 
     public void verificando_Doctor(String usuario, String contraseña) {
         String busqueda_usuario_doctor = null;
-        try {                                     //para buscar doctor tambien puede servir 
+        try {//para buscar doctor tambien puede servir 
             String sentencia_buscar = ("SELECT Usuario FROM doctor WHERE Usuario = '" + usuario + "' AND Contraseña = '"+contraseña+"'");
             sentencia_preparada = conexion.prepareStatement(sentencia_buscar);
             resultado = sentencia_preparada.executeQuery();
             //condicion 
             if (resultado.next()) {
-
                 String nombre = resultado.getString("Usuario");
                 busqueda_usuario_doctor = ("Bienvenido Doctor " + nombre);//CREO UN OBJETO DOCTOR ESTE DESPUE LLAMO AL METODO CARAGARDATOSDELDOCTOR Y PORFIN LO COMPLETO Y ASI ESTE PUEDE FUNCIONAR 
                 JOptionPane.showMessageDialog(null,busqueda_usuario_doctor);
                 //ingresando al jframe
-                Registro_Citas objregistrar = new Registro_Citas(conexion);//si no es doctor ,es un paciente
-                objregistrar.setVisible(true);
-                this.dispose();
-                
+                Atencion_Pacientes objPacientes = new Atencion_Pacientes(conexion);//si no es doctor ,es un paciente
+                objPacientes.setVisible(true);
+                this.dispose();                
             } 
             else
                 JOptionPane.showMessageDialog(null,"Usted no se encuentra registrado");
-
         } catch (Exception e) {
             System.out.println(e);
         }
-        
+        //Agregando a lista
+        try {
+            PreparedStatement datos = conexion.prepareStatement("Select dni,usuario,contraseña,nombre,apellido,fecha_nac,telefono,distrito from doctor");
+            ResultSet resultado=datos.executeQuery();
+            while(resultado.next())
+            {
+                String dni=resultado.getString("dni");
+                String usuario_lista=resultado.getString("usuario");
+                String contraseña_lista=resultado.getString("contraseña");
+                String nombre=resultado.getString("nombre");
+                String apellido=resultado.getString("apellido");
+                String fecha_nac=resultado.getString("fecha_nac");
+                SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy");
+                Date fecha_date=objSDF.parse(fecha_nac);
+                String telefono=resultado.getString("telefono");
+                String distrito=resultado.getString("distrito");
+                Doctor doctores =new Doctor(dni, usuario_lista, contraseña_lista, nombre, apellido,fecha_date,Integer.parseInt(telefono),distrito);
+                personas_array.add(doctores);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage().toString());
+        }
     }
-    //Metodo para cargar las personas y guardar en un arrayList
-   
-    
-    //Metodo mostrar los datos del arrayList
-    //Hola prueba
-    //asdasd
     //MIRANDO SI ES UN Administrador 
     public void VerificandoAdministrador(String usuario, String contraseña) {
         String busqueda_usuario_Administrador = null;

@@ -12,7 +12,7 @@ public class Administrador {
 
 
     public void Ingresar() {
-        // TODO implement here      ´//personal tega acceso a registrar cita 
+        // TODO implement here      //personal tega acceso a registrar cita 
     }
 
     public void Mantenimiento_Doctores() {

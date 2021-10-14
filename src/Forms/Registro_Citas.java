@@ -1,6 +1,8 @@
 package Forms;
 /*
 Estoy probando este codigo todavia
+Falta mantenimiento de citas
+El numero de cita incrementa solo, en el jdatechooser ya se pone la Hora mas 
 */
 
 import java.sql.Connection;
@@ -15,7 +17,9 @@ public class Registro_Citas extends javax.swing.JFrame {
         conexion=conectar;//nos conectaamos
         initComponents();
     }
-
+    public void buscar(){
+        
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -36,11 +40,12 @@ public class Registro_Citas extends javax.swing.JFrame {
         Btn_agendar_cita = new javax.swing.JButton();
         J_cho_cita = new com.toedter.calendar.JDateChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabla_doctores = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         Jcb_doctor = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         Jcb_buscar = new javax.swing.JComboBox<>();
+        txt_buscador = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -55,7 +60,7 @@ public class Registro_Citas extends javax.swing.JFrame {
 
         J_cho_cita.setDateFormatString("yyyy/MM/dd HH:mm");
 
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tabla_doctores);
 
         jLabel1.setText("Doctor:");
 
@@ -88,7 +93,10 @@ public class Registro_Citas extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addComponent(jLabel2)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(Jcb_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                    .addComponent(Jcb_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(txt_buscador, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 629, Short.MAX_VALUE)
                 .addContainerGap())
@@ -100,6 +108,8 @@ public class Registro_Citas extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(Jcb_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txt_buscador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Jcb_doctor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -145,7 +155,7 @@ public class Registro_Citas extends javax.swing.JFrame {
 
 
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
+        
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
@@ -167,8 +177,7 @@ public class Registro_Citas extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Registro_Citas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
-        /* Create and display the form */
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Registro_Citas(conexion).setVisible(true);
@@ -194,9 +203,10 @@ public class Registro_Citas extends javax.swing.JFrame {
     private com.toedter.calendar.JMonthChooserBeanInfo jMonthChooserBeanInfo1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private com.toedter.components.LocaleEditor localeEditor1;
     private com.toedter.calendar.MinMaxDateEvaluator minMaxDateEvaluator1;
+    private javax.swing.JTable tabla_doctores;
     private com.toedter.calendar.demo.TestDateEvaluator testDateEvaluator1;
+    private javax.swing.JTextField txt_buscador;
     // End of variables declaration//GEN-END:variables
 }
