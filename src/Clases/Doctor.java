@@ -10,6 +10,14 @@ public class Doctor extends Persona{
     }
     public Doctor() {
     }
+    //Getter and Setter de distrito
+    public String getDistrito() {
+        return distrito;
+    }
+
+    public void setDistrito(String distrito) {
+        this.distrito = distrito;
+    }
     public void Registrar() {
         
     }

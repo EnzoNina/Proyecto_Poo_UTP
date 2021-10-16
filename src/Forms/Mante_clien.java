@@ -1,9 +1,9 @@
 package Forms;
-//Este es el mantenimiento clientes                          Hay que crear el menu del doctor y el A
-                                                            //Administrador de citas
+//Este es el mantenimiento clientes 
+//Hay que crear el menu del doctor y el A
+//Administrador de citas
 import java.sql.Connection;
 import javax.swing.table.DefaultTableModel;
-import static Forms.Mante_doc.conexion;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
@@ -18,7 +18,7 @@ public class Mante_clien extends javax.swing.JFrame {
     public Mante_clien(Connection conectar) {
         conexion=conectar;
         initComponents();
-         mostrar();
+        mostrar();
     }
     //metodo mostrar 
      public void mostrar()

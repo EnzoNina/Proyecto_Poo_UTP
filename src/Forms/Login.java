@@ -19,13 +19,55 @@ public  class Login extends javax.swing.JFrame {
     ArrayList<Persona> personas_array = new ArrayList<Persona>();
     //CONSTRCUTOR 
     public void cargar(){
-        
+        //Cargamos los datos de los pacientes
+        try {
+            PreparedStatement pacientes = conexion.prepareStatement("Select dni,usuario,contraseña,nombre,apellido,fecha_nac,telefono from paciente");
+            ResultSet resultado=pacientes.executeQuery();
+            while(resultado.next())
+            {
+                String dni=resultado.getString("dni");
+                String usuario_lista=resultado.getString("usuario");
+                String contraseña_lista=resultado.getString("contraseña");
+                String nombre=resultado.getString("nombre");
+                String apellido=resultado.getString("apellido");
+                String fecha_nac=resultado.getString("fecha_nac");
+                SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy");
+                Date fecha_date=objSDF.parse(fecha_nac);
+                String telefono=resultado.getString("telefono");
+                Cliente personas =new Cliente(dni, usuario_lista, contraseña_lista, nombre, apellido,Integer.parseInt(telefono), fecha_date);
+                personas_array.add(personas);                
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage().toString());
+        }
+        //Cargamos informacion de los doctores
+        try {
+            PreparedStatement doctor = conexion.prepareStatement("Select dni,usuario,contraseña,nombre,apellido,fecha_nac,telefono,distrito from doctor");
+            ResultSet resultado=doctor.executeQuery();
+            while(resultado.next())
+            {
+                String dni=resultado.getString("dni");
+                String usuario_lista=resultado.getString("usuario");
+                String contraseña_lista=resultado.getString("contraseña");
+                String nombre=resultado.getString("nombre");
+                String apellido=resultado.getString("apellido");
+                String fecha_nac=resultado.getString("fecha_nac");
+                SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy");
+                Date fecha_date=objSDF.parse(fecha_nac);
+                String telefono=resultado.getString("telefono");
+                String distrito=resultado.getString("distrito");
+                Doctor doctores =new Doctor(dni, usuario_lista, contraseña_lista, nombre, apellido,fecha_date,Integer.parseInt(telefono),distrito);
+                personas_array.add(doctores);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage().toString());
+        }
     }
     public Login(Connection conectar) {
         initComponents();
         setLocationRelativeTo(null);//Posicion de la ventana en le medio de la ventana
         conexion=conectar;
-        
+        cargar();
     }    
     //buscando usuario en la base de datos VERIFICANDO 
     public void verificando_paciente(String usuario, String contraseña) {//verifico si es un paciente 
@@ -42,7 +84,7 @@ public  class Login extends javax.swing.JFrame {
                 busqueda_usuario = ("Bienvenido " + Nombre_usuario);
                 JOptionPane.showMessageDialog(null, busqueda_usuario);
                 //INGRESA AL JFRAME 
-                Registro_Citas objregistro = new Registro_Citas(conexion);
+                Registro_Citas objregistro = new Registro_Citas(conexion,personas_array);
                 objregistro.setVisible(true);
                 this.dispose();
             }
@@ -50,28 +92,7 @@ public  class Login extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null,"Usted no se encuentra registrado");
         } catch (Exception e) {
             System.out.println(e);
-        }
-        //Agregar a ArrayList
-        try {
-            PreparedStatement datos = conexion.prepareStatement("Select dni,usuario,contraseña,nombre,apellido,fecha_nac,telefono from paciente");
-            ResultSet resultado=datos.executeQuery();
-            while(resultado.next())
-            {
-                String dni=resultado.getString("dni");
-                String usuario_lista=resultado.getString("usuario");
-                String contraseña_lista=resultado.getString("contraseña");
-                String nombre=resultado.getString("nombre");
-                String apellido=resultado.getString("apellido");
-                String fecha_nac=resultado.getString("fecha_nac");
-                SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy");
-                Date fecha_date=objSDF.parse(fecha_nac);
-                String telefono=resultado.getString("telefono");
-                Cliente personas =new Cliente(dni, usuario, contraseña, nombre, apellido,Integer.parseInt(telefono), fecha_date);
-                personas_array.add(personas);                
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage().toString());
-        }
+        }                
     }
     
     //Buscando en la base de datos si el usuario es un doctor 
@@ -95,29 +116,7 @@ public  class Login extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null,"Usted no se encuentra registrado");
         } catch (Exception e) {
             System.out.println(e);
-        }
-        //Agregando a lista
-        try {
-            PreparedStatement datos = conexion.prepareStatement("Select dni,usuario,contraseña,nombre,apellido,fecha_nac,telefono,distrito from doctor");
-            ResultSet resultado=datos.executeQuery();
-            while(resultado.next())
-            {
-                String dni=resultado.getString("dni");
-                String usuario_lista=resultado.getString("usuario");
-                String contraseña_lista=resultado.getString("contraseña");
-                String nombre=resultado.getString("nombre");
-                String apellido=resultado.getString("apellido");
-                String fecha_nac=resultado.getString("fecha_nac");
-                SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy");
-                Date fecha_date=objSDF.parse(fecha_nac);
-                String telefono=resultado.getString("telefono");
-                String distrito=resultado.getString("distrito");
-                Doctor doctores =new Doctor(dni, usuario_lista, contraseña_lista, nombre, apellido,fecha_date,Integer.parseInt(telefono),distrito);
-                personas_array.add(doctores);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage().toString());
-        }
+        }                
     }
     //MIRANDO SI ES UN Administrador 
     public void VerificandoAdministrador(String usuario, String contraseña) {
@@ -148,10 +147,7 @@ public  class Login extends javax.swing.JFrame {
         }
         
     }
-    
-    
-    
-
+         
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -287,7 +283,7 @@ public  class Login extends javax.swing.JFrame {
             case "Admi":this.VerificandoAdministrador(usuario, contraseña);break;
             case "Doctor":this.verificando_Doctor(usuario, contraseña);break;
             case "Paciente":this.verificando_paciente(usuario, contraseña);break;
-            default:System.out.println("nO SE ENCINTRO");
+            default:System.out.println("NO SE ENCONTRO EL USUARIO!!");
         }
         /**if (objpersona1.getPaciente()) 
             this.verificando_paciente(usuario, contraseña);
