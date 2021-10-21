@@ -6,48 +6,83 @@ El numero de cita incrementa solo, en el jdatechooser ya se pone la Hora mas
 */
 import Clases.*;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 public class Registro_Citas extends javax.swing.JFrame {
-    Cliente ob_cliente = new Cliente();
-    static Connection conexion;//por se a acaso para que este en sincronia pongo en statico el objeto conexion para que puede accederlo desde cualquier parte
-    Date fecha,fecha1,fecha2;//objeto de 3 fechas 
+    //Instanciamos objetos
+    Cliente ob_cliente = new Cliente();    
+    //Conexion a la base de datos. Por ahora no es necesario    
+    //Atributos
+    Date fecha;
     SimpleDateFormat objSDF = new SimpleDateFormat("yyyy/MM/dd HH:mm");//objeto Data format
-    ArrayList<Persona> array_persona = new ArrayList<Persona>();
+    String dni;
+    public static PreparedStatement sentencia_preparada;
+    public static ResultSet resultado;
+    static Connection conexion;
+    //Arrays
+    ArrayList<Persona> array_persona = new ArrayList<Persona>();    
+    ArrayList<Cita> array_cita = new ArrayList<Cita>();
     //Datos de la tabla
     String [] titulos= {"DNI","NOMBRE","APELLIDO","TELEFONO","FECHA NACIMIENTO","DISTRITO"};
     DefaultTableModel tabla_defult = new DefaultTableModel(null, titulos);
-    public Registro_Citas(Connection conectar,ArrayList<Persona> array_pasado) {
+    public Registro_Citas(Connection conectar,ArrayList<Persona> array_pasado, ArrayList<Cita>array_cita_pasada, String dni) {
         conexion=conectar;//nos conectaamos
         initComponents();
-        array_persona=array_pasado;        
+        array_persona=array_pasado;      
+        array_cita=array_cita_pasada;
+        setLocationRelativeTo(null);
+        this.dni=dni;
     }   
     public void buscar(){   
         tabla_defult.setRowCount(0);
         tabla_doctores.setModel(ob_cliente.buscar_doctor(tabla_defult,array_persona, Jcb_buscar.getSelectedItem().toString(),txt_buscador.getText()));        
     }
+    public void agendarCita(){
+        int nro_cita;
+        if(array_cita.size()==0){
+            nro_cita=1;
+        }else{
+            nro_cita=array_cita.size()+1;
+        }
+        int seleccion=tabla_doctores.getSelectedRow();        
+        fecha=J_cho_cita.getDate();
+        //String fecha_String=((JTextField)J_cho_cita.getDateEditor().getUiComponent()).getText();
+        String fecha_String=objSDF.format(fecha);
+        //int nro, String dni_doctor, String dni_paciente, boolean estado, Date fecha_naci
+        Cita ob_cita = new Cita(nro_cita,String.valueOf(tabla_doctores.getValueAt(seleccion,0)), dni, true, fecha);
+        array_cita.add(ob_cita);
+        //Ingresar a la base de datos
+        try {
+           PreparedStatement ingresar = conexion.prepareStatement("insert into cita(dni_doctor,dni_cliente,fecha_hora,estado) values (?,?,?,?)");
+           ingresar.setString(1,String.valueOf(tabla_doctores.getValueAt(seleccion,0)));
+           ingresar.setString(2,dni);
+           ingresar.setString(3,fecha_String);
+           ingresar.setBoolean(4,true);
+           ingresar.executeUpdate();
+        }catch (Exception e){            
+            JOptionPane.showMessageDialog(null,e);
+        }
+    }
+    public void mostrarCita(){
+        for (Cita cita : array_cita) {
+            JOptionPane.showMessageDialog(null,cita.getNro() +  "\n"+cita.getDni_doctor() +  
+                                "\n"+ cita.getDni_paciente()+  "\n" + cita.getFecha_hora());
+        }
+        
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jCalendarBeanInfo1 = new com.toedter.calendar.JCalendarBeanInfo();
-        jCalendarBeanInfo2 = new com.toedter.calendar.JCalendarBeanInfo();
-        dateUtil1 = new com.toedter.calendar.DateUtil();
-        dateChooserPanelBeanInfo1 = new com.toedter.calendar.demo.DateChooserPanelBeanInfo();
-        birthdayEvaluator1 = new com.toedter.calendar.demo.BirthdayEvaluator();
-        jMonthChooserBeanInfo1 = new com.toedter.calendar.JMonthChooserBeanInfo();
-        testDateEvaluator1 = new com.toedter.calendar.demo.TestDateEvaluator();
-        minMaxDateEvaluator1 = new com.toedter.calendar.MinMaxDateEvaluator();
-        localeEditor1 = new com.toedter.components.LocaleEditor();
-        jCalendarTheme1 = new com.toedter.plaf.JCalendarTheme();
-        birthdayEvaluator2 = new com.toedter.calendar.demo.BirthdayEvaluator();
-        jCalendar2 = new com.toedter.calendar.JCalendar();
         jPanel1 = new javax.swing.JPanel();
         Btn_agendar_cita = new javax.swing.JButton();
-        J_cho_cita = new com.toedter.calendar.JDateChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla_doctores = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
@@ -56,6 +91,8 @@ public class Registro_Citas extends javax.swing.JFrame {
         btn_mostrar_horario = new javax.swing.JButton();
         btn_buscar_doct = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        J_cho_cita = new com.toedter.calendar.JDateChooser();
+        btn_mostrarCita = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -67,8 +104,6 @@ public class Registro_Citas extends javax.swing.JFrame {
                 Btn_agendar_citaActionPerformed(evt);
             }
         });
-
-        J_cho_cita.setDateFormatString("yyyy/MM/dd HH:mm");
 
         jScrollPane1.setViewportView(tabla_doctores);
 
@@ -87,6 +122,15 @@ public class Registro_Citas extends javax.swing.JFrame {
 
         jLabel1.setText("Fecha de la cita:");
 
+        J_cho_cita.setDateFormatString("yyyy/MM/dd HH:mm");
+
+        btn_mostrarCita.setText("Mostrar Cita ");
+        btn_mostrarCita.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_mostrarCitaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -94,25 +138,29 @@ public class Registro_Citas extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(61, 61, 61)
-                        .addComponent(Btn_agendar_cita))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(Jcb_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGap(28, 28, 28)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btn_mostrar_horario)
-                            .addComponent(txt_buscador, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(J_cho_cita, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(J_cho_cita, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
-                        .addComponent(btn_buscar_doct))
+                        .addContainerGap()
+                        .addComponent(txt_buscador, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(74, 74, 74)
-                        .addComponent(jLabel1)))
+                        .addGap(61, 61, 61)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btn_mostrarCita)
+                            .addComponent(Btn_agendar_cita)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(69, 69, 69)
+                        .addComponent(jLabel1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(61, 61, 61)
+                        .addComponent(btn_buscar_doct)))
                 .addGap(20, 20, 20)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 626, Short.MAX_VALUE)
                 .addContainerGap())
@@ -124,19 +172,21 @@ public class Registro_Citas extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(Jcb_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txt_buscador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(txt_buscador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_buscar_doct)
-                .addGap(64, 64, 64)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btn_mostrar_horario)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(J_cho_cita, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
+                .addGap(25, 25, 25)
                 .addComponent(Btn_agendar_cita)
-                .addGap(53, 53, 53))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_mostrarCita)
+                .addGap(13, 13, 13))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE)
@@ -160,20 +210,16 @@ public class Registro_Citas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void Btn_agendar_citaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_agendar_citaActionPerformed
-        //fecha=jCalendar1.getDate();
-        //fecha1=Jsd_fecha.getDate();
-        fecha2=J_cho_cita.getDate();
-        //String prueba1=objSDF.format(fecha);
-        //String prueba2=objSDF.format(fecha1);
-        String prueba3=objSDF.format(fecha2);
-        //System.out.println("fecha " +prueba1);        
-        //System.out.println("fecha 1 " +prueba2);        
-        System.out.println("fecha 2 " +prueba3);       
+        agendarCita();
     }//GEN-LAST:event_Btn_agendar_citaActionPerformed
 
     private void btn_buscar_doctActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_buscar_doctActionPerformed
         buscar();
     }//GEN-LAST:event_btn_buscar_doctActionPerformed
+
+    private void btn_mostrarCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_mostrarCitaActionPerformed
+        mostrarCita();
+    }//GEN-LAST:event_btn_mostrarCitaActionPerformed
 
 
     public static void main(String args[]) {
@@ -211,25 +257,14 @@ public class Registro_Citas extends javax.swing.JFrame {
     private javax.swing.JButton Btn_agendar_cita;
     private com.toedter.calendar.JDateChooser J_cho_cita;
     private javax.swing.JComboBox<String> Jcb_buscar;
-    private com.toedter.calendar.demo.BirthdayEvaluator birthdayEvaluator1;
-    private com.toedter.calendar.demo.BirthdayEvaluator birthdayEvaluator2;
     private javax.swing.JButton btn_buscar_doct;
+    private javax.swing.JButton btn_mostrarCita;
     private javax.swing.JButton btn_mostrar_horario;
-    private com.toedter.calendar.demo.DateChooserPanelBeanInfo dateChooserPanelBeanInfo1;
-    private com.toedter.calendar.DateUtil dateUtil1;
-    private com.toedter.calendar.JCalendar jCalendar2;
-    private com.toedter.calendar.JCalendarBeanInfo jCalendarBeanInfo1;
-    private com.toedter.calendar.JCalendarBeanInfo jCalendarBeanInfo2;
-    private com.toedter.plaf.JCalendarTheme jCalendarTheme1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private com.toedter.calendar.JMonthChooserBeanInfo jMonthChooserBeanInfo1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private com.toedter.components.LocaleEditor localeEditor1;
-    private com.toedter.calendar.MinMaxDateEvaluator minMaxDateEvaluator1;
     private javax.swing.JTable tabla_doctores;
-    private com.toedter.calendar.demo.TestDateEvaluator testDateEvaluator1;
     private javax.swing.JTextField txt_buscador;
     // End of variables declaration//GEN-END:variables
 }

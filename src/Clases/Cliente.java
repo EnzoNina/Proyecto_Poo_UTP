@@ -21,8 +21,8 @@ public class Cliente extends Persona {
         // TODO implement here
     }
     public DefaultTableModel buscar_doctor(DefaultTableModel tabla,ArrayList<Persona> array,String tipo,String textoString){        
-        SimpleDateFormat objSDF = new SimpleDateFormat("yyyy/MM/dd");//objeto Data format        
-        //Hacerlo dependiendo del texo o como el ejemplo del profesor de extensibilidad de los descuentos
+        //Se puede hacer con extensibilidad
+        SimpleDateFormat objSDF = new SimpleDateFormat("yyyy/MM/dd");//objeto Data format                
         if(tipo.equalsIgnoreCase("Nombre")){
             for (Persona persona : array) {
                 if(persona.getNombre().equalsIgnoreCase(textoString)){
@@ -31,17 +31,12 @@ public class Cliente extends Persona {
                 }
             }
             return tabla;
-        }
+        }        
         /*}else if(tipo.equalsIgnoreCase("Apellido")){
             
-        }else if(tipo.equalsIgnoreCase("DNI")){
-            
+        }else if(tipo.equalsIgnoreCase("DNI")){            
         }*/
         return null;
     }   
         
-    public void Registrar_Cita() {
-        // TODO implement here
-    }
-
 }

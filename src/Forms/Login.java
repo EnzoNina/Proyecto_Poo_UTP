@@ -17,8 +17,27 @@ public  class Login extends javax.swing.JFrame {
     public static ResultSet resultado;
     static Connection conexion;    
     ArrayList<Persona> personas_array = new ArrayList<Persona>();
+    ArrayList<Cita> array_cita = new ArrayList<Cita>();
     //CONSTRCUTOR 
     public void cargar(){
+        //Cargamos datos del array
+        try {
+            PreparedStatement cita = conexion.prepareStatement("Select nro_cita,dni_doctor,dni_cliente,fecha_hora,estado from cita");
+            ResultSet resultado_cita = cita.executeQuery();
+            while(resultado_cita.next()){
+                int nro_cita=resultado_cita.getInt("nro_cita");
+                String dni_coctor=resultado_cita.getString("dni_doctor");
+                String dni_cliente=resultado_cita.getString("dni_cliente");
+                String fecha_hora = resultado_cita.getString("fecha_hora");
+                SimpleDateFormat formateo = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+                Date fecha_formateada = formateo.parse(fecha_hora);
+                boolean estado = resultado_cita.getBoolean("estado");
+                Cita  obcita = new Cita(nro_cita, dni_coctor, dni_cliente, estado, fecha_formateada);
+                array_cita.add(obcita);
+            }            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage().toString());
+        }
         //Cargamos los datos de los pacientes
         try {
             PreparedStatement pacientes = conexion.prepareStatement("Select dni,usuario,contraseña,nombre,apellido,fecha_nac,telefono from paciente");
@@ -74,17 +93,19 @@ public  class Login extends javax.swing.JFrame {
         String busqueda_usuario = null;
         //Verificar
         try {//para buscar doctor tambien puede servir 
-            String Buscando_paciente = ("SELECT usuario FROM paciente WHERE contraseña = '" + contraseña + "'");
+            String Buscando_paciente = ("SELECT dni,nombre,apellido FROM paciente WHERE contraseña = '" + contraseña + "'");
             sentencia_preparada = conexion.prepareStatement(Buscando_paciente);//preparandpsentencia buscando
             resultado = sentencia_preparada.executeQuery();//botamos el resultado
             //condicion 
             if (resultado.next()) {
 
-                String Nombre_usuario = resultado.getString("usuario");
-                busqueda_usuario = ("Bienvenido " + Nombre_usuario);
+                String Nombre_usuario = resultado.getString("nombre");
+                String apellidoUsuario=resultado.getString("apellido");
+                String dni = resultado.getString("dni");
+                busqueda_usuario = ("Bienvenido " + Nombre_usuario + " " +apellidoUsuario);
                 JOptionPane.showMessageDialog(null, busqueda_usuario);
                 //INGRESA AL JFRAME 
-                Registro_Citas objregistro = new Registro_Citas(conexion,personas_array);
+                Registro_Citas objregistro = new Registro_Citas(conexion,personas_array,array_cita,dni);
                 objregistro.setVisible(true);
                 this.dispose();
             }

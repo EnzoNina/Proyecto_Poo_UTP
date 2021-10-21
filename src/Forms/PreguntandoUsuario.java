@@ -71,13 +71,6 @@ public final class PreguntandoUsuario extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e.getMessage().toString());
         }
     }
-    public void scrip(){
-        try {
-            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage().toString());
-        }
-    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

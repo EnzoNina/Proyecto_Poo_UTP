@@ -64,7 +64,7 @@ public class Mante_clien extends javax.swing.JFrame {
         mostrar();
     }
     
-     public void eliminar(){
+     public void eliminar(){         
         try {
             PreparedStatement eliminar=conexion.prepareStatement("delete from paciente where dni=?");
             eliminar.setString(1,txt_clien_dni.getText());
