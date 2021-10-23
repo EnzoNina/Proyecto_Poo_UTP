@@ -42,11 +42,8 @@ public class Persona {
     public boolean getPaciente()
     {   
         return Espaciente=true;
-    }
-    
-    
-    //aca cambia de valor booleano cuando llame a este metodo 
-    
+    }        
+    //aca cambia de valor booleano cuando llame a este metodi    
     public boolean isEsdoctor() {
          Esdoctor=true;
          return Esdoctor;
