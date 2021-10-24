@@ -29,7 +29,7 @@ public  class Login extends javax.swing.JFrame {
                 String dni_coctor=resultado_cita.getString("dni_doctor");
                 String dni_cliente=resultado_cita.getString("dni_cliente");
                 String fecha_hora = resultado_cita.getString("fecha_hora");
-                SimpleDateFormat formateo = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+                SimpleDateFormat formateo = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 Date fecha_formateada = formateo.parse(fecha_hora);                
                 boolean estado = resultado_cita.getBoolean("estado");
                 Cita  obcita = new Cita(nro_cita, dni_coctor, dni_cliente, estado, fecha_formateada);

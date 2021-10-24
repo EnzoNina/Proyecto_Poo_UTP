@@ -23,8 +23,7 @@ public class Cliente extends Persona {
     public boolean registrarCita(ArrayList<Cita> array_cita, Cita nuevaCita) {
         boolean seEncontro = false;
         for (Cita cita : array_cita) {
-            if (cita.getFecha_hora().equals(nuevaCita.getFecha_hora())) {
-                JOptionPane.showMessageDialog(null, "No se pudo agendar la cita, debido a que la fecha y hora ingresada ya seta en uso");
+            if (cita.getFecha_hora().equals(nuevaCita.getFecha_hora())) {                
                 seEncontro = true;
             }            
         }

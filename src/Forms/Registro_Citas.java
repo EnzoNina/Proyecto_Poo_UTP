@@ -81,6 +81,9 @@ public class Registro_Citas extends javax.swing.JFrame {
             }catch (Exception e){            
                 JOptionPane.showMessageDialog(null,e);
             }
+            String aviso ="Cita registrada correctamente"+"\nNro de cita: "+nro_cita+"\nDni Doctor: " + String.valueOf(tabla_doctores.getValueAt(seleccion,0))
+                    +"\nDni paciente: "+dni + "\nFecha Cita: " +fecha_String;
+            JOptionPane.showMessageDialog(null, aviso,"Aviso",JOptionPane.INFORMATION_MESSAGE);
         }
     }
     public void mostrarCita(){
@@ -96,7 +99,8 @@ public class Registro_Citas extends javax.swing.JFrame {
         tabla_horario.setRowCount(0);
         for (Cita cita : array_cita) {
             if(cita.getDni_doctor().equals(String.valueOf(tabla_doctores.getValueAt(seleccion,0)))){
-                tabla_horario.addRow(new Object[]{cita.getDni_doctor(),cita.getDni_paciente(),cita.getFecha_hora()});
+                String fecha=objSDF.format(cita.getFecha_hora());
+                tabla_horario.addRow(new Object[]{cita.getDni_doctor(),cita.getDni_paciente(),fecha});
             }
         }
         tabla_doctores.setModel(tabla_horario);
