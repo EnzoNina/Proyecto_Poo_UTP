@@ -150,7 +150,7 @@
               <StringArray count="3">
                 <StringItem index="0" value="Nombre"/>
                 <StringItem index="1" value="Apellido"/>
-                <StringItem index="2" value="Codigo"/>
+                <StringItem index="2" value="Dni"/>
               </StringArray>
             </Property>
           </Properties>
@@ -164,6 +164,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Mostrar horario del doctor"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_mostrar_horarioActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btn_buscar_doct">
           <Properties>
@@ -180,7 +183,7 @@
         </Component>
         <Component class="com.toedter.calendar.JDateChooser" name="J_cho_cita">
           <Properties>
-            <Property name="dateFormatString" type="java.lang.String" value="yyyy/MM/dd HH:mm"/>
+            <Property name="dateFormatString" type="java.lang.String" value="dd/MM/yyyy HH:mm"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btn_mostrarCita">
