@@ -59,5 +59,14 @@ public class Cita {
 
     public void setFecha_hora(Date fecha_hora) {
         this.fecha_hora = fecha_hora;
-    }             
+    }        
+    //Metodos
+    /*public void agendarCita(ArrayList<Cita> array_cita){
+        if(array_cita.size()==0){
+            nro=0;
+        }else{
+            nro=array_cita.size()+1;
+        }
+        
+    }*/   
 }

@@ -5,7 +5,6 @@ Falta mantenimiento de citas
 El numero de cita incrementa solo, en el jdatechooser ya se pone la Hora mas 
 */
 import Clases.*;
-import impl.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,15 +12,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 public class Registro_Citas extends javax.swing.JFrame {
     //Instanciamos objetos
-    Cliente obCliente = new Cliente();
+    Cliente ob_cliente = new Cliente();    
     //Conexion a la base de datos. Por ahora no es necesario    
     //Atributos
     Date fecha;
-    SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy HH:mm");//objeto Data format
+    SimpleDateFormat objSDF = new SimpleDateFormat("yyyy/MM/dd HH:mm");//objeto Data format
     String dni;
     public static PreparedStatement sentencia_preparada;
     public static ResultSet resultado;
@@ -38,49 +38,36 @@ public class Registro_Citas extends javax.swing.JFrame {
         array_persona=array_pasado;      
         array_cita=array_cita_pasada;
         setLocationRelativeTo(null);
-        this.dni=dni;        
+        this.dni=dni;
     }   
-    public void pruebaBuscar(){        
-        tabla_defult.setRowCount(0);       
-        if(Jcb_buscar.getSelectedItem().toString().equalsIgnoreCase("Nombre")){
-            tabla_defult.setRowCount(0);
-            Buscar ob_buscarNombre=new Buscar(tabla_defult, txt_buscador.getText(), array_persona);
-            tabla_doctores.setModel(ob_buscarNombre.buscarPor(new buscarPorNombre()));
-        }else if(Jcb_buscar.getSelectedItem().toString().equalsIgnoreCase("Dni")){
-            tabla_defult.setRowCount(0);
-            Buscar ob_buscarDNI=new Buscar(tabla_defult, txt_buscador.getText(), array_persona);
-            tabla_doctores.setModel(ob_buscarDNI.buscarPor(new buscarPorDni()));            
-        }else if(Jcb_buscar.getSelectedItem().toString().equalsIgnoreCase("Apellido")){
-            tabla_defult.setRowCount(0);
-            Buscar ob_buscarApellido=new Buscar(tabla_defult, txt_buscador.getText(), array_persona);
-            tabla_doctores.setModel(ob_buscarApellido.buscarPor(new buscarPorApellido()));
-        }
+    public void buscar(){   
+        tabla_defult.setRowCount(0);
+        tabla_doctores.setModel(ob_cliente.buscar_doctor(tabla_defult,array_persona, Jcb_buscar.getSelectedItem().toString(),txt_buscador.getText()));        
     }
     public void agendarCita(){
         int nro_cita;
-        int seleccion=tabla_doctores.getSelectedRow();//Atributo para escoger la fila de la tabla
-        if(array_cita.isEmpty()){
+        if(array_cita.size()==0){
             nro_cita=1;
         }else{
             nro_cita=array_cita.size()+1;
-        }        
-        fecha=J_cho_cita.getDate();                
-        String fecha_String=objSDF.format(fecha);        
-        boolean estadoCita=obCliente.registrarCita(array_cita,new Cita(nro_cita, String.valueOf(tabla_doctores.getValueAt(seleccion,0)), dni,true,fecha));
+        }
+        int seleccion=tabla_doctores.getSelectedRow();        
+        fecha=J_cho_cita.getDate();
+        //String fecha_String=((JTextField)J_cho_cita.getDateEditor().getUiComponent()).getText();
+        String fecha_String=objSDF.format(fecha);
+        //int nro, String dni_doctor, String dni_paciente, boolean estado, Date fecha_naci
+        Cita ob_cita = new Cita(nro_cita,String.valueOf(tabla_doctores.getValueAt(seleccion,0)), dni, true, fecha);
+        array_cita.add(ob_cita);
         //Ingresar a la base de datos
-        if(estadoCita){
-            JOptionPane.showMessageDialog(null, "La fecha y hora seleccionada ya esta registrada en otra cita, por favor seleccione otra fecha y hora");
-        }else{
-            try {                
-               PreparedStatement ingresar = conexion.prepareStatement("insert into cita(dni_doctor,dni_cliente,fecha_hora,estado) values (?,?,?,?)");
-               ingresar.setString(1,String.valueOf(tabla_doctores.getValueAt(seleccion,0)));
-               ingresar.setString(2,dni);
-               ingresar.setString(3,fecha_String);
-               ingresar.setBoolean(4,true);
-               ingresar.executeUpdate();
-            }catch (Exception e){            
-                JOptionPane.showMessageDialog(null,e);
-            }
+        try {
+           PreparedStatement ingresar = conexion.prepareStatement("insert into cita(dni_doctor,dni_cliente,fecha_hora,estado) values (?,?,?,?)");
+           ingresar.setString(1,String.valueOf(tabla_doctores.getValueAt(seleccion,0)));
+           ingresar.setString(2,dni);
+           ingresar.setString(3,fecha_String);
+           ingresar.setBoolean(4,true);
+           ingresar.executeUpdate();
+        }catch (Exception e){            
+            JOptionPane.showMessageDialog(null,e);
         }
     }
     public void mostrarCita(){
@@ -88,18 +75,7 @@ public class Registro_Citas extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null,cita.getNro() +  "\n"+cita.getDni_doctor() +  
                                 "\n"+ cita.getDni_paciente()+  "\n" + cita.getFecha_hora());
         }
-    }
-    public void mostrarHorario(){
-        int seleccion=tabla_doctores.getSelectedRow();//Atributo para escoger la fila de la tabla
-        String arrayTitulos_horario[]={"DNI DOCTOR","DNI CLIENTE","FECHA HORA"};//Titulos del horario del doctor
-        DefaultTableModel tabla_horario = new DefaultTableModel(null, arrayTitulos_horario);//Nueva tabla de modelo                
-        tabla_horario.setRowCount(0);
-        for (Cita cita : array_cita) {
-            if(cita.getDni_doctor().equals(String.valueOf(tabla_doctores.getValueAt(seleccion,0)))){
-                tabla_horario.addRow(new Object[]{cita.getDni_doctor(),cita.getDni_paciente(),cita.getFecha_hora()});
-            }
-        }
-        tabla_doctores.setModel(tabla_horario);
+        
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -133,14 +109,9 @@ public class Registro_Citas extends javax.swing.JFrame {
 
         jLabel2.setText("Buscar por:");
 
-        Jcb_buscar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "Apellido", "Dni" }));
+        Jcb_buscar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "Apellido", "Codigo" }));
 
         btn_mostrar_horario.setText("Mostrar horario del doctor");
-        btn_mostrar_horario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_mostrar_horarioActionPerformed(evt);
-            }
-        });
 
         btn_buscar_doct.setText("Buscar Doctor");
         btn_buscar_doct.addActionListener(new java.awt.event.ActionListener() {
@@ -151,7 +122,7 @@ public class Registro_Citas extends javax.swing.JFrame {
 
         jLabel1.setText("Fecha de la cita:");
 
-        J_cho_cita.setDateFormatString("dd/MM/yyyy HH:mm");
+        J_cho_cita.setDateFormatString("yyyy/MM/dd HH:mm");
 
         btn_mostrarCita.setText("Mostrar Cita ");
         btn_mostrarCita.addActionListener(new java.awt.event.ActionListener() {
@@ -243,16 +214,12 @@ public class Registro_Citas extends javax.swing.JFrame {
     }//GEN-LAST:event_Btn_agendar_citaActionPerformed
 
     private void btn_buscar_doctActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_buscar_doctActionPerformed
-        pruebaBuscar();
+        buscar();
     }//GEN-LAST:event_btn_buscar_doctActionPerformed
 
     private void btn_mostrarCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_mostrarCitaActionPerformed
         mostrarCita();
     }//GEN-LAST:event_btn_mostrarCitaActionPerformed
-
-    private void btn_mostrar_horarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_mostrar_horarioActionPerformed
-        mostrarHorario();
-    }//GEN-LAST:event_btn_mostrar_horarioActionPerformed
 
 
     public static void main(String args[]) {
