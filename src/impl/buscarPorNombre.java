@@ -1,4 +1,6 @@
 package impl;
+
+
 import Clases.Buscar;
 import Clases.Doctor;
 import Clases.Persona;

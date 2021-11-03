@@ -1,20 +1,14 @@
 package Forms;
 
 import java.sql.*;
-import java.text.ParseException;
-import java.util.Date;
-import java.text.SimpleDateFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class Mante_doc extends javax.swing.JFrame {
     static Connection conexion;
     //Tabla    
-    String [] titulos={"Dni","Usuario","Contraseña","Nombre","Apellido","Fecha Nacimiento","Telefono","Distrito"};//Array titulos para la tabla
+    String [] titulos={"Codigo","Usuario","Contraseña","Nombre","Apellido","Distrito"};//Array titulos para la tabla
     DefaultTableModel tabla=new DefaultTableModel(null,titulos);//Establecemos la tabla sin filas y con los titulos
-    SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
     public Mante_doc(Connection conectar) {     //objeto de coneccion ademas el static ayuda a que la coneccion este por toda la tabla   
         conexion=conectar;//
         initComponents();        
@@ -22,16 +16,13 @@ public class Mante_doc extends javax.swing.JFrame {
     }
     public void agregar(){
         try {
-            PreparedStatement agregar= conexion.prepareStatement("insert into doctor values (?,?,?,?,?,?,?,?)");//Sentencia para insertar nuevos doctores
+            PreparedStatement agregar= conexion.prepareStatement("insert into doctor values (?,?,?,?,?,?)");//Sentencia para insertar nuevos doctores
             agregar.setString(1, txt_mante_cod.getText());
             agregar.setString(2, txt_usuario.getText());
             agregar.setString(3, txt_contraseña.getText());
             agregar.setString(4, txt_mante_nombre.getText());
             agregar.setString(5, txt_mante_apell.getText());
-            String fechaSt=sdf.format(jdateFechaNacimiento.getDate());
-            agregar.setString(6,fechaSt);
-            agregar.setString(7,txt_telefono.getText());
-            agregar.setString(8,txt_mante_distr.getText());
+            agregar.setString(6, txt_mante_distr.getText());
             agregar.executeUpdate();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage().toString());
@@ -44,12 +35,11 @@ public class Mante_doc extends javax.swing.JFrame {
         ResultSet resultado=null;//este es el principal para que envie resultados 
         try {
             //Sentencia para obtener los datos de la base de datos
-            PreparedStatement mostrar=conexion.prepareStatement("select dni,Usuario,Contraseña,nombre,apellido,fecha_nac,telefono,distrito from doctor");            
+            PreparedStatement mostrar=conexion.prepareStatement("select codigo,Usuario,Contraseña,nombre,apellido,distrito from doctor");            
             resultado=mostrar.executeQuery();//Ejecutamos la sentencia
             while(resultado.next()){//Mientras obtenda un resultado 
                 //Agregamos los datos obtenidos de la base de datos a la tabla
-                tabla.addRow(new Object[]{resultado.getString("dni"),resultado.getString("Usuario"),resultado.getString("Contraseña"),resultado.getString("nombre"),resultado.getString("apellido"),
-                    resultado.getString("fecha_nac"),resultado.getString("telefono"),resultado.getString("distrito")});             
+                tabla.addRow(new Object[]{resultado.getString("codigo"),resultado.getString("Usuario"),resultado.getString("Contraseña"),resultado.getString("nombre"),resultado.getString("apellido"),resultado.getString("distrito")});             
             }            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage().toString());
@@ -60,12 +50,11 @@ public class Mante_doc extends javax.swing.JFrame {
     {
         try {
             //Sentencia para modificar los datos de la base de datos
-            PreparedStatement editar=conexion.prepareStatement("update doctor set nombre=?,apellido=?,telefono=?,distrito=? where dni=?");
+            PreparedStatement editar=conexion.prepareStatement("update doctor set nombre=?,apellido=?,distrito=? where codigo=?");
             editar.setString(1, txt_mante_nombre.getText());
             editar.setString(2, txt_mante_apell.getText());
-            editar.setString(3, txt_telefono.getText());
-            editar.setString(4, txt_mante_distr.getText());                        
-            editar.setString(5, txt_mante_cod.getText());            
+            editar.setString(3, txt_mante_distr.getText());
+            editar.setString(4, txt_mante_cod.getText());            
             if(editar.executeUpdate() > 0){//Si el resultado es mayor a 0,nos indica que se modificaron exitosamente        
             JOptionPane.showMessageDialog(null, "Los datos han sido modificados con éxito", "Operación Exitosa", 
                                           JOptionPane.INFORMATION_MESSAGE);            
@@ -81,7 +70,7 @@ public class Mante_doc extends javax.swing.JFrame {
     }
     public void eliminar(){
         try {
-            PreparedStatement eliminar=conexion.prepareStatement("delete from doctor where dni=?");
+            PreparedStatement eliminar=conexion.prepareStatement("delete from doctor where codigo=?");
             eliminar.setString(1,txt_mante_cod.getText());
             eliminar.executeUpdate();
         } catch (Exception e) {
@@ -112,16 +101,12 @@ public class Mante_doc extends javax.swing.JFrame {
         txt_usuario = new javax.swing.JTextField();
         txt_contraseña = new javax.swing.JTextField();
         btn_atras = new javax.swing.JButton();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        txt_telefono = new javax.swing.JTextField();
-        jdateFechaNacimiento = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setText("Dni");
+        jLabel1.setText("Codigo");
 
         jLabel2.setText("Nombre");
 
@@ -176,10 +161,6 @@ public class Mante_doc extends javax.swing.JFrame {
             }
         });
 
-        jLabel7.setText("Telefono:");
-
-        jLabel8.setText("Fecha Nacimiento");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -190,13 +171,12 @@ public class Mante_doc extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
-                            .addComponent(jLabel3)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel1)
+                                .addComponent(jLabel3))
                             .addComponent(jLabel2)
                             .addComponent(jLabel5)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel7))
+                            .addComponent(jLabel4))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(23, 23, 23)
@@ -207,42 +187,31 @@ public class Mante_doc extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(txt_mante_nombre, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(txt_telefono, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(txt_mante_apell, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE))
-                                        .addComponent(txt_mante_distr, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jdateFechaNacimiento, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(txt_mante_nombre, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txt_mante_apell, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txt_mante_distr, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(btn_agregar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btn_editar)
-                        .addGap(22, 22, 22)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btn_atras)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btn_agregar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btn_editar)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_eliminar)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 771, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btn_atras)
-                .addGap(45, 45, 45))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 441, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addComponent(btn_atras)
-                .addContainerGap(9, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(41, 41, 41)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txt_mante_cod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txt_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -258,24 +227,22 @@ public class Mante_doc extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(txt_mante_apell, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel8)
-                    .addComponent(jdateFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(txt_telefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(txt_mante_distr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
+                .addGap(80, 80, 80)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_agregar)
                     .addComponent(btn_editar)
                     .addComponent(btn_eliminar))
-                .addGap(49, 49, 49))
+                .addGap(28, 28, 28)
+                .addComponent(btn_atras)
+                .addGap(56, 56, 56))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 441, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -284,8 +251,8 @@ public class Mante_doc extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -299,21 +266,13 @@ public class Mante_doc extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
                                                                                  //tengo que ver esto 
     private void jtable_doctoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtable_doctoresMouseClicked
-        try {
-            int seleccion=jtable_doctores.rowAtPoint(evt.getPoint());//Sirve para obtener la posicion de la fila de la Jtable
-            txt_mante_cod.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 0)));//Establece los text field con el texto obtenido de la Jtable
-            txt_usuario.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 1)));
-            txt_contraseña.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 2)));
-            txt_mante_nombre.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 3)));
-            txt_mante_apell.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 4)));
-            String fechaSt=String.valueOf(jtable_doctores.getValueAt(seleccion,5));
-            Date fecha=sdf.parse(fechaSt);
-            jdateFechaNacimiento.setDate(fecha);
-            txt_telefono.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 6)));
-            txt_mante_distr.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 7)));
-        } catch (ParseException ex) {
-            Logger.getLogger(Mante_doc.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        int seleccion=jtable_doctores.rowAtPoint(evt.getPoint());//Sirve para obtener la posicion de la fila de la Jtable
+        txt_mante_cod.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 0)));//Establece los text field con el texto obtenido de la Jtable        
+        txt_usuario.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 1)));
+        txt_contraseña.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 2)));
+        txt_mante_nombre.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 3)));
+        txt_mante_apell.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 4)));
+        txt_mante_distr.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 5)));
     }//GEN-LAST:event_jtable_doctoresMouseClicked
 
     private void btn_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editarActionPerformed
@@ -376,18 +335,14 @@ public class Mante_doc extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private com.toedter.calendar.JDateChooser jdateFechaNacimiento;
     private javax.swing.JTable jtable_doctores;
     private javax.swing.JTextField txt_contraseña;
     private javax.swing.JTextField txt_mante_apell;
     private javax.swing.JTextField txt_mante_cod;
     private javax.swing.JTextField txt_mante_distr;
     private javax.swing.JTextField txt_mante_nombre;
-    private javax.swing.JTextField txt_telefono;
     private javax.swing.JTextField txt_usuario;
     // End of variables declaration//GEN-END:variables
 }

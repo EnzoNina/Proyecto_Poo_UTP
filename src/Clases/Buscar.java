@@ -8,12 +8,12 @@ public class Buscar {
     //Atributos
    private ArrayList<Persona> array_persona = new ArrayList<Persona>();
    private DefaultTableModel modelo;
-   private String buscarTexto;   
+   private String buscarTexto;
    //Constructor
     public Buscar(DefaultTableModel modelo, String buscarTexto,ArrayList<Persona> array) {
         this.array_persona=array;
         this.modelo = modelo;
-        this.buscarTexto = buscarTexto;        
+        this.buscarTexto = buscarTexto;
     }
     public Buscar() {
     }
