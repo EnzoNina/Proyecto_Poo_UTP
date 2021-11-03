@@ -1,9 +1,5 @@
 package Forms;
-/*
-Estoy probando este codigo todavia
-Falta mantenimiento de citas
-El numero de cita incrementa solo, en el jdatechooser ya se pone la Hora mas 
-*/
+
 import Clases.*;
 import impl.*;
 import java.sql.Connection;
@@ -17,7 +13,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class Registro_Citas extends javax.swing.JFrame {
     //Instanciamos objetos
-    Cliente obCliente = new Cliente();
+    Paciente obCliente = new Paciente();
     //Conexion a la base de datos. Por ahora no es necesario    
     //Atributos
     Date fecha;
@@ -40,7 +36,7 @@ public class Registro_Citas extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         this.dni=dni;        
     }   
-    public void pruebaBuscar(){        
+    public void buscarDoctor(){        
         tabla_defult.setRowCount(0);       
         if(Jcb_buscar.getSelectedItem().toString().equalsIgnoreCase("Nombre")){
             tabla_defult.setRowCount(0);
@@ -247,7 +243,7 @@ public class Registro_Citas extends javax.swing.JFrame {
     }//GEN-LAST:event_Btn_agendar_citaActionPerformed
 
     private void btn_buscar_doctActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_buscar_doctActionPerformed
-        pruebaBuscar();
+        buscarDoctor();
     }//GEN-LAST:event_btn_buscar_doctActionPerformed
 
     private void btn_mostrarCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_mostrarCitaActionPerformed
