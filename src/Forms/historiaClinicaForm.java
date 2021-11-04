@@ -38,8 +38,7 @@ public class historiaClinicaForm extends javax.swing.JFrame{
         initComponents();                
         cargar_tablas();
         try {            
-            llenartxt();
-            System.out.println("Dni paciente en constructor :" + dniPaciente);
+            llenartxt();            
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
@@ -65,8 +64,7 @@ public class historiaClinicaForm extends javax.swing.JFrame{
     public void registrar() throws ParseException, SQLException{
         LocalDateTime fechHora = LocalDateTime.now();        
         Date out = Date.from(fechHora.atZone(ZoneId.systemDefault()).toInstant());
-        String fechaStrn = sdf.format(out);
-        System.out.println(""+fechaStrn);
+        String fechaStrn = sdf.format(out);        
         Date fechaFormateada=sdf.parse(fechaStrn);
         int nrohistoria;
         if(arrayHistoriaClinica.isEmpty()){
