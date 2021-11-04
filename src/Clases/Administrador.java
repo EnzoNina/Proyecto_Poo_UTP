@@ -5,7 +5,7 @@ public class Administrador {
 
     public Administrador() {
     }
-                                        //claro enviar en un arreglo de arrays list todas las actividades que debe hacer el administrador 
+    //claro enviar en un arreglo de arrays list todas las actividades que debe hacer el administrador 
     public void Registar() {            //que se como un agregacion 
         // TODO implement here
     }

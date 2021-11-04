@@ -172,13 +172,10 @@ public final class PreguntandoUsuario extends javax.swing.JFrame {
         objlogin=new Login(Conectar);
         objlogin.setVisible(true);//ingreso al login
         this.dispose();
-        //le digo que si es Admi 
-        
+        //le digo que si es Admi         
         objpersona=new Persona();
         if(objpersona.getAdmi())
             cadena="Admi";
-        //objpersona.getAdmi();//al que este lo llame lo vuelve true 
-        //Persona.EsAdmi=true;
     }//GEN-LAST:event_labelAdmiMouseClicked
 
     private void labelpacienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelpacienteMouseClicked
@@ -190,7 +187,6 @@ public final class PreguntandoUsuario extends javax.swing.JFrame {
         objpersona=new Persona();
         if(objpersona.getPaciente())
             cadena="Paciente";
-       
     }//GEN-LAST:event_labelpacienteMouseClicked
 
     private void labeldoctorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labeldoctorMouseClicked
@@ -202,7 +198,6 @@ public final class PreguntandoUsuario extends javax.swing.JFrame {
        objpersona=new Persona();
         if(objpersona.getdoctor())
             cadena="Doctor";
-        //objpersona.get
     }//GEN-LAST:event_labeldoctorMouseClicked
 
     /**
