@@ -1,37 +1,37 @@
 package Forms;
-import java.sql.*;
+import Clases.Paciente;
+import java.sql.Connection;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import javax.swing.*;
 
 public class Registrar extends javax.swing.JFrame { 
     static Connection conexion;//este en modo static puedo acceder porque es el atributo de una clase 
+    Paciente obPaciente = new Paciente();
+    SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/YYYY");
     public Registrar(Connection Conectar) {//Obtenemos el objeto conexion que pasamos del formulario Login
         conexion=Conectar;
         initComponents();
         setLocationRelativeTo(null);//Posicion en el medio
     }
-    public void Registrarse()
-    {        
-        String usuario,contraseña,dni,nombre,apellido,telefono;                
+    public void Registrarse(){        
+        String usuario,contraseña,dni,nombre,apellido,telefono;                        
         try {
+            
             dni=txt_dni.getText();
             usuario=txt_usuario.getText();
             contraseña=txt_contraseña.getText();
             nombre=txt_nombre.getText();
-            apellido=txt_apellido.getText();          
-            String date =((JTextField)jdc_fecha_nac.getDateEditor().getUiComponent()).getText();//Codigo para obtener la fecha en String compatible con el tipo Date de SQLite
-            telefono=txt_telefono.getText();//Obtenemos los datos de los text field y del Jcalendar
-            PreparedStatement instruccion = conexion.prepareStatement("INSERT INTO paciente VALUES (?,?,?,?,?,?,?)");//Intruccion para insertar valores
-            instruccion.setString(1, dni);
-            instruccion.setString(2, usuario);
-            instruccion.setString(3, contraseña);
-            instruccion.setString(4, nombre);
-            instruccion.setString(5, apellido);
-            instruccion.setString(6, date);
-            instruccion.setString(7, telefono);
-            instruccion.executeUpdate();//Ejecutamos la sentencia escrita en el sql
+            apellido=txt_apellido.getText();                      
+            telefono=txt_telefono.getText();//Obtenemos los datos de los text field y del Jcalendar            
+            Date fecha=jdc_fecha_nac.getDate();
+            int resultado=obPaciente.registrar(conexion,new Paciente(dni, usuario, contraseña, nombre, apellido, Integer.parseInt(telefono),fecha));            
+            if(resultado>0){
+                JOptionPane.showMessageDialog(null, "Paciente registrado correctamente");
+            }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
-        }
+            System.out.println(e);
+        }        
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -50,8 +50,8 @@ public class Registrar extends javax.swing.JFrame {
         txt_nombre = new javax.swing.JTextField();
         txt_apellido = new javax.swing.JTextField();
         txt_telefono = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnRegistrar = new javax.swing.JButton();
+        btnIniciarSesion = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         txt_contraseña = new javax.swing.JPasswordField();
         jdc_fecha_nac = new com.toedter.calendar.JDateChooser();
@@ -74,17 +74,17 @@ public class Registrar extends javax.swing.JFrame {
 
         lbl_contraseña.setText("Contraseña");
 
-        jButton1.setText("Registrarse");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnRegistrar.setText("Registrarse");
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnRegistrarActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Iniciar sesión");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnIniciarSesion.setText("Iniciar sesión");
+        btnIniciarSesion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnIniciarSesionActionPerformed(evt);
             }
         });
 
@@ -134,9 +134,9 @@ public class Registrar extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(143, 143, 143)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2)
+                            .addComponent(btnIniciarSesion)
                             .addComponent(jLabel1)
-                            .addComponent(jButton1))))
+                            .addComponent(btnRegistrar))))
                 .addContainerGap(44, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -171,11 +171,11 @@ public class Registrar extends javax.swing.JFrame {
                     .addComponent(lbl_telefono)
                     .addComponent(txt_telefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24)
-                .addComponent(jButton1)
+                .addComponent(btnRegistrar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addComponent(btnIniciarSesion)
                 .addContainerGap(76, Short.MAX_VALUE))
         );
 
@@ -193,15 +193,15 @@ public class Registrar extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
         Login ob_lo=new Login(conexion);
         ob_lo.setVisible(true);//Regresar a la ventada de Login
         this.dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         Registrarse();//Al apretar en el boton de registrarse, ejecuta el metodo Registrarse
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnRegistrarActionPerformed
 
     public static void main(String args[]) {
         
@@ -234,8 +234,8 @@ public class Registrar extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btnIniciarSesion;
+    private javax.swing.JButton btnRegistrar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private com.toedter.calendar.JDateChooser jdc_fecha_nac;

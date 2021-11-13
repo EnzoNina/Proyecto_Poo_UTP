@@ -1,13 +1,16 @@
 package Forms;
 import Clases.Cita;
+import Clases.Persona;
 import java.sql.Connection;
 import java.util.ArrayList;
 
 public class Menu extends javax.swing.JFrame {
     static Connection conexion;
     static ArrayList<Cita> arrayCita=new ArrayList<Cita>();
-    public Menu(Connection Conectar,ArrayList<Cita>array_pasado) {      
+    static ArrayList<Persona>arrayPersona=new ArrayList<Persona>();
+    public Menu(Connection Conectar,ArrayList<Cita>array_pasado,ArrayList<Persona>array_persona) {      
         Menu.arrayCita=array_pasado;
+        Menu.arrayPersona=array_persona;
         conexion=Conectar;
         initComponents();
     }
@@ -15,6 +18,12 @@ public class Menu extends javax.swing.JFrame {
         //Provar si funciona asi       
         conexion=Conectar;
         initComponents();        
+    }
+
+    Menu(Connection Conectar, ArrayList<Cita> arrayCita) {
+        Menu.arrayCita=arrayCita;
+        conexion=Conectar;
+        initComponents();
     }
     
     @SuppressWarnings("unchecked")
@@ -106,14 +115,14 @@ public class Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void lbl_mante_doctorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_mante_doctorMouseClicked
-        Mante_doc ob_doc= new Mante_doc(conexion);
+        Mante_doc ob_doc= new Mante_doc(conexion,arrayPersona);
         ob_doc.setVisible(true);
         this.dispose();
 
     }//GEN-LAST:event_lbl_mante_doctorMouseClicked
 
     private void lbl_mante_clienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_mante_clienteMouseClicked
-        Mante_clien ob_clien=new Mante_clien(conexion);
+        Mante_clien ob_clien=new Mante_clien(conexion,arrayPersona);
         ob_clien.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_lbl_mante_clienteMouseClicked
@@ -151,7 +160,7 @@ public class Menu extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {                
-                new Menu(conexion,arrayCita).setVisible(true);
+                new Menu(conexion,arrayCita,arrayPersona).setVisible(true);
             }
         });
     }

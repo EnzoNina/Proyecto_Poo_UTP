@@ -1,30 +1,48 @@
 package Clases;
+import Interfaces.actividadesPersona;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.*;
+import javax.swing.JOptionPane;
 
-public class Administrador {
-
-    public Administrador() {
+public class Administrador extends Persona implements actividadesPersona<Administrador>{
+    //Atributos
+    public static PreparedStatement sentencia_preparada;
+    public static ResultSet resultado;
+    @Override
+    public String login(Connection conectar, String usuario, String contraseña) {
+        Connection conexion=conectar;
+        String idAdministrador=null;
+        try {
+            String sentencia_buscar = ("SELECT id,usuario,contraseña FROM Administrador WHERE usuario = '" + usuario + "' AND contraseña = '" + contraseña + "'");
+            sentencia_preparada = conexion.prepareStatement(sentencia_buscar);
+            resultado = sentencia_preparada.executeQuery();
+            //condicion 
+            if (resultado.next()) {                                
+                idAdministrador = resultado.getString("id");
+                String busqueda_usuario_doctor = ("Bienvenido Administrador " + idAdministrador);                
+                JOptionPane.showMessageDialog(null, busqueda_usuario_doctor);                
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return idAdministrador;
     }
-    //claro enviar en un arreglo de arrays list todas las actividades que debe hacer el administrador 
-    public void Registar() {            //que se como un agregacion 
-        // TODO implement here
+
+    @Override
+    public int registrar(Connection conectar, Administrador objetoRegistrar) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-
-    public void Ingresar() {
-        // TODO implement here      //personal tega acceso a registrar cita 
+    @Override
+    public int borrar(Connection conectar, String Dni) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void Mantenimiento_Doctores() {
-        // TODO implement here
+    @Override
+    public int modificar(Connection conectar, Administrador objetoModificar) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    public void Mantenimiento_Pacientes() {
-        // TODO implement here
-    }
-
-    public void Mantenimiento_Citas() {
-        // TODO implement here
-    }
-
+    
 }

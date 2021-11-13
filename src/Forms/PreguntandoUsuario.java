@@ -8,44 +8,32 @@ import java.io.FileReader;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author msi
- */
 public final class PreguntandoUsuario extends javax.swing.JFrame {
     //objetos de jframe
      Persona objpersona;
      Login objlogin;
      
-    //DECLARANDO OBJETOS y datos para conectarme con la bsd 
-    
+    //DECLARANDO OBJETOS y datos para conectarme con la bsd     
     public static PreparedStatement sentencia_preparada;
     public static ResultSet resultado;
-    public static String cadena;
-    
+    public static String cadena;    
     String barra = File.separator;    //Separador de ubicacion Direccion de la base de datos                                      
     String url = System.getProperty("user.dir") + barra + "Datos" + barra + "consulta.db";//Get property sirve para obtener la ubicacion el proyecto
-    Connection Conectar; 
-    //
+    Connection Conectar;     
     public PreguntandoUsuario() {
-        initComponents();
-        conexion();//me conecto a la bsd 
-        setLocationRelativeTo(null);        
-        
+        initComponents();        
+        conexion();//Conexion a la base de datos
+        setLocationRelativeTo(null);                
     }
     //metodo getter and setter 
-
     public String getCadena() {
         return cadena;
     }
     
-    //METODO PARA CONECTARME
-    public void conexion() {        
+    //METODO PARA IMPRIMIR EL SCRIP DE LA BASE DE DATOS
+    public void conexion() {               
         String nombre = System.getProperty("user.dir") + barra + "Datos" + barra + "base_datos_scrip.txt";
         BufferedReader br = null;
         try {
@@ -62,7 +50,7 @@ public final class PreguntandoUsuario extends javax.swing.JFrame {
                //Leer la siguiente línea
                texto = br.readLine();
            }
-            Class.forName("org.sqlite.JDBC");//Clase para corregir el error de la base de datos //este da a entender más la unión a la base de datos para que el prigrma nose paltee
+           Class.forName("org.sqlite.JDBC");//Clase para corregir el error de la base de datos //este da a entender más la unión a la base de datos para que el prigrma nose paltee
             Conectar = DriverManager.getConnection("jdbc:sqlite:" + url, "root", "");//Hacemos conexion con la base de datos, el root es para entrar como administrador
             if (Conectar != null) {
                 System.out.println("Conectado");//Si la conexcion es exitosa nos muestra el mensaje

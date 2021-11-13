@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>src/Clases/Doctor.java</url>
+            <bookmark id="1">
+                <name/>
+                <line>42</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Josh/Documents/GitHub/Proyecto_Poo_UTP/src/Clases/Cita.java</file>
-            <file>file:/C:/Users/Josh/Documents/GitHub/Proyecto_Poo_UTP/src/Clases/Doctor.java</file>
             <file>file:/C:/Users/Josh/Documents/GitHub/Proyecto_Poo_UTP/src/Clases/Paciente.java</file>
+            <file>file:/C:/Users/Josh/Documents/GitHub/Proyecto_Poo_UTP/src/Clases/Doctor.java</file>
             <file>file:/C:/Users/Josh/Documents/GitHub/Proyecto_Poo_UTP/src/Clases/Buscar.java</file>
             <file>file:/C:/Users/Josh/Documents/GitHub/Proyecto_Poo_UTP/src/Forms/Registrar.java</file>
             <file>file:/C:/Users/Josh/Documents/GitHub/Proyecto_Poo_UTP/src/Forms/Registro_Citas.java</file>
@@ -21,6 +30,7 @@
             <file>file:/C:/Users/Josh/Documents/GitHub/Proyecto_Poo_UTP/src/impl/buscarPorNombre.java</file>
             <file>file:/C:/Users/Josh/Documents/GitHub/Proyecto_Poo_UTP/src/Interfaces/IbuscarPor.java</file>
             <file>file:/C:/Users/Josh/Documents/GitHub/Proyecto_Poo_UTP/src/Forms/PreguntandoUsuario.java</file>
+            <file>file:/C:/Users/Josh/Documents/GitHub/Proyecto_Poo_UTP/src/Interfaces/actividadesPersona.java</file>
             <file>file:/C:/Users/Josh/Documents/GitHub/Proyecto_Poo_UTP/src/impl/buscarPorDni.java</file>
             <file>file:/C:/Users/Josh/Documents/GitHub/Proyecto_Poo_UTP/src/Forms/Mante_Citas.java</file>
             <file>file:/C:/Users/Josh/Documents/GitHub/Proyecto_Poo_UTP/src/Clases/historiaClinica.java</file>

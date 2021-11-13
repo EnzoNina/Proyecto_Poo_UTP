@@ -81,6 +81,7 @@ public class historiaClinicaForm extends javax.swing.JFrame{
         agregar.setString(4, txt_receta.getText());
         agregar.setString(5, fechaStrn);        
         agregar.executeUpdate();
+        cargar_tablas();
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
