@@ -27,7 +27,7 @@ public class historiaClinicaForm extends javax.swing.JFrame{
     String titulos[]={"nro Historia","Dni Doctor","Dni Paciente","Diagnostico","Receta","Fecha y Hora"};
     DefaultTableModel tablaDefault=new DefaultTableModel(null,titulos);
     SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy HH:mm");
-    Doctor obdoc = new Doctor();
+    Doctor obdoc = new Doctor();//objetodoctor
     public historiaClinicaForm(Connection conectar,String DniDodcor,String dniPaciente,Date Fecha,ArrayList<historiaClinica> arrayPasado) {
         historiaClinicaForm.arrayHistoriaClinica=arrayPasado;        
         //Llenamos los text fild con los datos del paciente     

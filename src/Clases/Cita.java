@@ -1,4 +1,5 @@
 package Clases;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Cita {
@@ -7,16 +8,23 @@ public class Cita {
     private String dni_doctor,dni_paciente;
     private boolean estado;
     private Date fecha_hora;
+    private String nombredoctor,nombrepaciente;
+    private String Apellidodoctor,Apellidopaciente;
+    
     //Constructor
     public Cita() {
     }
     
-    public Cita(int nro, String dni_doctor, String dni_paciente, boolean estado, Date fecha_hora) {
+    public Cita(int nro, String dni_doctor, String dni_paciente,String nombredoctor,String nombrepaciente,String Apelldoctor,String Apellpaciente, Date fecha_hora, boolean estado) {
         this.nro = nro;
         this.dni_doctor = dni_doctor;
         this.dni_paciente = dni_paciente;
-        this.estado = estado;
+        this.nombredoctor=nombredoctor;
+        this.nombrepaciente=nombrepaciente;
+        this.Apellidodoctor=Apelldoctor;
+        this.Apellidopaciente=Apellpaciente;
         this.fecha_hora = fecha_hora;
+        this.estado = estado;
     }        
     //Getter and Setter
         public int getNro() {
@@ -57,5 +65,47 @@ public class Cita {
 
     public void setFecha_hora(Date fecha_hora) {
         this.fecha_hora = fecha_hora;
-    }             
+    }         
+
+    public String getNombredoctor() {
+        return nombredoctor;
+    }
+
+    public void setNombredoctor(String nombredoctor) {
+        this.nombredoctor = nombredoctor;
+    }
+
+    public String getNombrepaciente() {
+        return nombrepaciente;
+    }
+
+    public void setNombrepaciente(String nombrepaciente) {
+        this.nombrepaciente = nombrepaciente;
+    }
+
+    public String getApellidodoctor() {
+        return Apellidodoctor;
+    }
+
+    public void setApellidodoctor(String Apellidodoctor) {
+        this.Apellidodoctor = Apellidodoctor;
+    }
+
+    public String getApellidopaciente() {
+        return Apellidopaciente;
+    }
+
+    public void setApellidopaciente(String Apellidopaciente) {
+        this.Apellidopaciente = Apellidopaciente;
+    }
+    
+    
+    
+   public void Buscandocita(ArrayList<Cita>array_cita)
+   {
+       for(Cita cita :array_cita)
+        {
+            
+        }
+   }
 }

@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 public class Paciente extends Persona implements actividadesPersona<Paciente>{        
     public static PreparedStatement sentencia_preparada;
     public static ResultSet resultado;
+    private boolean Espaciente;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     //Constructores
     public Paciente(String DNI, String Usuario, String Contraseña, String Nombre, String Apellido, int Numero, Date fecha_naci) {
@@ -20,16 +21,21 @@ public class Paciente extends Persona implements actividadesPersona<Paciente>{
     }
     public Paciente() {
     }
+    //Validacion
+    public boolean getPaciente()
+    {   
+        return Espaciente=true;
+    } 
     //Metodos implementados
     @Override
     public String login(Connection conectar,String usuario, String contraseña) {        
-        String DNI=null;
-        Connection conexion=conectar;
+        String DNI=null;//dni null
+        Connection conexion=conectar;//objeto conectar 
         try {
             String Buscando_paciente = ("SELECT dni,nombre,apellido FROM paciente WHERE contraseña = '" + contraseña + "'");
             sentencia_preparada = conexion.prepareStatement(Buscando_paciente);//preparandpsentencia buscando
             resultado = sentencia_preparada.executeQuery();//botamos el resultado   
-            if(resultado.next()){
+            if(resultado.next()){//si encuentra
                 String Nombre_usuario = resultado.getString("nombre");
                 String apellidoUsuario=resultado.getString("apellido");                
                 DNI =resultado.getString("dni");
@@ -59,7 +65,7 @@ public class Paciente extends Persona implements actividadesPersona<Paciente>{
             resul=sentencia_preparada.executeUpdate();//Ejecutamos la sentencia escrita en el sql                                                
         } catch (Exception e) {
         }
-        return resul;
+        return resul;//executeQuery devuelve una result set una tabla resultados,encambio  tabla del executeUpdate devuelve la cantidad de filas afectadas por nuestra instruccion 
     }
 
     @Override
@@ -69,7 +75,7 @@ public class Paciente extends Persona implements actividadesPersona<Paciente>{
         try {
             sentencia_preparada=conexion.prepareStatement("delete from paciente where dni=?");
             sentencia_preparada.setString(1,dni);
-            reslt=sentencia_preparada.executeUpdate();                       
+            reslt=sentencia_preparada.executeUpdate();  //devuelve el numero de lineas modificadas                      
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -85,7 +91,7 @@ public class Paciente extends Persona implements actividadesPersona<Paciente>{
             sentencia_preparada=conexion.prepareStatement("update paciente set nombre=?,apellido=?, fecha_nac=?,telefono=?,usuario=?,contraseña=? WHERE dni=?");
             sentencia_preparada.setString(1, objetoModificar.getNombre());
             sentencia_preparada.setString(2, objetoModificar.getApellido());
-            String date =sdf.format(objetoModificar.getFecha_naci());
+            String date =sdf.format(objetoModificar.getFecha_naci());//lo convierto a 02/05/2021 y lo actualizo
             sentencia_preparada.setString(3, date);
             sentencia_preparada.setString(4, String.valueOf(objetoModificar.getNumero())); 
             sentencia_preparada.setString(5, objetoModificar.getUsuario());
@@ -97,10 +103,10 @@ public class Paciente extends Persona implements actividadesPersona<Paciente>{
         }
         return rlt;
     }
-    //Metodos
+    //Metodos QUE REGISTRA CITAS Y QUE BUSCA INDIRECTAMENTE
     public boolean registrarCita(ArrayList<Cita> array_cita, Cita nuevaCita) {        
         boolean seEncontro = false;
-        for (Cita cita : array_cita) {
+        for (Cita cita : array_cita) {  
             if (cita.getFecha_hora().equals(nuevaCita.getFecha_hora())) {                
                 seEncontro = true;
             }            
@@ -110,4 +116,31 @@ public class Paciente extends Persona implements actividadesPersona<Paciente>{
         }
         return seEncontro;
     }   
+
+    @Override
+    public String buscandodni(Connection conectar,String texto)
+    {
+       String DNI=null;//dni null
+       Connection conexion=conectar;
+        //objeto conectar 
+        try {
+            String Buscando_paciente = ("SELECT dni,nombre,apellido FROM paciente WHERE contraseña = '" + texto + "'");
+            sentencia_preparada = conexion.prepareStatement(Buscando_paciente);//aca lo busca
+            resultado = sentencia_preparada.executeQuery();//optiene el resultado  
+            if(resultado.next()){//si encuentra
+                           
+                DNI =resultado.getString("dni");
+                                            
+            }
+        } catch (HeadlessException | SQLException e) {
+            System.out.println(e);
+        }
+        return DNI;
+    }
+        
+    
 }
+    
+    
+    
+

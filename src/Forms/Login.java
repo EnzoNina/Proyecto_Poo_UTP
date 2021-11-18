@@ -17,25 +17,30 @@ public class Login extends javax.swing.JFrame {
     public static ResultSet resultado;
     static Connection conexion;
     Paciente obPaciente = new Paciente();  
-    ArrayList<Persona> personas_array = new ArrayList<Persona>();
-    ArrayList<Cita> array_cita = new ArrayList<Cita>();
-    ArrayList<historiaClinica> array_historiaClinica = new ArrayList<historiaClinica>();
-
+    ArrayList<Persona> personas_array = new ArrayList<Persona>();//lista personas
+    ArrayList<Cita> array_cita = new ArrayList<Cita>();//lista citas
+   // ArrayList<historiaClinica> array_historiaClinica = new ArrayList<historiaClinica>();
+    ArrayList<historiaClinica> array_historiaClinica=new ArrayList<historiaClinica>();
+    //lista de historia clinica
     //CONSTRCUTOR 
     public void cargar() {
         //Cargamos datos del array de la cita
         try {
-            PreparedStatement cita = conexion.prepareStatement("Select nro_cita,dni_doctor,dni_cliente,fecha_hora,estado from cita");
+            PreparedStatement cita = conexion.prepareStatement("Select nro_cita,dni_doctor,dni_cliente,nombredoctor,nombrepaciente,Apellidodoctor,Apellidopaciente,fecha_hora,estado from cita");
             ResultSet resultado_cita = cita.executeQuery();
             while (resultado_cita.next()) {
                 int nro_cita = resultado_cita.getInt("nro_cita");
-                String dni_coctor = resultado_cita.getString("dni_doctor");
+                String dni_doctor = resultado_cita.getString("dni_doctor");
                 String dni_cliente = resultado_cita.getString("dni_cliente");
+                String nombredoctor=resultado_cita.getString("nombredoctor");
+                String nombrepaciente=resultado_cita.getString("nombrepaciente");
+                String Apellidodoctor=resultado_cita.getString("Apellidodoctor");
+                String Apellidopaciente=resultado_cita.getString("Apellidopaciente");
                 String fecha_hora = resultado_cita.getString("fecha_hora");
                 SimpleDateFormat formateo = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 Date fecha_formateada = formateo.parse(fecha_hora);
                 boolean estado = resultado_cita.getBoolean("estado");
-                Cita obcita = new Cita(nro_cita, dni_coctor, dni_cliente, estado, fecha_formateada);
+                Cita obcita = new Cita(nro_cita, dni_doctor, dni_cliente,nombredoctor,nombrepaciente,Apellidodoctor,Apellidopaciente, fecha_formateada,estado);
                 array_cita.add(obcita);
             }
         } catch (Exception e) {
@@ -90,34 +95,36 @@ public class Login extends javax.swing.JFrame {
                 int nroHistoria = resultado.getInt("nro_historia");
                 String dni_doctor = resultado.getString("dni_doctor");
                 String dni_cliente = resultado.getString("dni_cliente");
-                String diagnostico = resultado.getString("diagnostico");
+                String diagnostico = resultado.getString("diagnostico");  //CREo que es porque, no tiene datos la bsd 
                 String receta = resultado.getString("receta");
                 String Fecha = resultado.getString("Fecha");
                 SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 Date fecha_date = objSDF.parse(Fecha);
-                array_historiaClinica.add(new historiaClinica(nroHistoria, dni_cliente, dni_doctor, diagnostico, receta, fecha_date));
+               // array_historiaClinica.add(new historiaClinica(nroHistoria, dni_cliente, dni_doctor, diagnostico, receta,fecha_date));
+               array_historiaClinica.add(new historiaClinica(nroHistoria,dni_cliente,dni_doctor,diagnostico,receta,fecha_date));
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage().toString());
         }
     }
-
+    
+    //Constructor
     public Login(Connection conectar) {
         initComponents();
         setLocationRelativeTo(null);//Posicion de la ventana en le medio de la ventana
         conexion=conectar;
-        cargar();
+        cargar();//CARGA DATOS
     }
 
     //buscando usuario en la base de datos VERIFICANDO 
     public void verificando_paciente(String usuario, String contraseña) {//verifico si es un paciente                       
         String dni=obPaciente.login(conexion,usuario, contraseña);
-        if(dni!=null){
+        if(dni!=null){//SI lo encuentra entra
             Registro_Citas objregistro = new Registro_Citas(conexion, personas_array, array_cita, dni);        
             objregistro.setVisible(true);
             this.dispose();        
         }else
-            JOptionPane.showMessageDialog(null, "Usuario y contraseña incorrecta");
+            JOptionPane.showMessageDialog(null, "Usuario y contraseña incorrecta");//si no no entro
     }
 
     //Buscando en la base de datos si el usuario es un doctor 

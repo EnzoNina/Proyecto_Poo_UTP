@@ -1,5 +1,8 @@
 package Clases;
+import static Clases.Paciente.resultado;
+import static Clases.Paciente.sentencia_preparada;
 import Interfaces.actividadesPersona;
+import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,6 +17,7 @@ public class Doctor extends Persona implements actividadesPersona<Doctor>{
     private String distrito;    
     public static PreparedStatement sentencia_preparada;
     public static ResultSet resultado;
+    private boolean Esdoctor=false;
     SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
     //private Date Horario;
     public Doctor(String DNI, String Usuario, String Contraseña, String Nombre, String Apellido, Date fecha_naci, int Numero, String distrito) {
@@ -23,6 +27,12 @@ public class Doctor extends Persona implements actividadesPersona<Doctor>{
     public Doctor() {
     }
     //Getter and Setter de distrito
+    //validacion
+     public boolean getdoctor()
+    {   
+        return Esdoctor=true;
+    }
+    
     public String getDistrito() {
         return distrito;
     }
@@ -129,5 +139,28 @@ public class Doctor extends Persona implements actividadesPersona<Doctor>{
     public void llenarhistoriaClinica(ArrayList<historiaClinica> arrayHistoria,historiaClinica obHistoriaClinica){       
         arrayHistoria.add(obHistoriaClinica);
     }
+    //metodo abstracto 
+
+    @Override
+    public String buscandodni(Connection conectar, String texto) {
+        String DNI=null;//dni null
+       Connection conexion=conectar;
+        //objeto conectar 
+        try {
+            String Buscando_paciente = ("SELECT dni FROM doctor WHERE contraseña = '" + texto + "'");
+            sentencia_preparada = conexion.prepareStatement(Buscando_paciente);//aca lo busca
+            resultado = sentencia_preparada.executeQuery();//optiene el resultado  
+            if(resultado.next()){//si encuentra
+                           
+                DNI =resultado.getString("dni");
+                                            
+            }
+        } catch (HeadlessException | SQLException e) {
+            System.out.println(e);
+        }
+        return DNI;
+    }
+    
+    
 
 }

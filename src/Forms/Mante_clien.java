@@ -19,20 +19,20 @@ import javax.swing.JOptionPane;
 
 public class Mante_clien extends javax.swing.JFrame {  
     static Connection conexion;//Objeto conexion
-    SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
-    Paciente obPaciente = new Paciente();
+    SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");//date format 
+    Paciente obPaciente = new Paciente();//objeto paciente
     //Tabla    
     String [] titulos={"Dni","Nombre","Apellido","f.nacimiento","Télefono","Usuario","contraseña"};
-    DefaultTableModel tabla=new DefaultTableModel(null,titulos);
+    DefaultTableModel tabla=new DefaultTableModel(null,titulos);//objeto Arrayslist  con sus subtitulos
     ArrayList<Persona>array_persona=new ArrayList<Persona>();
     public Mante_clien(Connection conectar,ArrayList<Persona>arrayPasado) {
-        array_persona=arrayPasado;
-        conexion=conectar;
+        array_persona=arrayPasado;//le envio eñ array list de persona 
+        conexion=conectar;//presigue la conexion a la base de datos 
         initComponents();
         mostrar();
     }
     //metodo mostrar 
-     public void mostrar()
+     public void mostrar()//Imprime todo lo que esta en la bsd de cliente
     {        
         tabla.setRowCount(0);//primera fila
         ResultSet resultado=null;//este es el principal para que envie resultados 
@@ -73,10 +73,10 @@ public class Mante_clien extends javax.swing.JFrame {
         mostrar();
     }
      public void buscarPor(){
-         tabla.setRowCount(0);       
-        if(jcb_buscarPor.getSelectedItem().toString().equalsIgnoreCase("Nombre")){
+         tabla.setRowCount(0);//borrar la tabla     
+        if(jcb_buscarPor.getSelectedItem().toString().equalsIgnoreCase("Nombre")){//si es nombre
             tabla.setRowCount(0);
-            Buscar ob_buscarNombre=new Buscar(tabla, txt_buscarPor.getText(), array_persona);
+            Buscar ob_buscarNombre=new Buscar(tabla, txt_buscarPor.getText(), array_persona);//le envio el texto
             jTable_Pacientes.setModel(ob_buscarNombre.buscarPor(new buscarPacientePorNombre()));
         }else if(jcb_buscarPor.getSelectedItem().toString().equalsIgnoreCase("Dni")){
             tabla.setRowCount(0);

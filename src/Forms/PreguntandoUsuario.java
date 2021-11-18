@@ -12,8 +12,12 @@ import javax.swing.JOptionPane;
 
 public final class PreguntandoUsuario extends javax.swing.JFrame {
     //objetos de jframe
-     Persona objpersona;
+     //Persona objpersona;
      Login objlogin;
+     Doctor objdoctor;
+     Administrador objadmi;
+     Paciente objpaciente;
+     
      
     //DECLARANDO OBJETOS y datos para conectarme con la bsd     
     public static PreparedStatement sentencia_preparada;
@@ -161,8 +165,8 @@ public final class PreguntandoUsuario extends javax.swing.JFrame {
         objlogin.setVisible(true);//ingreso al login
         this.dispose();
         //le digo que si es Admi         
-        objpersona=new Persona();
-        if(objpersona.getAdmi())
+        objadmi=new Administrador();
+        if(objadmi.getAdmi())
             cadena="Admi";
     }//GEN-LAST:event_labelAdmiMouseClicked
 
@@ -172,8 +176,8 @@ public final class PreguntandoUsuario extends javax.swing.JFrame {
         objlogin.setVisible(true);//ingreso al login
         this.dispose();
         //correcto
-        objpersona=new Persona();
-        if(objpersona.getPaciente())
+        objpaciente=new Paciente();
+        if(objpaciente.getPaciente())
             cadena="Paciente";
     }//GEN-LAST:event_labelpacienteMouseClicked
 
@@ -183,8 +187,8 @@ public final class PreguntandoUsuario extends javax.swing.JFrame {
         objlogin.setVisible(true);//ingreso al login
         this.dispose();
         //le digo si es doctor 
-       objpersona=new Persona();
-        if(objpersona.getdoctor())
+       objdoctor=new Doctor();
+        if(objdoctor.getdoctor())
             cadena="Doctor";
     }//GEN-LAST:event_labeldoctorMouseClicked
 

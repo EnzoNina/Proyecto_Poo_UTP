@@ -6,10 +6,11 @@ import java.sql.ResultSet;
 import java.util.*;
 import javax.swing.JOptionPane;
 
-public class Administrador extends Persona implements actividadesPersona<Administrador>{
+public class Administrador extends Persona implements actividadesPersona<Administrador> {
     //Atributos
     public static PreparedStatement sentencia_preparada;
     public static ResultSet resultado;
+    private boolean EsAdmi=false;
     @Override
     public String login(Connection conectar, String usuario, String contraseña) {
         Connection conexion=conectar;
@@ -29,7 +30,11 @@ public class Administrador extends Persona implements actividadesPersona<Adminis
         }
         return idAdministrador;
     }
-
+    //Validacion 
+     public boolean getAdmi()
+    {   
+        return EsAdmi=true;           //aca en el login miraremos la situacion si se convierto en verdadeo ara algo
+    }
     @Override
     public int registrar(Connection conectar, Administrador objetoRegistrar) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -44,5 +49,12 @@ public class Administrador extends Persona implements actividadesPersona<Adminis
     public int modificar(Connection conectar, Administrador objetoModificar) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    //metodo a implementar
+
+    @Override
+    public String buscandodni(Connection conectar, String texto) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     
 }

@@ -1,8 +1,9 @@
 package Clases;
 
+import java.sql.Connection;
 import java.util.Date;
 
-public class Persona{
+public abstract  class Persona{
     private String DNI;
     private String Usuario;
     private String Contraseña;
@@ -123,5 +124,8 @@ public class Persona{
 
     public void setFecha_naci(Date fecha_naci) {
         this.fecha_naci = fecha_naci;
-    }         
+    }       
+    
+    //Metodo abstracto 
+    public abstract String buscandodni(Connection conectar,String texto);
 }
