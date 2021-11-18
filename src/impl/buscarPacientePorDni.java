@@ -2,7 +2,6 @@ package impl;
 
 import Clases.Buscar;
 import Clases.Paciente;
-import Clases.Persona;
 import Interfaces.IbuscarPor;
 import java.text.SimpleDateFormat;
 import javax.swing.table.DefaultTableModel;
