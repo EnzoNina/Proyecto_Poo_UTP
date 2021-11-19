@@ -6,7 +6,8 @@ import javax.swing.table.DefaultTableModel;
 
 public class Buscar {
     //Atributos
-   private ArrayList<Persona> array_persona = new ArrayList<Persona>();//arreglo persona 
+   private ArrayList<Persona> array_persona = new ArrayList<Persona>();//arreglo persona
+   private ArrayList<Cita>array_cita=new ArrayList<Cita>();
    private DefaultTableModel modelo;//objeto defaulttable Model
    private String buscarTexto;   
    //Constructor
@@ -15,9 +16,18 @@ public class Buscar {
         this.modelo = modelo;    //el modelo 
         this.buscarTexto = buscarTexto;     //y el texto a buscar    
     }
+
     public Buscar() {
     }
     //Getter and Setter
+    public ArrayList<Cita> getArray_cita() {
+        return array_cita;
+    }
+
+    public void setArray_cita(ArrayList<Cita> array_cita) {
+        this.array_cita = array_cita;
+    }
+    
     public ArrayList<Persona> getArray_persona() { //devuelve la lista
         return array_persona;
     }

@@ -39,8 +39,8 @@ public class Login extends javax.swing.JFrame {
                 String fecha_hora = resultado_cita.getString("fecha_hora");
                 SimpleDateFormat formateo = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 Date fecha_formateada = formateo.parse(fecha_hora);
-                boolean estado = resultado_cita.getBoolean("estado");
-                Cita obcita = new Cita(nro_cita, dni_doctor, dni_cliente,nombredoctor,nombrepaciente,Apellidodoctor,Apellidopaciente, fecha_formateada,estado);
+                boolean estado = resultado_cita.getBoolean("estado");                
+                Cita obcita = new Cita(nro_cita, dni_doctor, dni_cliente,nombredoctor,Apellidodoctor,nombrepaciente,Apellidopaciente, fecha_formateada,estado);
                 array_cita.add(obcita);
             }
         } catch (Exception e) {
@@ -118,9 +118,9 @@ public class Login extends javax.swing.JFrame {
 
     //buscando usuario en la base de datos VERIFICANDO 
     public void verificando_paciente(String usuario, String contraseña) {//verifico si es un paciente                       
-        String dni=obPaciente.login(conexion,usuario, contraseña);
-        if(dni!=null){//SI lo encuentra entra
-            Registro_Citas objregistro = new Registro_Citas(conexion, personas_array, array_cita, dni);        
+        String datos[]=obPaciente.login(conexion,usuario, contraseña);
+        if(datos.length>0){//SI lo encuentra entra
+            Registro_Citas objregistro = new Registro_Citas(conexion, personas_array, array_cita, datos);        
             objregistro.setVisible(true);
             this.dispose();        
         }else
@@ -130,9 +130,9 @@ public class Login extends javax.swing.JFrame {
     //Buscando en la base de datos si el usuario es un doctor 
     public void verificando_Doctor(String usuario, String contraseña) {
         Doctor obDoctor=new Doctor();
-        String dniDoctor=obDoctor.login(conexion,usuario, contraseña);
-        if(dniDoctor!=null){
-            Atencion_Pacientes objPacientes = new Atencion_Pacientes(dniDoctor,conexion,array_cita,array_historiaClinica);//si no es doctor ,es un paciente
+        String datos[]=obDoctor.login(conexion,usuario, contraseña);
+        if(datos.length>0){
+            Atencion_Pacientes objPacientes = new Atencion_Pacientes(datos,conexion,array_cita,array_historiaClinica);//si no es doctor ,es un paciente
             objPacientes.setVisible(true);
             this.dispose();
         }else
@@ -142,8 +142,8 @@ public class Login extends javax.swing.JFrame {
     //MIRANDO SI ES UN Administrador 
     public void VerificandoAdministrador(String usuario, String contraseña) {
         Administrador obadmi=new Administrador();
-        String id=obadmi.login(conexion, usuario, contraseña);
-        if(id!=null){
+        String datos[]=obadmi.login(conexion, usuario, contraseña);
+        if(datos.length>0){
             Menu objmenu = new Menu(conexion,array_cita,personas_array);
             objmenu.setVisible(true);
             this.dispose(); 

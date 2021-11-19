@@ -1,9 +1,10 @@
 package Clases;
 
+import Interfaces.actividadesPersona;
 import java.sql.Connection;
 import java.util.Date;
 
-public abstract  class Persona{
+public abstract class Persona implements actividadesPersona<Persona>{
     private String DNI;
     private String Usuario;
     private String Contraseña;
@@ -128,4 +129,26 @@ public abstract  class Persona{
     
     //Metodo abstracto 
     public abstract String buscandodni(Connection conectar,String texto);
+    //Metodos implementados
+
+    @Override
+    public String[] login(Connection conectar, String usuario, String contraseña) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int registrar(Connection conectar, Persona objetoRegistrar) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int borrar(Connection conectar, String Dni) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int modificar(Connection conectar, Persona objetoModificar) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 }

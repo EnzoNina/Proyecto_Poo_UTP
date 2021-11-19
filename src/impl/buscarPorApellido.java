@@ -13,7 +13,7 @@ public class buscarPorApellido implements IbuscarPor{
             if(persona instanceof Doctor){
                 if (((Doctor) persona).getApellido().equalsIgnoreCase(objetoBuscar.getBuscarTexto())) {
                     String fecha_formateada = objSDF.format(((Doctor) persona).getFecha_naci());                    
-                    objetoBuscar.getModelo().addRow(new Object[]{((Doctor) persona).getDNI(), ((Doctor) persona).getUsuario(),((Doctor) persona).getContraseña(),((Doctor) persona).getNombre(), ((Doctor) persona).getApellido(),fecha_formateada, ((Doctor) persona).getNumero(), ((Doctor) persona).getDistrito()});
+                    objetoBuscar.getModelo().addRow(new Object[]{((Doctor) persona).getDNI(),((Doctor) persona).getNombre(), ((Doctor) persona).getApellido(),fecha_formateada, ((Doctor) persona).getNumero(), ((Doctor) persona).getDistrito(), ((Doctor) persona).getUsuario(),((Doctor) persona).getContraseña()});
                 }
             }
         }

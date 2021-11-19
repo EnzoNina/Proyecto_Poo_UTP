@@ -18,7 +18,7 @@ public class Mante_doc extends javax.swing.JFrame {
     static Connection conexion;
     Doctor obDoctor=new Doctor();
     //Tabla    
-    String [] titulos={"Dni","Usuario","Contraseña","Nombre","Apellido","Fecha Nacimiento","Telefono","Distrito"};//Array titulos para la tabla
+    String [] titulos={"Dni","Nombre","Apellido","Fecha Nacimiento","Telefono","Distrito","Usuario","Contraseña"};//Array titulos para la tabla
     DefaultTableModel tabla=new DefaultTableModel(null,titulos);//Establecemos la tabla sin filas y con los titulos
     SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
     ArrayList<Persona>array_persona=new ArrayList<Persona>();
@@ -47,8 +47,8 @@ public class Mante_doc extends javax.swing.JFrame {
             resultado=mostrar.executeQuery();//Ejecutamos la sentencia
             while(resultado.next()){//Mientras obtenda un resultado 
                 //Agregamos los datos obtenidos de la base de datos a la tabla
-                tabla.addRow(new Object[]{resultado.getString("dni"),resultado.getString("Usuario"),resultado.getString("Contraseña"),resultado.getString("nombre"),resultado.getString("apellido"),
-                    resultado.getString("fecha_nac"),resultado.getString("telefono"),resultado.getString("distrito")});             
+                tabla.addRow(new Object[]{resultado.getString("dni"),resultado.getString("nombre"),resultado.getString("apellido"),
+                    resultado.getString("fecha_nac"),resultado.getString("telefono"),resultado.getString("distrito"),resultado.getString("Usuario"),resultado.getString("Contraseña")});             
             }            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage().toString());
@@ -323,18 +323,18 @@ public class Mante_doc extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
                                                                                  //tengo que ver esto 
     private void jtable_doctoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtable_doctoresMouseClicked
-        try {
+        try {            
             int seleccion=jtable_doctores.rowAtPoint(evt.getPoint());//Sirve para obtener la posicion de la fila de la Jtable
             txt_mante_dni.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 0)));//Establece los text field con el texto obtenido de la Jtable
-            txt_usuario.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 1)));
-            txt_contraseña.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 2)));
-            txt_mante_nombre.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 3)));
-            txt_mante_apell.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 4)));
-            String fechaSt=String.valueOf(jtable_doctores.getValueAt(seleccion,5));
+            txt_mante_nombre.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 1)));
+            txt_mante_apell.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 2)));
+            String fechaSt=String.valueOf(jtable_doctores.getValueAt(seleccion,3));
             Date fecha=sdf.parse(fechaSt);
             jdateFechaNacimiento.setDate(fecha);
-            txt_telefono.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 6)));
-            txt_mante_distr.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 7)));
+            txt_telefono.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 4)));
+            txt_mante_distr.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 5)));
+            txt_usuario.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 6)));
+            txt_contraseña.setText(String.valueOf(jtable_doctores.getValueAt(seleccion, 7)));                        
         } catch (ParseException ex) {
             Logger.getLogger(Mante_doc.class.getName()).log(Level.SEVERE, null, ex);
         }

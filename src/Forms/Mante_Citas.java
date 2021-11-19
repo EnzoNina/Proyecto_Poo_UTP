@@ -1,73 +1,44 @@
 package Forms;
 import Clases.Cita;
-import static Forms.Mante_clien.conexion;
 import Clases.*;
+import impl.buscarCitaDoctorApellido;
+import impl.buscarCitaDoctorDNI;
+import impl.buscarCitaDoctorNombre;
+import impl.buscarCitaPacienteApellido;
+import impl.buscarCitaPacienteDni;
+import impl.buscarCitaPacienteNombre;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
+import java.util.Date;
 import javax.swing.table.DefaultTableModel;
 
 public class Mante_Citas extends javax.swing.JFrame {
-    static ArrayList<Cita> arrayCita=new ArrayList<Cita>();
+    ArrayList<Cita> arrayCita=new ArrayList<Cita>();
     static Connection conexion;
+    Cita objcita;
+    Administrador ob_administrador=new Administrador();
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     //Inicializo la tabla 
-    String [] titulos={"nrocita","dnidoctor","dnicliente","Nombredoctor","Nombrepaciente","Apelpaciente","Apellidodoctor","fechacita"};
-    DefaultTableModel tabla=new DefaultTableModel(null,titulos);
+    String [] titulos={"nrocita","dnidoctor","Nombre doctor","Apellido doctor","dnicliente","Nombre paciente","Apellido paciente","fecha cita","estado"};
+    DefaultTableModel tabla=new DefaultTableModel(null,titulos);    
     //objetos
     Paciente objpaciente;
     Doctor objdoctor;
     
     public Mante_Citas(Connection conectar,ArrayList<Cita> arrayPasado) {
-        Mante_Citas.arrayCita=arrayPasado;//Primero agarrar el array de citas pasado 
+        this.arrayCita=arrayPasado;//Primero agarrar el array de citas pasado 
         initComponents();
         conexion=conectar; 
         mostrar();//muestra el Jtable 
-    }
-    
-    public void estadoCita(){
-        //Condicion para el estado de la cita
-        
-    }
-    private void buscandonombredoctor(String tipobusqueda,String dato)
-    {   tabla.setRowCount(0);  
-    
-        for(Cita cita :arrayCita)
-        {
-            if(tipobusqueda.equalsIgnoreCase("Nombres") && cita.getNombredoctor().equalsIgnoreCase(dato))
-                 tabla.addRow(new Object[]{cita.getNro(),cita.getDni_doctor(),cita.getDni_paciente(),cita.getNombredoctor(),cita.getNombrepaciente(),
-                     cita.getApellidodoctor(),cita.getApellidopaciente(),cita.getFecha_hora()
-                 });
-                jtabla_citas.setModel(tabla);
-            else if (tipobusqueda.equalsIgnoreCase("Apellidos")&& cita.getApellidodoctor().equalsIgnoreCase(dato))
-                tabla.addRow(new Object[]{cita.getNro(),cita.getDni_doctor(),cita.getDni_paciente(),cita.getNombredoctor(),cita.getNombrepaciente(),
-                     cita.getApellidodoctor(),cita.getApellidopaciente(),cita.getFecha_hora()
-                 });
-            else if (tipobusqueda.equalsIgnoreCase("Dni") && objdoctor.buscandodni(conexion, dato).equalsIgnoreCase(dato))
-                tabla.addRow(new Object[]{cita.getNro(),cita.getDni_doctor(),cita.getDni_paciente(),cita.getNombredoctor(),cita.getNombrepaciente(),
-                     cita.getApellidodoctor(),cita.getApellidopaciente(),cita.getFecha_hora()
-                 });
-            
-        }
-        
-    }
-    
-    public void mostrar()
-    {
-         
+    }     
+   public void mostrar()
+    {         
         tabla.setRowCount(0);//primera fila ?este que hacia ?
-        ResultSet resultado=null;//este es el principal para que envie resultados 
-        try {
-            //Sentencia para obtener los datos de la base de datos
-            PreparedStatement mostrar=conexion.prepareStatement("select nro_cita,dni_doctor,dni_cliente,fecha_hora from cita");            
-            resultado=mostrar.executeQuery();//Ejecutamos la sentencia
-            while(resultado.next()){//Mientras obtenda un resultado 
-                //Agregamos los datos obtenidos de la base de datos a la tabla
-                tabla.addRow(new Object[]{resultado.getString("nro_cita"),resultado.getString("dni_doctor"),resultado.getString("dni_cliente"),resultado.getString("NombDoctor"),resultado.getString("Nombpaciente"),resultado.getString("Apelldoctor"),resultado.getString("fecha_hora")});             
-            }            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
+        for (Cita cita : arrayCita) {
+            String fecha=sdf.format(cita.getFecha_hora());
+            tabla.addRow(new Object[]{cita.getNro(),cita.getDni_doctor(),cita.getNombredoctor(),cita.getApellidodoctor(),cita.getDni_paciente(),
+            cita.getNombrepaciente(),cita.getApellidopaciente(),fecha,cita.getEstado()});
         }
         jtabla_citas.setModel(tabla);//Establemos el modelo de la tabla
    
@@ -91,17 +62,23 @@ public class Mante_Citas extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         txt_dni_doc = new javax.swing.JTextField();
         txt_dni_paciente = new javax.swing.JTextField();
-        txt_fecha_hora = new javax.swing.JTextField();
         txt_estado = new javax.swing.JTextField();
-        txt_buscar = new javax.swing.JButton();
+        btnbuscarCliente = new javax.swing.JButton();
         txt_eliminar = new javax.swing.JButton();
         txt_editar = new javax.swing.JButton();
         btn_regresar = new javax.swing.JButton();
+        btnbuscarDoctor = new javax.swing.JButton();
+        jdate_fechaHora = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
+        jtabla_citas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtabla_citasMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jtabla_citas);
 
         Comboboxcliente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombres", "Apellidos", "Dni" }));
@@ -120,16 +97,26 @@ public class Mante_Citas extends javax.swing.JFrame {
 
         jLabel7.setText("Estado");
 
-        txt_buscar.setText("Buscar");
-        txt_buscar.addActionListener(new java.awt.event.ActionListener() {
+        btnbuscarCliente.setText("Buscar cliente");
+        btnbuscarCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_buscarActionPerformed(evt);
+                btnbuscarClienteActionPerformed(evt);
             }
         });
 
         txt_eliminar.setText("Eliminar");
+        txt_eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_eliminarActionPerformed(evt);
+            }
+        });
 
         txt_editar.setText("Editar");
+        txt_editar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_editarActionPerformed(evt);
+            }
+        });
 
         btn_regresar.setText("Regresar");
         btn_regresar.addActionListener(new java.awt.event.ActionListener() {
@@ -138,105 +125,135 @@ public class Mante_Citas extends javax.swing.JFrame {
             }
         });
 
+        btnbuscarDoctor.setText("Buscar doctor");
+        btnbuscarDoctor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnbuscarDoctorActionPerformed(evt);
+            }
+        });
+
+        jdate_fechaHora.setDateFormatString("dd/MM/yyyy HH:mm");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(6, 6, 6)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel1))
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txt_paciente)
-                                .addComponent(txt_doctor, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
-                                .addComponent(comboboxdoctor, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(Comboboxcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel1)
+                        .addGap(12, 12, 12)
+                        .addComponent(Comboboxcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
+                        .addGap(6, 6, 6)
+                        .addComponent(txt_paciente, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
+                        .addComponent(btnbuscarCliente))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(jLabel2)
+                        .addGap(6, 6, 6)
+                        .addComponent(comboboxdoctor, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addComponent(txt_doctor, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
+                        .addComponent(btnbuscarDoctor))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(30, 30, 30)
+                        .addComponent(txt_dni_doc, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(18, 18, 18)
+                        .addComponent(txt_dni_paciente, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(txt_editar)
+                        .addGap(28, 28, 28)
+                        .addComponent(btn_regresar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(37, 37, 37)
+                        .addComponent(txt_eliminar))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel6))
+                        .addGap(24, 24, 24)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(txt_buscar)
-                                .addGap(46, 46, 46)
-                                .addComponent(txt_editar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txt_eliminar))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel4))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txt_dni_doc, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txt_dni_paciente)
-                                        .addComponent(txt_fecha_hora)
-                                        .addComponent(txt_estado))))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(105, 105, 105)
-                        .addComponent(btn_regresar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 584, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14))
+                            .addComponent(txt_estado)
+                            .addComponent(jdate_fechaHora, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE))))
+                .addGap(6, 6, 6)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 851, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(Comboboxcliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txt_paciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(comboboxdoctor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txt_doctor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(5, 5, 5)
+                                .addComponent(jLabel1))
+                            .addComponent(Comboboxcliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(6, 6, 6)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txt_paciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnbuscarCliente))
+                        .addGap(6, 6, 6)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(5, 5, 5)
+                                .addComponent(jLabel2))
+                            .addComponent(comboboxdoctor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(6, 6, 6)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txt_doctor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnbuscarDoctor))
                         .addGap(69, 69, 69)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel4))
                             .addComponent(txt_dni_doc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel5))
                             .addComponent(txt_dni_paciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(24, 24, 24)
+                                .addComponent(jLabel6))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jdate_fechaHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(txt_fecha_hora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel7))
                             .addComponent(txt_estado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(26, 26, 26)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txt_buscar)
-                            .addComponent(txt_eliminar)
-                            .addComponent(txt_editar))
-                        .addGap(36, 36, 36)
-                        .addComponent(btn_regresar)))
-                .addContainerGap(15, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(txt_editar)
+                                .addComponent(btn_regresar))
+                            .addComponent(txt_eliminar)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(15, 15, 15))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -247,28 +264,74 @@ public class Mante_Citas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_regresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_regresarActionPerformed
-        // Regresando al menú 
+         // Regresando al menú 
         Menu objmenu=new Menu(conexion,arrayCita);
         objmenu.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_regresarActionPerformed
 
-    private void txt_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_buscarActionPerformed
-        // cuando aprete el boton buscar 
-        String tipobusqueda=Comboboxcliente.getSelectedItem().toString();//tipo de busque yasea dni nombre y apellido 
-        String dato=txt_paciente.getText();
-       // Ahora lo busco                         //validacion de quiene sta vacio 
-        String tipobusqueda1=comboboxdoctor.getSelectedItem().toString();//Doctor
-        //
-        if(tipobusqueda.isEmpty() && tipobusqueda1.length()>0)
-        {
-            if(tipobusqueda1.equalsIgnoreCase("Nombres"))//nombre del doctor 
-                buscandonombredoctor(tipobusqueda,dato);
-        //else
-            
+    private void btnbuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuscarClienteActionPerformed
+        buscarCita obCita = new buscarCita(tabla, txt_paciente.getText(), arrayCita);
+        if(Comboboxcliente.getSelectedItem().toString().equalsIgnoreCase("Nombres")){
+            tabla.setRowCount(0);
+            jtabla_citas.setModel(obCita.buscarCitaPor(new buscarCitaPacienteNombre()));
+        }else if(Comboboxcliente.getSelectedItem().toString().equalsIgnoreCase("Apellidos")){            
+            tabla.setRowCount(0);
+            jtabla_citas.setModel(obCita.buscarCitaPor(new buscarCitaPacienteApellido()));
+        }else{
+            tabla.setRowCount(0);
+            jtabla_citas.setModel(obCita.buscarCitaPor(new buscarCitaPacienteDni()));
         }
-        
-    }//GEN-LAST:event_txt_buscarActionPerformed
+    }//GEN-LAST:event_btnbuscarClienteActionPerformed
+
+    private void txt_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_editarActionPerformed
+        int seleccion=jtabla_citas.getSelectedRow();//Atributo para escoger la fila de la tabla
+        String fecha=sdf.format(jdate_fechaHora.getDate());             
+        boolean estado=Boolean.parseBoolean(txt_estado.getText());        
+        int nroCita=Integer.parseInt(String.valueOf(jtabla_citas.getValueAt(seleccion, 0)));
+        String nombreDoctor=String.valueOf(jtabla_citas.getValueAt(seleccion, 2));
+        String ApellidoDoctor=String.valueOf(jtabla_citas.getValueAt(seleccion, 3));
+        String nombrePaciente=String.valueOf(jtabla_citas.getValueAt(seleccion, 5));
+        String ApellidoPaciente=String.valueOf(jtabla_citas.getValueAt(seleccion, 6));
+        Cita objetoNuevo=new Cita(nroCita,txt_dni_doc.getText(),txt_dni_paciente.getText(),nombreDoctor,ApellidoDoctor,nombrePaciente,ApellidoPaciente,jdate_fechaHora.getDate(),estado);
+        ob_administrador.modificarCita(conexion, arrayCita, objetoNuevo,nroCita, txt_dni_doc.getText(), txt_dni_paciente.getText(), jdate_fechaHora.getDate(), estado);                
+        mostrar();
+    }//GEN-LAST:event_txt_editarActionPerformed
+
+    private void btnbuscarDoctorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuscarDoctorActionPerformed
+        buscarCita obCita = new buscarCita(tabla, txt_doctor.getText(), arrayCita);
+        if(comboboxdoctor.getSelectedItem().toString().equalsIgnoreCase("Nombres")){
+            tabla.setRowCount(0);
+            jtabla_citas.setModel(obCita.buscarCitaPor(new buscarCitaDoctorNombre()));
+        }else if(comboboxdoctor.getSelectedItem().toString().equalsIgnoreCase("Apellidos")){            
+            tabla.setRowCount(0);
+            jtabla_citas.setModel(obCita.buscarCitaPor(new buscarCitaDoctorApellido()));
+        }else{
+            tabla.setRowCount(0);
+            jtabla_citas.setModel(obCita.buscarCitaPor(new buscarCitaDoctorDNI()));
+        }
+    }//GEN-LAST:event_btnbuscarDoctorActionPerformed
+
+    private void jtabla_citasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtabla_citasMouseClicked
+        try {
+            int seleccion=jtabla_citas.rowAtPoint(evt.getPoint());//Sirve para obtener la posicion de la fila de la Jtable
+            txt_dni_doc.setText(String.valueOf(jtabla_citas.getValueAt(seleccion, 1)));
+            txt_dni_paciente.setText(String.valueOf(jtabla_citas.getValueAt(seleccion, 4)));
+            String fechaSt=String.valueOf(jtabla_citas.getValueAt(seleccion,7));
+            Date fecha=sdf.parse(fechaSt);
+            jdate_fechaHora.setDate(fecha);
+            txt_estado.setText(String.valueOf(jtabla_citas.getValueAt(seleccion, 8)));            
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_jtabla_citasMouseClicked
+
+    private void txt_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_eliminarActionPerformed
+        int seleccion=jtabla_citas.getSelectedRow();//Atributo para escoger la fila de la tabla        
+        int nroCita=Integer.parseInt(String.valueOf(jtabla_citas.getValueAt(seleccion, 0)));
+        ob_administrador.eliminar(conexion, arrayCita, nroCita);
+        mostrar();
+    }//GEN-LAST:event_txt_eliminarActionPerformed
     
     public static void main(String args[]) {
 
@@ -293,13 +356,15 @@ public class Mante_Citas extends javax.swing.JFrame {
         
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Mante_Citas(conexion,arrayCita).setVisible(true);
+                //new Mante_Citas(conexion,arrayCita).setVisible(true);
             }
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> Comboboxcliente;
     private javax.swing.JButton btn_regresar;
+    private javax.swing.JButton btnbuscarCliente;
+    private javax.swing.JButton btnbuscarDoctor;
     private javax.swing.JComboBox<String> comboboxdoctor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -309,15 +374,14 @@ public class Mante_Citas extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private com.toedter.calendar.JDateChooser jdate_fechaHora;
     private javax.swing.JTable jtabla_citas;
-    private javax.swing.JButton txt_buscar;
     private javax.swing.JTextField txt_dni_doc;
     private javax.swing.JTextField txt_dni_paciente;
     private javax.swing.JTextField txt_doctor;
     private javax.swing.JButton txt_editar;
     private javax.swing.JButton txt_eliminar;
     private javax.swing.JTextField txt_estado;
-    private javax.swing.JTextField txt_fecha_hora;
     private javax.swing.JTextField txt_paciente;
     // End of variables declaration//GEN-END:variables
 }

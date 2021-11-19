@@ -1,5 +1,4 @@
 package Clases;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class Cita {
@@ -15,7 +14,7 @@ public class Cita {
     public Cita() {
     }
     
-    public Cita(int nro, String dni_doctor, String dni_paciente,String nombredoctor,String nombrepaciente,String Apelldoctor,String Apellpaciente, Date fecha_hora, boolean estado) {
+    public Cita(int nro, String dni_doctor, String dni_paciente,String nombredoctor,String Apelldoctor,String nombrepaciente,String Apellpaciente, Date fecha_hora, boolean estado) {
         this.nro = nro;
         this.dni_doctor = dni_doctor;
         this.dni_paciente = dni_paciente;
@@ -51,10 +50,10 @@ public class Cita {
         this.dni_paciente = dni_paciente;
     }
 
-    public boolean isEstado() {
+    public boolean getEstado() {
         return estado;
     }
-
+    
     public void setEstado(boolean estado) {
         this.estado = estado;
     }
@@ -97,15 +96,5 @@ public class Cita {
 
     public void setApellidopaciente(String Apellidopaciente) {
         this.Apellidopaciente = Apellidopaciente;
-    }
-    
-    
-    
-   public void Buscandocita(ArrayList<Cita>array_cita)
-   {
-       for(Cita cita :array_cita)
-        {
-            
-        }
-   }
+    }        
 }

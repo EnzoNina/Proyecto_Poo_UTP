@@ -10,9 +10,7 @@ public class historiaClinica {
     private String Diagnostico;
     private String Receta;
     private Date Fecha;
-    //Constructores
-    public historiaClinica() {
-    }
+    //Constructores    
     public historiaClinica(int nroHistoria, String dniCliente, String dniDoctor, String Diagnostico, String Receta, Date Fecha) {
         this.nroHistoria = nroHistoria;
         this.dniCliente = dniCliente;

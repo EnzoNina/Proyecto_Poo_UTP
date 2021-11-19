@@ -17,15 +17,15 @@ public class Atencion_Pacientes extends javax.swing.JFrame {
     //Atributos
     Doctor obdoc = new Doctor();
     static Connection conexion;
-    static String dniDoctor;
+    static String datosDoctor[];
     static ArrayList<Cita>array_cita = new ArrayList<Cita>();    
     static ArrayList<historiaClinica>array_historiaClinica=new ArrayList<historiaClinica>();
     SimpleDateFormat sdf= new SimpleDateFormat("dd/MM/yyyy HH:mm");    
     String titulos[]={"Nro de cita","Dni Paciente","Fecha y hora"};
     DefaultTableModel tabla= new DefaultTableModel(null,titulos);
     //Constructor
-    public Atencion_Pacientes(String dniDoctor,Connection conectar, ArrayList<Cita> array_pasado,ArrayList<historiaClinica> array_pasadoHC) {
-        Atencion_Pacientes.dniDoctor=dniDoctor;        
+    public Atencion_Pacientes(String []array,Connection conectar, ArrayList<Cita> array_pasado,ArrayList<historiaClinica> array_pasadoHC) {
+        Atencion_Pacientes.datosDoctor=array;        
         conexion=conectar;
         initComponents();
         array_cita=array_pasado;
@@ -35,7 +35,7 @@ public class Atencion_Pacientes extends javax.swing.JFrame {
         int seleccion=Jtable_selec_cita.getSelectedRow();
         String dniCliente=String.valueOf(Jtable_selec_cita.getValueAt(seleccion,1));
         Date fechaString =sdf.parse(String.valueOf(Jtable_selec_cita.getValueAt(seleccion,2)));                      
-        historiaClinicaForm obhistoria = new historiaClinicaForm(conexion,dniDoctor, dniCliente, fechaString,array_historiaClinica);
+        historiaClinicaForm obhistoria = new historiaClinicaForm(conexion,datosDoctor[0], dniCliente, fechaString,array_historiaClinica);
         obhistoria.setVisible(true);
         this.dispose();
     }
@@ -176,7 +176,7 @@ public class Atencion_Pacientes extends javax.swing.JFrame {
         }
         try {
             tabla.setRowCount(0);
-            Jtable_selec_cita.setModel(obdoc.Busqueda_Atencion_Citas(array_cita,jdate_chooser.getDate(),tabla,dniDoctor));
+            Jtable_selec_cita.setModel(obdoc.Busqueda_Atencion_Citas(array_cita,jdate_chooser.getDate(),tabla,datosDoctor[0]));
         } catch (ParseException ex) {
             Logger.getLogger(Atencion_Pacientes.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -229,7 +229,7 @@ public class Atencion_Pacientes extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Atencion_Pacientes(dniDoctor,conexion,array_cita,array_historiaClinica).setVisible(true);
+                new Atencion_Pacientes(datosDoctor,conexion,array_cita,array_historiaClinica).setVisible(true);
             }
         });
     }

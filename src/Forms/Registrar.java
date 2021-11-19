@@ -16,8 +16,7 @@ public class Registrar extends javax.swing.JFrame {
     }
     public void Registrarse(){        
         String usuario,contraseña,dni,nombre,apellido,telefono;                        
-        try {
-            
+        try {            
             dni=txt_dni.getText();
             usuario=txt_usuario.getText();
             contraseña=txt_contraseña.getText();

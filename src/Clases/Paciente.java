@@ -9,8 +9,9 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
-public class Paciente extends Persona implements actividadesPersona<Paciente>{        
+public class Paciente extends Persona {        
     public static PreparedStatement sentencia_preparada;
     public static ResultSet resultado;
     private boolean Espaciente;
@@ -25,11 +26,12 @@ public class Paciente extends Persona implements actividadesPersona<Paciente>{
     public boolean getPaciente()
     {   
         return Espaciente=true;
-    } 
+    }    
     //Metodos implementados
-    @Override
-    public String login(Connection conectar,String usuario, String contraseña) {        
+    
+    public String [] login(Connection conectar,String usuario, String contraseña) {        
         String DNI=null;//dni null
+        String datosEnviar[] = new String[3];
         Connection conexion=conectar;//objeto conectar 
         try {
             String Buscando_paciente = ("SELECT dni,nombre,apellido FROM paciente WHERE contraseña = '" + contraseña + "'");
@@ -39,16 +41,18 @@ public class Paciente extends Persona implements actividadesPersona<Paciente>{
                 String Nombre_usuario = resultado.getString("nombre");
                 String apellidoUsuario=resultado.getString("apellido");                
                 DNI =resultado.getString("dni");
+                datosEnviar[0]=DNI;
+                datosEnviar[1]=Nombre_usuario;
+                datosEnviar[2]=apellidoUsuario;
                 String busqueda_usuario = ("Bienvenido " + Nombre_usuario + " " +apellidoUsuario);
                 JOptionPane.showMessageDialog(null, busqueda_usuario);                                
             }
         } catch (HeadlessException | SQLException e) {
             System.out.println(e);
         }
-        return DNI;
+        return datosEnviar;
     }    
-    @Override
-    
+        
     public int registrar(Connection conectar,Paciente objetoRegistrar) {
         Connection conexion=conectar;
         int resul=-1;        
@@ -68,7 +72,7 @@ public class Paciente extends Persona implements actividadesPersona<Paciente>{
         return resul;//executeQuery devuelve una result set una tabla resultados,encambio  tabla del executeUpdate devuelve la cantidad de filas afectadas por nuestra instruccion 
     }
 
-    @Override
+    
     public int borrar(Connection conectar,String dni) {
         Connection conexion=conectar;
         int reslt=-1;        
@@ -82,7 +86,7 @@ public class Paciente extends Persona implements actividadesPersona<Paciente>{
         return reslt;
     }
 
-    @Override
+    
     public int modificar(Connection conectar,Paciente objetoModificar) {
         Connection conexion=conectar;
         int rlt=-1;          
@@ -103,7 +107,8 @@ public class Paciente extends Persona implements actividadesPersona<Paciente>{
         }
         return rlt;
     }
-    //Metodos QUE REGISTRA CITAS Y QUE BUSCA INDIRECTAMENTE
+    
+//Metodos QUE REGISTRA CITAS Y QUE BUSCA INDIRECTAMENTE
     public boolean registrarCita(ArrayList<Cita> array_cita, Cita nuevaCita) {        
         boolean seEncontro = false;
         for (Cita cita : array_cita) {  
@@ -117,7 +122,7 @@ public class Paciente extends Persona implements actividadesPersona<Paciente>{
         return seEncontro;
     }   
 
-    @Override
+    
     public String buscandodni(Connection conectar,String texto)
     {
        String DNI=null;//dni null

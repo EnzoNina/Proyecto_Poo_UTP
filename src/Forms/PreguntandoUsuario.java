@@ -16,9 +16,7 @@ public final class PreguntandoUsuario extends javax.swing.JFrame {
      Login objlogin;
      Doctor objdoctor;
      Administrador objadmi;
-     Paciente objpaciente;
-     
-     
+     Paciente objpaciente;          
     //DECLARANDO OBJETOS y datos para conectarme con la bsd     
     public static PreparedStatement sentencia_preparada;
     public static ResultSet resultado;
@@ -34,8 +32,7 @@ public final class PreguntandoUsuario extends javax.swing.JFrame {
     //metodo getter and setter 
     public String getCadena() {
         return cadena;
-    }
-    
+    }    
     //METODO PARA IMPRIMIR EL SCRIP DE LA BASE DE DATOS
     public void conexion() {               
         String nombre = System.getProperty("user.dir") + barra + "Datos" + barra + "base_datos_scrip.txt";

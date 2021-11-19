@@ -13,7 +13,7 @@ import java.util.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-public class Doctor extends Persona implements actividadesPersona<Doctor>{   
+public class Doctor extends Persona{   
     private String distrito;    
     public static PreparedStatement sentencia_preparada;
     public static ResultSet resultado;
@@ -39,11 +39,11 @@ public class Doctor extends Persona implements actividadesPersona<Doctor>{
 
     public void setDistrito(String distrito) {
         this.distrito = distrito;
-    }
-    //Metodos implementados
-    @Override
-    public String login(Connection conectar,String usuario, String contraseña) {        
+    } 
+    //Metodos implementados    
+    public String[] login(Connection conectar,String usuario, String contraseña) {        
         Connection conexion=conectar;
+        String [] datos=new String[3];
         String dniDoctor=null;
         try {
             String sentencia_buscar = ("SELECT dni,nombre,apellido FROM doctor WHERE Usuario = '" + usuario + "' AND Contraseña = '" + contraseña + "'");
@@ -55,15 +55,18 @@ public class Doctor extends Persona implements actividadesPersona<Doctor>{
                 String apellido = resultado.getString("apellido");
                 String busqueda_usuario_doctor = ("Bienvenido Doctor " + nombre + " " + apellido);//CREO UN OBJETO DOCTOR ESTE DESPUE LLAMO AL METODO CARAGARDATOSDELDOCTOR Y PORFIN LO COMPLETO Y ASI ESTE PUEDE FUNCIONAR 
                 dniDoctor = resultado.getString("dni");
+                datos[0]=dniDoctor;
+                datos[1]=nombre;
+                datos[2]=apellido;
                 JOptionPane.showMessageDialog(null, busqueda_usuario_doctor);                
             }
         } catch (Exception e) {
             System.out.println(e);
         }
-        return dniDoctor;
+        return datos;
     }
 
-    @Override
+    
     public int registrar(Connection conectar,Doctor objetoRegistrar) {
         Connection conexion=conectar;        
         int result=-1;
@@ -85,7 +88,7 @@ public class Doctor extends Persona implements actividadesPersona<Doctor>{
         return result;
     }
 
-    @Override
+    
     public int borrar(Connection conectar,String dni) {
         Connection conexion=conectar;
         int resul=-1;
@@ -99,7 +102,7 @@ public class Doctor extends Persona implements actividadesPersona<Doctor>{
         return resul;
     }
 
-    @Override
+    
     public int modificar(Connection conectar,Doctor objetoModificar) {
         Connection conexion=conectar;
         int rst=-1;
