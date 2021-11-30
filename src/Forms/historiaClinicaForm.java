@@ -45,7 +45,8 @@ public class historiaClinicaForm extends javax.swing.JFrame{
         
     }
     public void cargar_tablas(){
-        //Metodo para cargar el historial clinico del paciente        
+        //Metodo para cargar el historial clinico del paciente
+        tablaDefault.setRowCount(0);        
         for (historiaClinica clinica : arrayHistoriaClinica) {                        
             if(clinica.getDniCliente().equals(dniPaciente)){
                 String fechaFormateada=sdf.format(clinica.getFecha());
@@ -102,7 +103,6 @@ public class historiaClinicaForm extends javax.swing.JFrame{
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         btn_registrar = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -148,13 +148,6 @@ public class historiaClinicaForm extends javax.swing.JFrame{
             }
         });
 
-        jButton1.setText("Mostrar array");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -163,9 +156,7 @@ public class historiaClinicaForm extends javax.swing.JFrame{
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(58, 58, 58)
-                        .addComponent(btn_registrar)
-                        .addGap(68, 68, 68)
-                        .addComponent(jButton1))
+                        .addComponent(btn_registrar))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(7, 7, 7)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -221,9 +212,7 @@ public class historiaClinicaForm extends javax.swing.JFrame{
                             .addComponent(jLabel6)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(40, 40, 40)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btn_registrar)
-                            .addComponent(jButton1))
+                        .addComponent(btn_registrar)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE))
                 .addContainerGap())
@@ -247,24 +236,14 @@ public class historiaClinicaForm extends javax.swing.JFrame{
 
     private void btn_registrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_registrarActionPerformed
         try {
-            registrar();
+            registrar();                        
+            cargar_tablas();
         } catch (ParseException ex) {
             Logger.getLogger(historiaClinicaForm.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(historiaClinicaForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btn_registrarActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        for (historiaClinica clinica : arrayHistoriaClinica) {
-            System.out.println(""+clinica.getnroHistoria());
-            System.out.println(""+clinica.getDniDoctor());
-            System.out.println(""+clinica.getDniCliente());
-            System.out.println(""+clinica.getDiagnostico());
-            System.out.println(""+clinica.getReceta());
-            System.out.println(""+clinica.getFecha());
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     public static void main(String args[]) {      
         
@@ -294,7 +273,6 @@ public class historiaClinicaForm extends javax.swing.JFrame{
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_registrar;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

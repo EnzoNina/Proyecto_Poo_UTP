@@ -1,12 +1,15 @@
 package Forms;
+import Clases.Persona;
 import Clases.Paciente;
 import java.sql.Connection;
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import javax.swing.*;
 
 public class Registrar extends javax.swing.JFrame { 
     static Connection conexion;//este en modo static puedo acceder porque es el atributo de una clase 
+    ArrayList<Persona> arrayPersona = new ArrayList<Persona>();
     Paciente obPaciente = new Paciente();
     SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/YYYY");
     public Registrar(Connection Conectar) {//Obtenemos el objeto conexion que pasamos del formulario Login
@@ -24,9 +27,11 @@ public class Registrar extends javax.swing.JFrame {
             apellido=txt_apellido.getText();                      
             telefono=txt_telefono.getText();//Obtenemos los datos de los text field y del Jcalendar            
             Date fecha=jdc_fecha_nac.getDate();
-            int resultado=obPaciente.registrar(conexion,new Paciente(dni, usuario, contraseña, nombre, apellido, Integer.parseInt(telefono),fecha));            
+            Paciente obNuevo= new Paciente(dni, usuario, contraseña, nombre, apellido, Integer.parseInt(telefono),fecha);
+            int resultado=obPaciente.registrar(conexion,obNuevo,arrayPersona);
             if(resultado>0){
-                JOptionPane.showMessageDialog(null, "Paciente registrado correctamente");
+                JOptionPane.showMessageDialog(null, "Paciente registrado correctamente");                
+                //Comprobar si funciona                
             }
         } catch (Exception e) {
             System.out.println(e);

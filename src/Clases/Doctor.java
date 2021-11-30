@@ -1,7 +1,4 @@
 package Clases;
-import static Clases.Paciente.resultado;
-import static Clases.Paciente.sentencia_preparada;
-import Interfaces.actividadesPersona;
 import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,13 +23,7 @@ public class Doctor extends Persona{
     }
     public Doctor() {
     }
-    //Getter and Setter de distrito
-    //validacion
-     public boolean getdoctor()
-    {   
-        return Esdoctor=true;
-    }
-    
+    //Getter and Setter de distrito        
     public String getDistrito() {
         return distrito;
     }
@@ -40,7 +31,13 @@ public class Doctor extends Persona{
     public void setDistrito(String distrito) {
         this.distrito = distrito;
     } 
-    //Metodos implementados    
+    //validacion
+     public boolean getdoctor()
+    {   
+        return Esdoctor=true;
+    }
+
+    //Metodos implementados                        
     public String[] login(Connection conectar,String usuario, String contraseña) {        
         Connection conexion=conectar;
         String [] datos=new String[3];
@@ -67,30 +64,34 @@ public class Doctor extends Persona{
     }
 
     
-    public int registrar(Connection conectar,Doctor objetoRegistrar) {
-        Connection conexion=conectar;        
+    @Override
+    public int registrar(Connection conectar, Persona objetoRegistrar,ArrayList<Persona>arrayPersona) {
+        Connection conexion=conectar;
+        Doctor obDoctor= (Doctor) objetoRegistrar;
         int result=-1;
         try {
             PreparedStatement agregar= conexion.prepareStatement("insert into doctor values (?,?,?,?,?,?,?,?)");//Sentencia para insertar nuevos doctores
-            agregar.setString(1, objetoRegistrar.getDNI());
-            agregar.setString(2, objetoRegistrar.getUsuario());
-            agregar.setString(3, objetoRegistrar.getContraseña());
-            agregar.setString(4, objetoRegistrar.getNombre());
-            agregar.setString(5, objetoRegistrar.getApellido());
-            String fechaSt=sdf.format(objetoRegistrar.getFecha_naci());
+            agregar.setString(1, obDoctor.getDNI());
+            agregar.setString(2, obDoctor.getUsuario());
+            agregar.setString(3, obDoctor.getContraseña());
+            agregar.setString(4, obDoctor.getNombre());
+            agregar.setString(5, obDoctor.getApellido());
+            String fechaSt=sdf.format(obDoctor.getFecha_naci());
             agregar.setString(6,fechaSt);
-            agregar.setString(7,String.valueOf(objetoRegistrar.getNumero()));
-            agregar.setString(8,objetoRegistrar.getDistrito());
+            agregar.setString(7,String.valueOf(obDoctor.getNumero()));
+            agregar.setString(8,obDoctor.getDistrito());
             result=agregar.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e);
         }
+        arrayPersona.add(obDoctor);
         return result;
     }
 
-    
-    public int borrar(Connection conectar,String dni) {
+    @Override
+    public int borrar(Connection conectar, String dni, Persona obOriginal, ArrayList<Persona> arrayPersona) {
         Connection conexion=conectar;
+        Doctor obBorrar=(Doctor) obOriginal;
         int resul=-1;
         try {
             PreparedStatement eliminar=conexion.prepareStatement("delete from doctor where dni=?");
@@ -99,28 +100,46 @@ public class Doctor extends Persona{
         } catch (Exception e) {
             System.out.println(e);
         }
+        int posicion=0;        
+        for (Persona persona : arrayPersona) {
+            posicion++;
+            if(persona.getDNI().equals(obBorrar.getDNI())){
+               break;
+            }            
+        }        
+        arrayPersona.remove(posicion-1);
         return resul;
-    }
-
-    
-    public int modificar(Connection conectar,Doctor objetoModificar) {
+        
+    }   
+    @Override
+    public int modificar(Connection conectar, Persona objetoModificar,ArrayList<Persona> arrayPersona,Persona objetoOriginal) {
         Connection conexion=conectar;
+        Doctor obDocOriginal=(Doctor) objetoOriginal;
+        Doctor obNuevo=(Doctor) objetoModificar;
         int rst=-1;
         try {
             PreparedStatement editar=conexion.prepareStatement("update doctor set usuario=?,contraseña=?,nombre=?,apellido=?,fecha_nac=?,telefono=?,distrito=? WHERE dni=?");
-            editar.setString(1, objetoModificar.getUsuario());
-            editar.setString(2, objetoModificar.getContraseña());
-            editar.setString(3, objetoModificar.getNombre());
-            editar.setString(4, objetoModificar.getApellido());
-            String fecha=sdf.format(objetoModificar.getFecha_naci());
+            editar.setString(1, obNuevo.getUsuario());
+            editar.setString(2, obNuevo.getContraseña());
+            editar.setString(3, obNuevo.getNombre());
+            editar.setString(4, obNuevo.getApellido());
+            String fecha=sdf.format(obNuevo.getFecha_naci());
             editar.setString(5, fecha);//fecha
-            editar.setString(6, String.valueOf(objetoModificar.getNumero()));
-            editar.setString(7, objetoModificar.getDistrito());                        
-            editar.setString(8, objetoModificar.getDNI());
+            editar.setString(6, String.valueOf(obNuevo.getNumero()));
+            editar.setString(7, obNuevo.getDistrito());                        
+            editar.setString(8, obNuevo.getDNI());
             rst=editar.executeUpdate();
         } catch (Exception e) {
             System.out.println(e);
         }
+         int posicion=0;        
+        for (Persona persona : arrayPersona) {
+            posicion++;
+            if(persona.getDNI().equals(obDocOriginal.getDNI())){
+               break;
+            }            
+        }
+        arrayPersona.set(posicion-1,obNuevo);
         return rst;
     }
       
@@ -163,7 +182,4 @@ public class Doctor extends Persona{
         }
         return DNI;
     }
-    
-    
-
 }

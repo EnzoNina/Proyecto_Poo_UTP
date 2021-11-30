@@ -1,6 +1,5 @@
 package Clases;
 
-import Interfaces.actividadesPersona;
 import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +8,6 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
 public class Paciente extends Persona {        
     public static PreparedStatement sentencia_preparada;
@@ -53,8 +51,10 @@ public class Paciente extends Persona {
         return datosEnviar;
     }    
         
-    public int registrar(Connection conectar,Paciente objetoRegistrar) {
+    @Override
+    public int registrar(Connection conectar, Persona objetoRegistrar,ArrayList<Persona>arrayPersona) {
         Connection conexion=conectar;
+        Paciente obPaciente=(Paciente) objetoRegistrar;
         int resul=-1;        
         try {
             sentencia_preparada = conexion.prepareStatement("INSERT INTO paciente VALUES (?,?,?,?,?,?,?)");//Intruccion para insertar valores
@@ -69,12 +69,15 @@ public class Paciente extends Persona {
             resul=sentencia_preparada.executeUpdate();//Ejecutamos la sentencia escrita en el sql                                                
         } catch (Exception e) {
         }
-        return resul;//executeQuery devuelve una result set una tabla resultados,encambio  tabla del executeUpdate devuelve la cantidad de filas afectadas por nuestra instruccion 
+        arrayPersona.add(obPaciente);
+        return resul;//executeQuery devuelve una result set una tabla resultados,encambio  tabla del executeUpdate devuelve la cantidad de filas afectadas por nuestra instruccion         
     }
 
     
-    public int borrar(Connection conectar,String dni) {
+    @Override
+    public int borrar(Connection conectar, String dni, Persona obOriginal, ArrayList<Persona> arrayPersona) {        
         Connection conexion=conectar;
+        Paciente obBorrar= (Paciente)obOriginal;
         int reslt=-1;        
         try {
             sentencia_preparada=conexion.prepareStatement("delete from paciente where dni=?");
@@ -83,12 +86,23 @@ public class Paciente extends Persona {
         } catch (Exception e) {
             System.out.println(e);
         }
+        int posicion=0;        
+        for (Persona persona : arrayPersona) {
+            posicion++;
+            if(persona.getDNI().equals(obBorrar.getDNI())){
+               break;
+            }            
+        } 
+        arrayPersona.remove(posicion-1);
         return reslt;
     }
 
     
-    public int modificar(Connection conectar,Paciente objetoModificar) {
+    @Override
+    public int modificar(Connection conectar, Persona objetoModificar,ArrayList<Persona> arrayPersona,Persona objetoOriginal) {
         Connection conexion=conectar;
+        Paciente obModificar=(Paciente) objetoModificar;
+        Paciente obriginal=(Paciente) objetoOriginal;
         int rlt=-1;          
         try {
             //Sentencia para modificar los datos de la base de datos
@@ -105,6 +119,14 @@ public class Paciente extends Persona {
         } catch (Exception e) {
             System.out.println(e);
         }
+        int posicion=0;        
+        for (Persona persona : arrayPersona) {
+            posicion++;
+            if(persona.getDNI().equals(obriginal.getDNI())){
+               break;
+            }            
+        }                        
+        arrayPersona.set(posicion-1, obModificar);
         return rlt;
     }
     
@@ -123,6 +145,7 @@ public class Paciente extends Persona {
     }   
 
     
+    @Override
     public String buscandodni(Connection conectar,String texto)
     {
        String DNI=null;//dni null
@@ -141,9 +164,7 @@ public class Paciente extends Persona {
             System.out.println(e);
         }
         return DNI;
-    }
-        
-    
+    }    
 }
     
     

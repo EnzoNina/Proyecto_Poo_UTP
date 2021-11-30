@@ -28,11 +28,27 @@ public class Mante_doc extends javax.swing.JFrame {
         initComponents();        
         mostrar();
     }
+    public Doctor obtenerDoctorOriginal() throws ParseException{
+        int seleccion=jtable_doctores.getSelectedRow();//obtener numero de fila
+        //Obtener datos del objeto Doctor original 
+        String dniOriginal=String.valueOf(jtable_doctores.getValueAt(seleccion, 0));
+        String usuarioOriginal=String.valueOf(jtable_doctores.getValueAt(seleccion, 6));
+        String contraseñaOriginal=String.valueOf(jtable_doctores.getValueAt(seleccion, 7));
+        String nombreOriginal=String.valueOf(jtable_doctores.getValueAt(seleccion, 1));
+        String apellidoOriginal=String.valueOf(jtable_doctores.getValueAt(seleccion, 2));
+        String fechaStringOriginal=String.valueOf(jtable_doctores.getValueAt(seleccion, 3));
+        Date fechaOriginal=sdf.parse(fechaStringOriginal);
+        int numeroOriginal=Integer.parseInt(String.valueOf(jtable_doctores.getValueAt(seleccion, 4)));
+        String distritoOriginal=String.valueOf(jtable_doctores.getValueAt(seleccion, 5));
+        Doctor obOriginal=new Doctor(dniOriginal, usuarioOriginal, contraseñaOriginal, nombreOriginal, apellidoOriginal, fechaOriginal, numeroOriginal, distritoOriginal);
+        return obOriginal;
+    }
     public void agregar(){
-        int resultado=obDoctor.registrar(conexion, new Doctor(txt_mante_dni.getText(), txt_usuario.getText(), txt_contraseña.getText(), 
-            txt_mante_nombre.getText(), txt_mante_apell.getText(), jdateFechaNacimiento.getDate(),Integer.parseInt(txt_telefono.getText()), txt_mante_distr.getText()));
+        Doctor obNuevo=new Doctor(txt_mante_dni.getText(), txt_usuario.getText(), txt_contraseña.getText(), 
+            txt_mante_nombre.getText(), txt_mante_apell.getText(), jdateFechaNacimiento.getDate(),Integer.parseInt(txt_telefono.getText()), txt_mante_distr.getText());
+        int resultado=obDoctor.registrar(conexion,obNuevo,array_persona);
         if(resultado>0){
-            JOptionPane.showMessageDialog(null,"Doctor Registrado Correctamente");
+            JOptionPane.showMessageDialog(null,"Doctor Registrado Correctamente");            
         }else
             JOptionPane.showMessageDialog(null, "Ocurrio un error, revisa los datos");
         mostrar();
@@ -55,13 +71,16 @@ public class Mante_doc extends javax.swing.JFrame {
         }
         jtable_doctores.setModel(tabla);//Establemos el modelo de la tabla
     }
-    public void editar()
-    {//Ver si le agrego en modificacion mas atributos
-        int editar=obDoctor.modificar(conexion, new Doctor(txt_mante_dni.getText(), txt_usuario.getText(), txt_contraseña.getText(), 
-            txt_mante_nombre.getText(), txt_mante_apell.getText(), jdateFechaNacimiento.getDate(),Integer.parseInt(txt_telefono.getText()), txt_mante_distr.getText()));
-        if(editar> 0){//Si el resultado es mayor a 0,nos indica que se modificaron exitosamente        
+    public void editar() throws ParseException
+    {           
+        Doctor obOriginal=obtenerDoctorOriginal();
+        Doctor obModificar = new Doctor(txt_mante_dni.getText(), txt_usuario.getText(), txt_contraseña.getText(), 
+            txt_mante_nombre.getText(), txt_mante_apell.getText(), jdateFechaNacimiento.getDate(),Integer.parseInt(txt_telefono.getText()), txt_mante_distr.getText());
+        int editar=obDoctor.modificar(conexion, obModificar, array_persona, obOriginal);
+        
+        if(editar>0){//Si el resultado es mayor a 0,nos indica que se modificaron exitosamente        
             JOptionPane.showMessageDialog(null, "Los datos han sido modificados con éxito", "Operación Exitosa", 
-                                          JOptionPane.INFORMATION_MESSAGE);            
+                                          JOptionPane.INFORMATION_MESSAGE);                        
         }else{        
             JOptionPane.showMessageDialog(null, "No se ha podido realizar la actualización de los datos\n"
                                           + "Inténtelo nuevamente.", "Error en la operación", 
@@ -69,8 +88,9 @@ public class Mante_doc extends javax.swing.JFrame {
         }        
         mostrar();
     }
-    public void eliminar(){
-        int rst=obDoctor.borrar(conexion, txt_mante_dni.getText());
+    public void eliminar() throws ParseException{
+        Doctor obOriginal=obtenerDoctorOriginal();
+        int rst=obDoctor.borrar(conexion, txt_mante_dni.getText(),obOriginal,array_persona);
         if(rst>0){
             JOptionPane.showMessageDialog(null,"Doctor Eliminado Correctamente");
         }else
@@ -212,41 +232,46 @@ public class Mante_doc extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addComponent(jLabel7)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btn_agregar)
-                        .addGap(40, 40, 40)
-                        .addComponent(btn_editar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btn_eliminar)
-                        .addGap(753, 753, 753)
-                        .addComponent(btn_atras))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel12)
-                            .addComponent(jLabel11))
-                        .addGap(19, 19, 19)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txt_usuario)
-                            .addComponent(txt_contraseña)
-                            .addComponent(txt_mante_nombre)
-                            .addComponent(txt_mante_apell)
-                            .addComponent(jdateFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txt_telefono)
-                            .addComponent(txt_mante_distr, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txt_mante_dni)
-                            .addComponent(txt_buscarPor)
-                            .addComponent(jcb_buscarPor, 0, 164, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(5, 5, 5)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel12)
+                                    .addComponent(jLabel11))
+                                .addGap(19, 19, 19)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txt_usuario)
+                                    .addComponent(txt_contraseña)
+                                    .addComponent(txt_mante_nombre)
+                                    .addComponent(txt_mante_apell)
+                                    .addComponent(jdateFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txt_telefono)
+                                    .addComponent(txt_mante_distr, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txt_mante_dni)
+                                    .addComponent(txt_buscarPor)
+                                    .addComponent(jcb_buscarPor, 0, 164, Short.MAX_VALUE))
+                                .addGap(18, 18, 18))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(btn_agregar)
+                                .addGap(40, 40, 40)
+                                .addComponent(btn_editar)
+                                .addGap(18, 18, 18)
+                                .addComponent(btn_eliminar)
+                                .addGap(43, 43, 43)))
                         .addComponent(btnBuscar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 785, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(12, Short.MAX_VALUE))
+                        .addGap(9, 9, 9)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 785, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(643, 643, 643)
+                                .addComponent(btn_atras)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -303,7 +328,7 @@ public class Mante_doc extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(1, 1, 1)
                         .addComponent(btn_atras)))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -341,7 +366,11 @@ public class Mante_doc extends javax.swing.JFrame {
     }//GEN-LAST:event_jtable_doctoresMouseClicked
 
     private void btn_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editarActionPerformed
-        editar();
+        try {
+            editar();
+        } catch (ParseException ex) {
+            Logger.getLogger(Mante_doc.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btn_editarActionPerformed
 
     private void btn_agregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_agregarActionPerformed
@@ -349,7 +378,11 @@ public class Mante_doc extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_agregarActionPerformed
 
     private void btn_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminarActionPerformed
-        eliminar();
+        try {
+            eliminar();
+        } catch (ParseException ex) {
+            Logger.getLogger(Mante_doc.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btn_eliminarActionPerformed
 
     private void btn_atrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_atrasActionPerformed

@@ -29,12 +29,12 @@ public class Administrador extends Persona{
             String fecha=sdf.format(fechaHora);
             sentencia_preparada.setString(3, fecha);
             sentencia_preparada.setBoolean(4, estado);
-            sentencia_preparada.setInt(5, nroCita);
+            sentencia_preparada.setInt(5, objetoCita.getNro());
             rlt=sentencia_preparada.executeUpdate();            
         } catch (Exception e) {
             System.out.println(e);
-        }          
-        arrayCita.set(nroCita-2, objetoCita);
+        }
+        arrayCita.set(nroCita, objetoCita);
         return rlt;
     }
     public void eliminar(Connection conectar,ArrayList<Cita>arrayCita,int nroCita){
@@ -71,26 +71,29 @@ public class Administrador extends Persona{
         return datos;
     }
     //Validacion      
-    
-    public int registrar(Connection conectar, Administrador objetoRegistrar) {
+
+    @Override
+    public int modificar(Connection cnctn, Persona prsn, ArrayList<Persona> al, Persona prsn1) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
-    public int borrar(Connection conectar, String Dni) {
+    @Override
+    public int borrar(Connection conectar, String dni, Persona obOriginal, ArrayList<Persona> arrayPersona) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
-    public int modificar(Connection conectar, Administrador objetoModificar) {
+    @Override
+    public int registrar(Connection conectar, Persona objetoRegistrar,ArrayList<Persona>arrayPersona) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
     //metodo a implementar
 
     
+    @Override
     public String buscandodni(Connection conectar, String texto) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     
 }

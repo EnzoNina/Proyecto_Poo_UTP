@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -30,6 +31,21 @@ public class Mante_clien extends javax.swing.JFrame {
         conexion=conectar;//presigue la conexion a la base de datos 
         initComponents();
         mostrar();
+    }
+    //metodo obtener paciente original
+    public Paciente obtenerOriginal() throws ParseException{
+        int seleccion=jTable_Pacientes.getSelectedRow();//obtener numero de fila
+        //Obtener datos del objeto Doctor original 
+        String dniOriginal=String.valueOf(jTable_Pacientes.getValueAt(seleccion, 0));
+        String nombreOriginal=String.valueOf(jTable_Pacientes.getValueAt(seleccion, 1));
+        String apellidoOriginal=String.valueOf(jTable_Pacientes.getValueAt(seleccion, 2));
+        String fechaStringOriginal=String.valueOf(jTable_Pacientes.getValueAt(seleccion, 3));
+        int numeroOriginal=Integer.parseInt(String.valueOf(jTable_Pacientes.getValueAt(seleccion, 4))); 
+        String usuarioOriginal=String.valueOf(jTable_Pacientes.getValueAt(seleccion, 5));
+        String contraseñaOriginal=String.valueOf(jTable_Pacientes.getValueAt(seleccion, 6));
+        Date fechaOriginal=sdf.parse(fechaStringOriginal);               
+        Paciente obOriginal=new Paciente(dniOriginal,usuarioOriginal,contraseñaOriginal,nombreOriginal,apellidoOriginal,numeroOriginal,fechaOriginal);
+        return obOriginal;
     }
     //metodo mostrar 
      public void mostrar()//Imprime todo lo que esta en la bsd de cliente
@@ -50,11 +66,14 @@ public class Mante_clien extends javax.swing.JFrame {
         jTable_Pacientes.setModel(tabla);//Establemos el modelo de la tabla
     }
      
-    public void editar()
+    public void editar() throws ParseException
     {        
-        int editar=obPaciente.modificar(conexion,new Paciente(txt_clien_dni.getText(), txt_usuario.getText(), txt_contraseña.getText(), 
-                txt_clien_nom.getText(), txt_clien_apell.getText(), Integer.parseInt(txt_clien_telf.getText()), jdate_fecha.getDate()));
-        if(editar>0){//Si el resultado es mayor a 0,nos indica que se modificaron exitosamente        
+        Paciente obModificar= new Paciente(txt_clien_dni.getText(), txt_usuario.getText(), txt_contraseña.getText(), 
+                txt_clien_nom.getText(), txt_clien_apell.getText(), Integer.parseInt(txt_clien_telf.getText()), jdate_fecha.getDate());
+        Paciente obOriginal=obtenerOriginal();
+        int editar=obPaciente.modificar(conexion,obModificar,array_persona,obOriginal);
+        if(editar>0){
+            //Si el resultado es mayor a 0,nos indica que se modificaron exitosamente            
             JOptionPane.showMessageDialog(null, "Los datos han sido modificados con éxito", "Operación Exitosa", 
                                           JOptionPane.INFORMATION_MESSAGE);            
         }else{        
@@ -65,10 +84,11 @@ public class Mante_clien extends javax.swing.JFrame {
         mostrar();
     }
     
-     public void eliminar(){                 
-        int resultado=obPaciente.borrar(conexion,txt_clien_dni.getText());
+     public void eliminar() throws ParseException{                 
+        Paciente obOriginal=obtenerOriginal();
+        int resultado=obPaciente.borrar(conexion,txt_clien_dni.getText(),obOriginal,array_persona);
         if(resultado>0){
-            JOptionPane.showMessageDialog(null,"Paciente elimnado correctamente");
+            JOptionPane.showMessageDialog(null,"Paciente elimnado correctamente");            
         }
         mostrar();
     }
@@ -214,7 +234,7 @@ public class Mante_clien extends javax.swing.JFrame {
                         .addComponent(txt_contraseña, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(txt_usuario, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jdate_fecha, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -261,7 +281,7 @@ public class Mante_clien extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(txt_contraseña, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
+                .addGap(41, 41, 41)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_modificar)
                     .addComponent(btn_eliminar)
@@ -291,7 +311,11 @@ public class Mante_clien extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_modificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_modificarActionPerformed
-        editar();
+        try {
+            editar();
+        } catch (ParseException ex) {
+            Logger.getLogger(Mante_clien.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btn_modificarActionPerformed
 
     private void jTable_PacientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_PacientesMouseClicked
@@ -312,8 +336,12 @@ public class Mante_clien extends javax.swing.JFrame {
     }//GEN-LAST:event_jTable_PacientesMouseClicked
 
     private void btn_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminarActionPerformed
-        // eliminando
-        eliminar();
+        try {
+            // eliminando
+            eliminar();
+        } catch (ParseException ex) {
+            Logger.getLogger(Mante_clien.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btn_eliminarActionPerformed
 
     private void btn_regresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_regresarActionPerformed

@@ -2,6 +2,7 @@ package Clases;
 
 import Interfaces.actividadesPersona;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.Date;
 
 public abstract class Persona implements actividadesPersona<Persona>{
@@ -132,23 +133,15 @@ public abstract class Persona implements actividadesPersona<Persona>{
     //Metodos implementados
 
     @Override
-    public String[] login(Connection conectar, String usuario, String contraseña) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public abstract int modificar(Connection conectar, Persona objetoModificar, ArrayList<Persona> arrayPersona, Persona objetoOriginal);
 
     @Override
-    public int registrar(Connection conectar, Persona objetoRegistrar) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public abstract int borrar(Connection conectar, String dni, Persona obOriginal, ArrayList<Persona> arrayPersona);
 
     @Override
-    public int borrar(Connection conectar, String Dni) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public abstract int registrar(Connection conectar, Persona objetoRegistrar,ArrayList<Persona>arrayPersona);
 
     @Override
-    public int modificar(Connection conectar, Persona objetoModificar) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public abstract String[] login(Connection conectar, String usuario, String contraseña);
     
 }

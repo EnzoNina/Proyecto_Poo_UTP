@@ -288,13 +288,13 @@ public class Mante_Citas extends javax.swing.JFrame {
         int seleccion=jtabla_citas.getSelectedRow();//Atributo para escoger la fila de la tabla
         String fecha=sdf.format(jdate_fechaHora.getDate());             
         boolean estado=Boolean.parseBoolean(txt_estado.getText());        
-        int nroCita=Integer.parseInt(String.valueOf(jtabla_citas.getValueAt(seleccion, 0)));
+        int nroCita=Integer.parseInt(String.valueOf(jtabla_citas.getValueAt(seleccion,0)));
         String nombreDoctor=String.valueOf(jtabla_citas.getValueAt(seleccion, 2));
         String ApellidoDoctor=String.valueOf(jtabla_citas.getValueAt(seleccion, 3));
         String nombrePaciente=String.valueOf(jtabla_citas.getValueAt(seleccion, 5));
         String ApellidoPaciente=String.valueOf(jtabla_citas.getValueAt(seleccion, 6));
         Cita objetoNuevo=new Cita(nroCita,txt_dni_doc.getText(),txt_dni_paciente.getText(),nombreDoctor,ApellidoDoctor,nombrePaciente,ApellidoPaciente,jdate_fechaHora.getDate(),estado);
-        ob_administrador.modificarCita(conexion, arrayCita, objetoNuevo,nroCita, txt_dni_doc.getText(), txt_dni_paciente.getText(), jdate_fechaHora.getDate(), estado);                
+        ob_administrador.modificarCita(conexion, arrayCita, objetoNuevo,seleccion, txt_dni_doc.getText(), txt_dni_paciente.getText(), jdate_fechaHora.getDate(), estado);                
         mostrar();
     }//GEN-LAST:event_txt_editarActionPerformed
 
