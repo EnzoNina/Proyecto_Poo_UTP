@@ -85,15 +85,5 @@ public class Administrador extends Persona{
     @Override
     public int registrar(Connection conectar, Persona objetoRegistrar,ArrayList<Persona>arrayPersona) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    //metodo a implementar
-
-    
-    @Override
-    public String buscandodni(Connection conectar, String texto) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    
+    }       
 }

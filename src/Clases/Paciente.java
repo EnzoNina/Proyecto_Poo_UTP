@@ -27,7 +27,7 @@ public class Paciente extends Persona {
     }    
     //Metodos implementados
     
-    public String [] login(Connection conectar,String usuario, String contraseña) {        
+    public String [] login(Connection conectar,String usuario, String contraseña){
         String DNI=null;//dni null
         String datosEnviar[] = new String[3];
         Connection conexion=conectar;//objeto conectar 
@@ -77,17 +77,18 @@ public class Paciente extends Persona {
     @Override
     public int borrar(Connection conectar, String dni, Persona obOriginal, ArrayList<Persona> arrayPersona) {        
         Connection conexion=conectar;
-        Paciente obBorrar= (Paciente)obOriginal;
+        Paciente obBorrar=(Paciente) obOriginal;
         int reslt=-1;        
         try {
             sentencia_preparada=conexion.prepareStatement("delete from paciente where dni=?");
             sentencia_preparada.setString(1,dni);
-            reslt=sentencia_preparada.executeUpdate();  //devuelve el numero de lineas modificadas                      
+            reslt=sentencia_preparada.executeUpdate();//devuelve el numero de lineas modificadas
         } catch (Exception e) {
             System.out.println(e);
         }
-        int posicion=0;        
-        for (Persona persona : arrayPersona) {
+        int posicion=0;
+        //Metodo para buscar la persona en el arrayList
+        for (Persona persona : arrayPersona){
             posicion++;
             if(persona.getDNI().equals(obBorrar.getDNI())){
                break;
@@ -132,7 +133,7 @@ public class Paciente extends Persona {
     
 //Metodos QUE REGISTRA CITAS Y QUE BUSCA INDIRECTAMENTE
     public boolean registrarCita(ArrayList<Cita> array_cita, Cita nuevaCita) {        
-        boolean seEncontro = false;
+        boolean seEncontro = false;        
         for (Cita cita : array_cita) {  
             if (cita.getFecha_hora().equals(nuevaCita.getFecha_hora())) {                
                 seEncontro = true;
@@ -142,29 +143,7 @@ public class Paciente extends Persona {
             array_cita.add(nuevaCita);
         }
         return seEncontro;
-    }   
-
-    
-    @Override
-    public String buscandodni(Connection conectar,String texto)
-    {
-       String DNI=null;//dni null
-       Connection conexion=conectar;
-        //objeto conectar 
-        try {
-            String Buscando_paciente = ("SELECT dni,nombre,apellido FROM paciente WHERE contraseña = '" + texto + "'");
-            sentencia_preparada = conexion.prepareStatement(Buscando_paciente);//aca lo busca
-            resultado = sentencia_preparada.executeQuery();//optiene el resultado  
-            if(resultado.next()){//si encuentra
-                           
-                DNI =resultado.getString("dni");
-                                            
-            }
-        } catch (HeadlessException | SQLException e) {
-            System.out.println(e);
-        }
-        return DNI;
-    }    
+    }      
 }
     
     

@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class Doctor extends Persona{   
-    private String distrito;    
+    private String distrito;
     public static PreparedStatement sentencia_preparada;
     public static ResultSet resultado;
     private boolean Esdoctor=false;
@@ -38,7 +38,7 @@ public class Doctor extends Persona{
     }
 
     //Metodos implementados                        
-    public String[] login(Connection conectar,String usuario, String contraseña) {        
+    public String [] login(Connection conectar,String usuario, String contraseña) {        
         Connection conexion=conectar;
         String [] datos=new String[3];
         String dniDoctor=null;
@@ -65,7 +65,7 @@ public class Doctor extends Persona{
 
     
     @Override
-    public int registrar(Connection conectar, Persona objetoRegistrar,ArrayList<Persona>arrayPersona) {
+    public int registrar(Connection conectar,Persona objetoRegistrar,ArrayList<Persona>arrayPersona) {
         Connection conexion=conectar;
         Doctor obDoctor= (Doctor) objetoRegistrar;
         int result=-1;
@@ -158,28 +158,12 @@ public class Doctor extends Persona{
         }
         return tablaModelo;
     }
+    public DefaultTableModel llenarTabla(ArrayList<Cita>arrayCita,DefaultTableModel tabla){
+        SimpleDateFormat sdtFH=new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        
+        return tabla;
+    }
     public void llenarhistoriaClinica(ArrayList<historiaClinica> arrayHistoria,historiaClinica obHistoriaClinica){       
         arrayHistoria.add(obHistoriaClinica);
-    }
-    //metodo abstracto 
-
-    @Override
-    public String buscandodni(Connection conectar, String texto) {
-        String DNI=null;//dni null
-       Connection conexion=conectar;
-        //objeto conectar 
-        try {
-            String Buscando_paciente = ("SELECT dni FROM doctor WHERE contraseña = '" + texto + "'");
-            sentencia_preparada = conexion.prepareStatement(Buscando_paciente);//aca lo busca
-            resultado = sentencia_preparada.executeQuery();//optiene el resultado  
-            if(resultado.next()){//si encuentra
-                           
-                DNI =resultado.getString("dni");
-                                            
-            }
-        } catch (HeadlessException | SQLException e) {
-            System.out.println(e);
-        }
-        return DNI;
     }
 }

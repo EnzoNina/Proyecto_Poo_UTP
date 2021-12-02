@@ -14,8 +14,8 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class Atencion_Pacientes extends javax.swing.JFrame {
-
     //Atributos
+    
     Doctor obdoc = new Doctor();
     static Connection conexion;
     static String datosDoctor[];
@@ -24,7 +24,6 @@ public class Atencion_Pacientes extends javax.swing.JFrame {
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     String titulos[] = {"Nro de cita", "Dni Paciente", "Fecha y hora"};
     DefaultTableModel tabla = new DefaultTableModel(null, titulos);
-
     //Constructor
     public Atencion_Pacientes(String[] array, Connection conectar, ArrayList<Cita> array_pasado, ArrayList<historiaClinica> array_pasadoHC) {
         Atencion_Pacientes.datosDoctor = array;
@@ -33,7 +32,6 @@ public class Atencion_Pacientes extends javax.swing.JFrame {
         array_cita = array_pasado;
         array_historiaClinica = array_pasadoHC;
     }
-
     private void entrarHistorial() throws ParseException {
         int seleccion = Jtable_selec_cita.getSelectedRow();
         String dniCliente = String.valueOf(Jtable_selec_cita.getValueAt(seleccion, 1));
@@ -190,7 +188,7 @@ public class Atencion_Pacientes extends javax.swing.JFrame {
     private void Jtable_selec_citaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Jtable_selec_citaMouseClicked
         int seleccion = Jtable_selec_cita.getSelectedRow();
         txt_ate_dni.setText(String.valueOf(Jtable_selec_cita.getValueAt(seleccion, 1)));
-        Date fechaCita;
+        Date fechaCita;        
         try {
             fechaCita = sdf.parse(String.valueOf(Jtable_selec_cita.getValueAt(seleccion, 2)));
             jdc_fechaHoraCita.setDate(fechaCita);

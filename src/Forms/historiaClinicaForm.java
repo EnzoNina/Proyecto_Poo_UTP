@@ -41,8 +41,7 @@ public class historiaClinicaForm extends javax.swing.JFrame{
             llenartxt();            
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-        
+        }        
     }
     public void cargar_tablas(){
         //Metodo para cargar el historial clinico del paciente

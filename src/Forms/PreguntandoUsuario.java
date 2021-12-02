@@ -1,5 +1,6 @@
 package Forms;
 //Importaciones
+
 import java.sql.Connection;
 import Clases.*;
 import java.io.BufferedReader;
@@ -11,47 +12,50 @@ import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 
 public final class PreguntandoUsuario extends javax.swing.JFrame {
+
     //objetos de jframe
-     //Persona objpersona;
-     Login objlogin;
-     Doctor objdoctor;
-     Administrador objadmi;
-     Paciente objpaciente;          
+    //Persona objpersona;
+    Login objlogin;
+    Doctor objdoctor;
+    Administrador objadmi;
+    Paciente objpaciente;
     //DECLARANDO OBJETOS y datos para conectarme con la bsd     
     public static PreparedStatement sentencia_preparada;
     public static ResultSet resultado;
-    public static String cadena;    
+    public static String cadena;
     String barra = File.separator;    //Separador de ubicacion Direccion de la base de datos                                      
     String url = System.getProperty("user.dir") + barra + "Datos" + barra + "consulta.db";//Get property sirve para obtener la ubicacion el proyecto
-    Connection Conectar;     
+    Connection Conectar;
+
     public PreguntandoUsuario() {
-        initComponents();        
+        initComponents();
         conexion();//Conexion a la base de datos
-        setLocationRelativeTo(null);                
+        setLocationRelativeTo(null);
     }
+
     //metodo getter and setter 
     public String getCadena() {
         return cadena;
-    }    
+    }
+
     //METODO PARA IMPRIMIR EL SCRIP DE LA BASE DE DATOS
-    public void conexion() {               
+    public void conexion() {
         String nombre = System.getProperty("user.dir") + barra + "Datos" + barra + "base_datos_scrip.txt";
         BufferedReader br = null;
         try {
             //Crear un objeto BufferedReader al que se le pasa 
-           //   un objeto FileReader con el nombre del fichero
-           br = new BufferedReader(new FileReader(nombre));
-           //Leer la primera línea, guardando en un String
-           String texto = br.readLine();
-           //Repetir mientras no se llegue al final del fichero
-           while(texto != null)
-           {
-               //Hacer lo que sea con la línea leída
-               System.out.println(texto);
-               //Leer la siguiente línea
-               texto = br.readLine();
-           }
-           Class.forName("org.sqlite.JDBC");//Clase para corregir el error de la base de datos //este da a entender más la unión a la base de datos para que el prigrma nose paltee
+            //   un objeto FileReader con el nombre del fichero
+            br = new BufferedReader(new FileReader(nombre));
+            //Leer la primera línea, guardando en un String
+            String texto = br.readLine();
+            //Repetir mientras no se llegue al final del fichero
+            while (texto != null) {
+                //Hacer lo que sea con la línea leída
+                System.out.println(texto);
+                //Leer la siguiente línea
+                texto = br.readLine();
+            }
+            Class.forName("org.sqlite.JDBC");//Clase para corregir el error de la base de datos //este da a entender más la unión a la base de datos para que el prigrma nose paltee
             Conectar = DriverManager.getConnection("jdbc:sqlite:" + url, "root", "");//Hacemos conexion con la base de datos, el root es para entrar como administrador
             if (Conectar != null) {
                 System.out.println("Conectado");//Si la conexcion es exitosa nos muestra el mensaje
@@ -60,6 +64,7 @@ public final class PreguntandoUsuario extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e.getMessage().toString());
         }
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -158,35 +163,35 @@ public final class PreguntandoUsuario extends javax.swing.JFrame {
 
     private void labelAdmiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelAdmiMouseClicked
         // si es Admi
-        objlogin=new Login(Conectar);
+        objlogin = new Login(Conectar);
         objlogin.setVisible(true);//ingreso al login
         this.dispose();
         //le digo que si es Admi         
-        objadmi=new Administrador();
-        if(objadmi.getAdmi())
-            cadena="Admi";
+        objadmi = new Administrador();
+        if (objadmi.getAdmi())
+            cadena = "Admi";
     }//GEN-LAST:event_labelAdmiMouseClicked
 
     private void labelpacienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelpacienteMouseClicked
         // si es paciente 
-        objlogin=new Login(Conectar);
+        objlogin = new Login(Conectar);
         objlogin.setVisible(true);//ingreso al login
         this.dispose();
         //correcto
-        objpaciente=new Paciente();
-        if(objpaciente.getPaciente())
-            cadena="Paciente";
+        objpaciente = new Paciente();
+        if (objpaciente.getPaciente())
+            cadena = "Paciente";
     }//GEN-LAST:event_labelpacienteMouseClicked
 
     private void labeldoctorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labeldoctorMouseClicked
         // si es doctor 
-        objlogin=new Login(Conectar);
+        objlogin = new Login(Conectar);
         objlogin.setVisible(true);//ingreso al login
         this.dispose();
         //le digo si es doctor 
-       objdoctor=new Doctor();
-        if(objdoctor.getdoctor())
-            cadena="Doctor";
+        objdoctor = new Doctor();
+        if (objdoctor.getdoctor())
+            cadena = "Doctor";
     }//GEN-LAST:event_labeldoctorMouseClicked
 
     /**

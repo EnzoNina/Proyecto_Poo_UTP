@@ -15,6 +15,5 @@ public class buscarPacientePorApellido implements IbuscarPor{
             objetoBuscar.getModelo().addRow(new Object[]{((Paciente) persona).getDNI(), ((Paciente) persona).getNombre(), ((Paciente) persona).getApellido(),fecha_formateada, ((Paciente) persona).getNumero(), ((Paciente) persona).getUsuario(), ((Paciente) persona).getContraseña()});
         });
         return objetoBuscar.getModelo();
-    }
-    
+    }   
 }

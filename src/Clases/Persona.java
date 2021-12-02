@@ -126,12 +126,8 @@ public abstract class Persona implements actividadesPersona<Persona>{
 
     public void setFecha_naci(Date fecha_naci) {
         this.fecha_naci = fecha_naci;
-    }       
-    
-    //Metodo abstracto 
-    public abstract String buscandodni(Connection conectar,String texto);
+    }           
     //Metodos implementados
-
     @Override
     public abstract int modificar(Connection conectar, Persona objetoModificar, ArrayList<Persona> arrayPersona, Persona objetoOriginal);
 
