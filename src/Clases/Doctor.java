@@ -1,4 +1,4 @@
-package Clases;
+    package Clases;
 import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -144,14 +144,15 @@ public class Doctor extends Persona{
     }
       
     //Metodos publicos
-    public DefaultTableModel Busqueda_Atencion_Citas(ArrayList<Cita>array_cita,Date fecha,DefaultTableModel tablaModelo, String dniDoctor) throws ParseException {
+    public DefaultTableModel Busqueda_Atencion_Citas(ArrayList<Cita>array_cita,String fecha,DefaultTableModel tablaModelo) throws ParseException {
         //buscar cita por fecha dentro del arrayList
         SimpleDateFormat sdt = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat sdtFH=new SimpleDateFormat("dd/MM/yyyy HH:mm");
         for (Cita cita : array_cita) {
-            String parseada=sdt.format(cita.getFecha_hora());
-            Date fechaFor =sdt.parse(parseada);
-            if(fechaFor.equals(fecha) && dniDoctor.equals(cita.getDni_doctor())){
+            
+            String parseada=sdt.format(cita.getFecha_hora());//la convierto a fomato normal en fpormato string 
+            //Date fechaFor =sdt.parse(parseada);//lo convierte a fecha ,ya que el format lo convierte a String 
+            if(parseada.equals(fecha) ){//dniDoctor.equals(cita.getDni_doctor())
                 String fechaHM=sdtFH.format(cita.getFecha_hora());
                 tablaModelo.addRow(new Object[]{cita.getNro(),cita.getDni_paciente(),fechaHM});
             }

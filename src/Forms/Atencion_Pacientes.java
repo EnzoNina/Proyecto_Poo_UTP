@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+//import java.sql.Date;
 
 public class Atencion_Pacientes extends javax.swing.JFrame {
     //Atributos
@@ -22,6 +23,7 @@ public class Atencion_Pacientes extends javax.swing.JFrame {
     static ArrayList<Cita> array_cita = new ArrayList<Cita>();
     static ArrayList<historiaClinica> array_historiaClinica = new ArrayList<historiaClinica>();
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    SimpleDateFormat sdf1=new SimpleDateFormat("dd/MM/YYYY");
     String titulos[] = {"Nro de cita", "Dni Paciente", "Fecha y hora"};
     DefaultTableModel tabla = new DefaultTableModel(null, titulos);
     //Constructor
@@ -30,7 +32,8 @@ public class Atencion_Pacientes extends javax.swing.JFrame {
         conexion = conectar;
         initComponents();
         array_cita = array_pasado;
-        array_historiaClinica = array_pasadoHC;
+        array_historiaClinica = array_pasadoHC;             
+        mostrar();
     }
     private void entrarHistorial() throws ParseException {
         int seleccion = Jtable_selec_cita.getSelectedRow();
@@ -40,7 +43,18 @@ public class Atencion_Pacientes extends javax.swing.JFrame {
         obhistoria.setVisible(true);
         this.dispose();
     }
-
+    //MOSTRAR EN LA TABLA 
+    private void mostrar()
+    {   tabla.setRowCount(0);
+        
+        for(Cita objcita:array_cita)
+        {
+            String fecha=sdf.format(objcita.getFecha_hora());
+            tabla.addRow(new Object[]{objcita.getNro(),objcita.getDni_paciente(),fecha});
+            
+        }
+        Jtable_selec_cita.setModel(tabla);
+    }
     //Agregar el metodo guardar arraylist clientes
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -173,12 +187,21 @@ public class Atencion_Pacientes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_mostrarCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_mostrarCitaActionPerformed
+        
         if (jdate_chooser.getDate() == null) {
             JOptionPane.showMessageDialog(null, "Por favor, Seleccione una Fecha", "Alerta", JOptionPane.INFORMATION_MESSAGE);
         }else{
             try {
+                //extraigo la fecha 
+                String date =sdf1.format(jdate_chooser.getDate());
+                //Date fechafor=sdf1.parse(date);
+                
+                //BUSCANDO CITA                  //recuperacion del dni cuando ingrese al aula
+                                                        //el ERROR QUE ME SALE ES QUE EL DNI ES NULL 
                 tabla.setRowCount(0);                
-                Jtable_selec_cita.setModel(obdoc.Busqueda_Atencion_Citas(array_cita, jdate_chooser.getDate(), tabla, datosDoctor[0]));
+                Jtable_selec_cita.setModel(obdoc.Busqueda_Atencion_Citas(array_cita,date, tabla));
+                
+                
             } catch (ParseException ex) {
                 Logger.getLogger(Atencion_Pacientes.class.getName()).log(Level.SEVERE, null, ex);
             }

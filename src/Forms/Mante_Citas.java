@@ -14,8 +14,8 @@ import java.util.Date;
 import javax.swing.table.DefaultTableModel;
 
 public class Mante_Citas extends javax.swing.JFrame {
-    ArrayList<Cita> arrayCita=new ArrayList<Cita>();
-    static Connection conexion;
+    ArrayList<Cita> arrayCita=new ArrayList<Cita>();//aqui creo un array list 
+    static Connection conexion;//statico la conexion
     Cita objcita;
     Administrador ob_administrador=new Administrador();
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -272,9 +272,9 @@ public class Mante_Citas extends javax.swing.JFrame {
 
     private void btnbuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuscarClienteActionPerformed
         buscarCita obCita = new buscarCita(tabla, txt_paciente.getText(), arrayCita);
-        if(Comboboxcliente.getSelectedItem().toString().equalsIgnoreCase("Nombres")){
-            tabla.setRowCount(0);
-            jtabla_citas.setModel(obCita.buscarCitaPor(new buscarCitaPacienteNombre()));
+        if(Comboboxcliente.getSelectedItem().toString().equalsIgnoreCase("Nombres")){//si es igual a nombres 
+            tabla.setRowCount(0);//borro el inicio 
+            jtabla_citas.setModel(obCita.buscarCitaPor(new buscarCitaPacienteNombre()));//establesco el modelo 
         }else if(Comboboxcliente.getSelectedItem().toString().equalsIgnoreCase("Apellidos")){            
             tabla.setRowCount(0);
             jtabla_citas.setModel(obCita.buscarCitaPor(new buscarCitaPacienteApellido()));
