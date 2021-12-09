@@ -46,14 +46,7 @@ public class Atencion_Pacientes extends javax.swing.JFrame {
     //MOSTRAR EN LA TABLA 
     private void mostrar()
     {   tabla.setRowCount(0);
-        
-        for(Cita objcita:array_cita)
-        {
-            String fecha=sdf.format(objcita.getFecha_hora());
-            tabla.addRow(new Object[]{objcita.getNro(),objcita.getDni_paciente(),fecha});
-            
-        }
-        Jtable_selec_cita.setModel(tabla);
+        Jtable_selec_cita.setModel(obdoc.llenarTabla(array_cita, tabla,datosDoctor[0]));
     }
     //Agregar el metodo guardar arraylist clientes
     @SuppressWarnings("unchecked")
@@ -194,14 +187,8 @@ public class Atencion_Pacientes extends javax.swing.JFrame {
             try {
                 //extraigo la fecha 
                 String date =sdf1.format(jdate_chooser.getDate());
-                //Date fechafor=sdf1.parse(date);
-                
-                //BUSCANDO CITA                  //recuperacion del dni cuando ingrese al aula
-                                                        //el ERROR QUE ME SALE ES QUE EL DNI ES NULL 
                 tabla.setRowCount(0);                
-                Jtable_selec_cita.setModel(obdoc.Busqueda_Atencion_Citas(array_cita,date, tabla));
-                
-                
+                Jtable_selec_cita.setModel(obdoc.Busqueda_Atencion_Citas(array_cita,date, tabla));                                
             } catch (ParseException ex) {
                 Logger.getLogger(Atencion_Pacientes.class.getName()).log(Level.SEVERE, null, ex);
             }

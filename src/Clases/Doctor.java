@@ -159,9 +159,14 @@ public class Doctor extends Persona{
         }
         return tablaModelo;
     }
-    public DefaultTableModel llenarTabla(ArrayList<Cita>arrayCita,DefaultTableModel tabla){
+    public DefaultTableModel llenarTabla(ArrayList<Cita>arrayCita,DefaultTableModel tabla,String dniDoctor){
         SimpleDateFormat sdtFH=new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        
+        for (Cita cita : arrayCita) {
+            if(cita.getDni_doctor().equalsIgnoreCase(dniDoctor)){
+                String fecha = sdtFH.format(cita.getFecha_hora());
+                tabla.addRow(new Object[]{cita.getNro(),cita.getDni_paciente(),fecha});
+            }
+        }
         return tabla;
     }
     public void llenarhistoriaClinica(ArrayList<historiaClinica> arrayHistoria,historiaClinica obHistoriaClinica){       

@@ -119,7 +119,7 @@ public class Login extends javax.swing.JFrame {
     //buscando usuario en la base de datos VERIFICANDO 
     public void verificando_paciente(String usuario, String contraseña) {//verifico si es un paciente                       
         String datos[]=obPaciente.login(conexion,usuario, contraseña);
-        if(datos.length>0){//SI lo encuentra entra
+        if(datos[0]!=null){
             Registro_Citas objregistro = new Registro_Citas(conexion, personas_array, array_cita, datos);        
             objregistro.setVisible(true);
             this.dispose();        
@@ -131,7 +131,7 @@ public class Login extends javax.swing.JFrame {
     public void verificando_Doctor(String usuario, String contraseña) {
         Doctor obDoctor=new Doctor();
         String datos[]=obDoctor.login(conexion,usuario, contraseña);
-        if(datos.length>0){
+        if(datos[0]!=null){
             Atencion_Pacientes objPacientes = new Atencion_Pacientes(datos,conexion,array_cita,array_historiaClinica);//si no es doctor ,es un paciente
             objPacientes.setVisible(true);
             this.dispose();
@@ -143,7 +143,7 @@ public class Login extends javax.swing.JFrame {
     public void VerificandoAdministrador(String usuario, String contraseña) {
         Administrador obadmi=new Administrador();
         String datos[]=obadmi.login(conexion, usuario, contraseña);
-        if(datos.length>0){
+        if(datos[0]!=null){
             Menu objmenu = new Menu(conexion,array_cita,personas_array);
             objmenu.setVisible(true);
             this.dispose(); 

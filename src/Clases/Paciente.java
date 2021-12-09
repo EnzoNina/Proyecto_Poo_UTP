@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class Paciente extends Persona {        
     public static PreparedStatement sentencia_preparada;
@@ -130,8 +131,20 @@ public class Paciente extends Persona {
         arrayPersona.set(posicion-1, obModificar);
         return rlt;
     }
-    
-//Metodos QUE REGISTRA CITAS Y QUE BUSCA INDIRECTAMENTE
+    //Metodo para llenar la tabla de doctores
+    public DefaultTableModel llenar(ArrayList<Persona>arrayList,DefaultTableModel tabla){
+        //{"DNI","NOMBRE","APELLIDO","TELEFONO","FECHA NACIMIENTO","DISTRITO"};
+        for (Persona persona : arrayList) {
+            if(persona instanceof Doctor){
+                String fecha_formateada = sdf.format(((Doctor) persona).getFecha_naci());                
+                tabla.addRow(new Object[]{((Doctor) persona).getDNI(),((Doctor) persona).getNombre(),((Doctor) persona).getApellido(),((Doctor) persona).getNumero(),
+                fecha_formateada,((Doctor) persona).getDistrito()});
+                
+            }
+        }
+        return tabla;
+    }
+//Metodos QUE REGISTRA CITA
     public boolean registrarCita(ArrayList<Cita> array_cita, Cita nuevaCita) {        
         boolean seEncontro = false;        
         for (Cita cita : array_cita) {  

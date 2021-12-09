@@ -36,8 +36,13 @@ public class Registro_Citas extends javax.swing.JFrame {
         array_persona=array_pasado;      
         array_cita=array_cita_pasada;
         setLocationRelativeTo(null);
-        this.datos=datosPasados;        
-    }   
+        this.datos=datosPasados;    
+        llenarTabla();
+    }
+    public void llenarTabla(){
+        tabla_defult.setRowCount(0);
+        tabla_doctores.setModel(obCliente.llenar(array_persona, tabla_defult));
+    }
     public void buscarDoctor(){        
         tabla_defult.setRowCount(0);       
         if(Jcb_buscar.getSelectedItem().toString().equalsIgnoreCase("Nombre")){

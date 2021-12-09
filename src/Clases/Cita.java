@@ -8,13 +8,10 @@ public class Cita {
     private boolean estado;
     private Date fecha_hora;
     private String nombredoctor,nombrepaciente;
-    private String Apellidodoctor,Apellidopaciente;
-    
+    private String Apellidodoctor,Apellidopaciente;    
     //Constructor
-    public Cita() {
-    }
-    
-    public Cita(int nro, String dni_doctor, String dni_paciente,String nombredoctor,String Apelldoctor,String nombrepaciente,String Apellpaciente, Date fecha_hora, boolean estado) {
+    public Cita(){}    
+    public Cita(int nro, String dni_doctor, String dni_paciente,String nombredoctor,String Apelldoctor,String nombrepaciente,String Apellpaciente, Date fecha_hora, boolean estado){
         this.nro = nro;
         this.dni_doctor = dni_doctor;
         this.dni_paciente = dni_paciente;

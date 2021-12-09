@@ -4,7 +4,7 @@ import Clases.Persona;
 import java.sql.Connection;
 import java.util.ArrayList;
 
-public class Menu extends javax.swing.JFrame {
+public class Menu extends javax.swing.JFrame{
     static Connection conexion;
     static ArrayList<Cita> arrayCita=new ArrayList<Cita>();
     static ArrayList<Persona>arrayPersona=new ArrayList<Persona>();
@@ -14,8 +14,7 @@ public class Menu extends javax.swing.JFrame {
         conexion=Conectar;
         initComponents();
     }
-    public Menu(Connection Conectar){
-        //Provar si funciona asi       
+    public Menu(Connection Conectar){        
         conexion=Conectar;
         initComponents();        
     }
@@ -128,7 +127,7 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_lbl_mante_clienteMouseClicked
 
     private void Manteni_citasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Manteni_citasMouseClicked
-        Mante_Citas ob_mante=new Mante_Citas(conexion,arrayCita);//Agregar mandar el parametro de arraylist<Cita>
+        Mante_Citas ob_mante=new Mante_Citas(conexion,arrayCita,arrayPersona);//Agregar mandar el parametro de arraylist<Cita>
         ob_mante.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_Manteni_citasMouseClicked

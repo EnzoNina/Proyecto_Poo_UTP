@@ -6,13 +6,13 @@ import Clases.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
+import Creacional.Singleton.baseDatosSingleton;
+import java.io.IOException;
 
 public final class PreguntandoUsuario extends javax.swing.JFrame {
-
     //objetos de jframe
     //Persona objpersona;
     Login objlogin;
@@ -26,7 +26,6 @@ public final class PreguntandoUsuario extends javax.swing.JFrame {
     String barra = File.separator;    //Separador de ubicacion Direccion de la base de datos                                      
     String url = System.getProperty("user.dir") + barra + "Datos" + barra + "consulta.db";//Get property sirve para obtener la ubicacion el proyecto
     Connection Conectar;
-
     public PreguntandoUsuario() {
         initComponents();
         conexion();//Conexion a la base de datos
@@ -55,12 +54,9 @@ public final class PreguntandoUsuario extends javax.swing.JFrame {
                 //Leer la siguiente línea
                 texto = br.readLine();
             }
-            Class.forName("org.sqlite.JDBC");//Clase para corregir el error de la base de datos //este da a entender más la unión a la base de datos para que el prigrma nose paltee
-            Conectar = DriverManager.getConnection("jdbc:sqlite:" + url, "root", "");//Hacemos conexion con la base de datos, el root es para entrar como administrador
-            if (Conectar != null) {
-                System.out.println("Conectado");//Si la conexcion es exitosa nos muestra el mensaje
-            }
-        } catch (Exception e) {
+            baseDatosSingleton obBase = new baseDatosSingleton();
+            Conectar=obBase.getConectar();
+        } catch (IOException e) {
             JOptionPane.showMessageDialog(null, e.getMessage().toString());
         }
     }

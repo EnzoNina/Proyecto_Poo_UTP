@@ -17,19 +17,24 @@ public class Administrador extends Persona{
         return EsAdmi=true;           //aca en el login miraremos la situacion si se convierto en verdadeo ara algo
     }
     //Metodos publicos
-    public int modificarCita(Connection conectar,ArrayList<Cita>arrayCita,Cita objetoCita,int nroCita,String dni_doctor,String dniPaciente,Date fechaHora,boolean estado){
+    public int modificarCita(Connection conectar,ArrayList<Cita>arrayCita,Cita objetoCita,int nroCita,String dni_doctor,String nombreDoc,String apeDoc,
+        String dniPaciente,String nomPaciente,String apePaciente,Date fechaHora,boolean estado){
         SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy HH:mm");
         Connection conexion=conectar;
         int rlt=-1;          
         try {
             //Sentencia para modificar los datos de la base de datos
-            sentencia_preparada=conexion.prepareStatement("update cita set dni_doctor=?,dni_cliente=?,fecha_hora=?,estado=? WHERE nro_cita=?");
+            sentencia_preparada=conexion.prepareStatement("update cita set dni_doctor=?,nombredoctor=?,Apellidodoctor=?,dni_cliente=?,nombrepaciente=?,Apellidopaciente=?,fecha_hora=?,estado=? WHERE nro_cita=?");
             sentencia_preparada.setString(1, dni_doctor);
-            sentencia_preparada.setString(2, dniPaciente);
+            sentencia_preparada.setString(2, nombreDoc);
+            sentencia_preparada.setString(3, apeDoc);
+            sentencia_preparada.setString(4, dniPaciente);
+            sentencia_preparada.setString(5, nomPaciente);
+            sentencia_preparada.setString(6, apePaciente);
             String fecha=sdf.format(fechaHora);
-            sentencia_preparada.setString(3, fecha);
-            sentencia_preparada.setBoolean(4, estado);
-            sentencia_preparada.setInt(5, objetoCita.getNro());
+            sentencia_preparada.setString(7, fecha);
+            sentencia_preparada.setBoolean(8, estado);
+            sentencia_preparada.setInt(9, objetoCita.getNro());
             rlt=sentencia_preparada.executeUpdate();            
         } catch (Exception e) {
             System.out.println(e);
