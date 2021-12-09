@@ -1,29 +1,30 @@
 package Clases;
+
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Cita {
     //Atributos
     private int nro;
-    private String dni_doctor,dni_paciente;
     private boolean estado;
     private Date fecha_hora;
-    private String nombredoctor,nombrepaciente;
-    private String Apellidodoctor,Apellidopaciente;    
+    private Doctor doctor;
+    private Paciente paciente;
+
     //Constructor
-    public Cita(){}    
-    public Cita(int nro, String dni_doctor, String dni_paciente,String nombredoctor,String Apelldoctor,String nombrepaciente,String Apellpaciente, Date fecha_hora, boolean estado){
+    public Cita() {
+    }
+
+    public Cita(int nro, Doctor doctor, Paciente paciente, boolean estado, Date fecha_hora) {
         this.nro = nro;
-        this.dni_doctor = dni_doctor;
-        this.dni_paciente = dni_paciente;
-        this.nombredoctor=nombredoctor;
-        this.nombrepaciente=nombrepaciente;
-        this.Apellidodoctor=Apelldoctor;
-        this.Apellidopaciente=Apellpaciente;
-        this.fecha_hora = fecha_hora;
         this.estado = estado;
-    }        
+        this.fecha_hora = fecha_hora;
+        this.doctor = doctor;
+        this.paciente = paciente;
+    }
+
     //Getter and Setter
-        public int getNro() {
+    public int getNro() {
         return nro;
     }
 
@@ -31,26 +32,10 @@ public class Cita {
         this.nro = nro;
     }
 
-    public String getDni_doctor() {
-        return dni_doctor;
-    }
-
-    public void setDni_doctor(String dni_doctor) {
-        this.dni_doctor = dni_doctor;
-    }
-
-    public String getDni_paciente() {
-        return dni_paciente;
-    }
-
-    public void setDni_paciente(String dni_paciente) {
-        this.dni_paciente = dni_paciente;
-    }
-
     public boolean getEstado() {
         return estado;
     }
-    
+
     public void setEstado(boolean estado) {
         this.estado = estado;
     }
@@ -61,37 +46,44 @@ public class Cita {
 
     public void setFecha_hora(Date fecha_hora) {
         this.fecha_hora = fecha_hora;
-    }         
-
-    public String getNombredoctor() {
-        return nombredoctor;
     }
 
-    public void setNombredoctor(String nombredoctor) {
-        this.nombredoctor = nombredoctor;
+    public Doctor getDoctor() {
+        return doctor;
     }
 
-    public String getNombrepaciente() {
-        return nombrepaciente;
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
     }
 
-    public void setNombrepaciente(String nombrepaciente) {
-        this.nombrepaciente = nombrepaciente;
+    public Paciente getPaciente() {
+        return paciente;
     }
 
-    public String getApellidodoctor() {
-        return Apellidodoctor;
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
     }
 
-    public void setApellidodoctor(String Apellidodoctor) {
-        this.Apellidodoctor = Apellidodoctor;
+    //Metodo publico
+    public Doctor obtenerDoctor(ArrayList<Persona> personas_array, String dniDoc) {
+        Doctor obDocCita = null;
+        for (Persona persona : personas_array) {
+            if (persona instanceof Doctor && persona.getDNI().equalsIgnoreCase(dniDoc)) {
+                obDocCita = new Doctor(((Doctor) persona).getDNI(), ((Doctor) persona).getUsuario(), ((Doctor) persona).getContraseña(), ((Doctor) persona).getNombre(),
+                        ((Doctor) persona).getApellido(), ((Doctor) persona).getFecha_naci(), ((Doctor) persona).getNumero(), ((Doctor) persona).getDistrito());
+            }
+        }
+        return obDocCita;
     }
 
-    public String getApellidopaciente() {
-        return Apellidopaciente;
+    public Paciente obtenerPaciente(ArrayList<Persona> personas_array, String dniPaciente) {
+        Paciente obPacCita = null;
+        for (Persona persona : personas_array) {
+            if (persona instanceof Paciente && persona.getDNI().equalsIgnoreCase(dniPaciente)) {
+                obPacCita = new Paciente(((Paciente) persona).getDNI(), ((Paciente) persona).getUsuario(), ((Paciente) persona).getContraseña(), ((Paciente) persona).getNombre(),
+                        ((Paciente) persona).getApellido(), ((Paciente) persona).getNumero(), ((Paciente) persona).getFecha_naci());
+            }
+        }
+        return obPacCita;
     }
-
-    public void setApellidopaciente(String Apellidopaciente) {
-        this.Apellidopaciente = Apellidopaciente;
-    }        
 }

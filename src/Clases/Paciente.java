@@ -26,30 +26,31 @@ public class Paciente extends Persona {
     {   
         return Espaciente=true;
     }    
-    //Metodos implementados
-    
-    public String [] login(Connection conectar,String usuario, String contraseña){
-        String DNI=null;//dni null
-        String datosEnviar[] = new String[3];
+    //Metodos implementados    
+    @Override
+    public Paciente login(Connection conectar, String usuario, String contraseña) {
+        Paciente obPa=null;
         Connection conexion=conectar;//objeto conectar 
         try {
-            String Buscando_paciente = ("SELECT dni,nombre,apellido FROM paciente WHERE contraseña = '" + contraseña + "'");
+            String Buscando_paciente = ("SELECT * FROM paciente WHERE contraseña = '" + contraseña + "'");
             sentencia_preparada = conexion.prepareStatement(Buscando_paciente);//preparandpsentencia buscando
             resultado = sentencia_preparada.executeQuery();//botamos el resultado   
-            if(resultado.next()){//si encuentra
-                String Nombre_usuario = resultado.getString("nombre");
-                String apellidoUsuario=resultado.getString("apellido");                
-                DNI =resultado.getString("dni");
-                datosEnviar[0]=DNI;
-                datosEnviar[1]=Nombre_usuario;
-                datosEnviar[2]=apellidoUsuario;
-                String busqueda_usuario = ("Bienvenido " + Nombre_usuario + " " +apellidoUsuario);
-                JOptionPane.showMessageDialog(null, busqueda_usuario);                                
+            if(resultado.next()){//si encuentra              
+                String DNI =resultado.getString("dni");                
+                String usuarioOb=resultado.getString("usuario");
+                String passOb=resultado.getString("contraseña");
+                String nombre=resultado.getString("nombre");
+                String apellido=resultado.getString("apellido");
+                Date fechaNac = resultado.getDate("fecha_nac");
+                int telefono=resultado.getInt("telefono");
+                String busqueda_usuario = ("Bienvenido " + nombre + " " +apellido);
+                JOptionPane.showMessageDialog(null, busqueda_usuario);
+                obPa=new Paciente(DNI, usuario, contraseña, nombre, apellido, telefono, fechaNac);
             }
         } catch (HeadlessException | SQLException e) {
             System.out.println(e);
         }
-        return datosEnviar;
+        return obPa;
     }    
         
     @Override

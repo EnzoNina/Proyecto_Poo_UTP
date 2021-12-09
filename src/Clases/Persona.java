@@ -129,15 +129,22 @@ public abstract class Persona implements actividadesPersona<Persona>{
     }           
     //Metodos implementados
     @Override
-    public abstract int modificar(Connection conectar, Persona objetoModificar, ArrayList<Persona> arrayPersona, Persona objetoOriginal);
+    public Persona login(Connection conectar, String usuario, String contraseña) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     @Override
-    public abstract int borrar(Connection conectar, String dni, Persona obOriginal, ArrayList<Persona> arrayPersona);
+    public int registrar(Connection conectar, Persona objetoRegistrar, ArrayList<Persona> arrayPersona) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     @Override
-    public abstract int registrar(Connection conectar, Persona objetoRegistrar,ArrayList<Persona>arrayPersona);
+    public int borrar(Connection conectar, String dni, Persona obOriginal, ArrayList<Persona> arrayPersona) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     @Override
-    public abstract String[] login(Connection conectar, String usuario, String contraseña);
-    
+    public int modificar(Connection conectar, Persona objetoModificar, ArrayList<Persona> arrayPersona, Persona objetoOriginal) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }        
 }

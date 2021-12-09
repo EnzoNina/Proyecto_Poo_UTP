@@ -20,7 +20,8 @@ public class Registro_Citas extends javax.swing.JFrame {
     //Atributos
     Date fecha;
     SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy HH:mm");//objeto Data format
-    String datos[];
+    Paciente obPa;
+    Doctor obDocPa;
     public static PreparedStatement sentencia_preparada;
     public static ResultSet resultado;
     static Connection conexion;
@@ -30,13 +31,14 @@ public class Registro_Citas extends javax.swing.JFrame {
     //Datos de la tabla
     String [] titulos= {"DNI","NOMBRE","APELLIDO","TELEFONO","FECHA NACIMIENTO","DISTRITO"};
     DefaultTableModel tabla_defult = new DefaultTableModel(null, titulos);
-    public Registro_Citas(Connection conectar,ArrayList<Persona> array_pasado, ArrayList<Cita>array_cita_pasada, String []datosPasados) {
+    public Registro_Citas(Connection conectar,ArrayList<Persona> array_pasado, ArrayList<Cita>array_cita_pasada,Paciente obpasado,Doctor obDoctorPasado) {
         conexion=conectar;//nos conectaamos
         initComponents();
         array_persona=array_pasado;      
         array_cita=array_cita_pasada;
         setLocationRelativeTo(null);
-        this.datos=datosPasados;    
+        this.obPa=obpasado;    
+        this.obDocPa=obDoctorPasado;
         llenarTabla();
     }
     public void llenarTabla(){
@@ -70,7 +72,7 @@ public class Registro_Citas extends javax.swing.JFrame {
         fecha=J_cho_cita.getDate();                
         String fecha_String=objSDF.format(fecha);
         //int nro, String dni_doctor, String dni_paciente,String nombredoctor,String nombrepaciente,String Apelldoctor,String Apellpaciente, Date fecha_hora, boolean estado        
-        boolean estadoCita=obCliente.registrarCita(array_cita, new Cita(nro_cita,String.valueOf(tabla_doctores.getValueAt(seleccion,0)),datos[0],String.valueOf(tabla_doctores.getValueAt(seleccion,1)),String.valueOf(tabla_doctores.getValueAt(seleccion,2)),datos[1],datos[2],fecha,true));
+        boolean estadoCita=obCliente.registrarCita(array_cita, new Cita(nro_cita,obDocPa,obCliente,true,fecha));
         //Ingresar a la base de datos
         if(estadoCita){
             JOptionPane.showMessageDialog(null, "La fecha y hora seleccionada ya esta registrada en otra cita, por favor seleccione otra fecha y hora");
@@ -80,9 +82,9 @@ public class Registro_Citas extends javax.swing.JFrame {
                ingresar.setString(1,String.valueOf(tabla_doctores.getValueAt(seleccion,0)));//Dni doctor
                ingresar.setString(2,String.valueOf(tabla_doctores.getValueAt(seleccion,1)));//nombre doctor
                ingresar.setString(3,String.valueOf(tabla_doctores.getValueAt(seleccion,2)));//Apellido doctor
-               ingresar.setString(4, datos[0]);//dni paciente
-               ingresar.setString(5, datos[1]);//nombre paciente
-               ingresar.setString(6, datos[2]);//Apellido paciente
+               ingresar.setString(4, obPa.getDNI());//dni paciente
+               ingresar.setString(5, obPa.getNombre());//nombre paciente
+               ingresar.setString(6, obPa.getApellido());//Apellido paciente
                ingresar.setString(7,fecha_String);//fecha
                ingresar.setBoolean(8,true);//estado
                ingresar.executeUpdate();
@@ -91,15 +93,15 @@ public class Registro_Citas extends javax.swing.JFrame {
             }
             String aviso ="Cita registrada correctamente"+"\nNro de cita: "+nro_cita+"\nDni Doctor: " + String.valueOf(tabla_doctores.getValueAt(seleccion,0))
                     +"\nNombre Doctor: " + String.valueOf(tabla_doctores.getValueAt(seleccion,1))+"\nApellido Doctor: " + String.valueOf(tabla_doctores.getValueAt(seleccion,2))
-                    +"\nDni paciente: "+datos[0]+"\nNombre paciente: "+datos[1]+"\nApellido paciente: "+datos[2] 
+                    +"\nDni paciente: "+obPa.getDNI()+"\nNombre paciente: "+obPa.getNombre()+"\nApellido paciente: "+obPa.getApellido()
                     + "\nFecha Cita: " +fecha_String;
             JOptionPane.showMessageDialog(null, aviso,"Aviso",JOptionPane.INFORMATION_MESSAGE);
         }
     }
     public void mostrarCita(){
         for (Cita cita : array_cita) {
-            JOptionPane.showMessageDialog(null,cita.getNro() +  "\n"+cita.getDni_doctor() +  
-                                "\n"+ cita.getDni_paciente()+  "\n" + cita.getFecha_hora());
+            JOptionPane.showMessageDialog(null,cita.getNro() +  "\n"+cita.getDoctor().getDNI() +  
+                                "\n"+ cita.getPaciente().getDNI()+  "\n" + cita.getFecha_hora());
         }
     }
     public void mostrarHorario(){
@@ -108,9 +110,9 @@ public class Registro_Citas extends javax.swing.JFrame {
         DefaultTableModel tabla_horario = new DefaultTableModel(null, arrayTitulos_horario);//Nueva tabla de modelo                
         tabla_horario.setRowCount(0);
         for (Cita cita : array_cita) {
-            if(cita.getDni_doctor().equals(String.valueOf(tabla_doctores.getValueAt(seleccion,0)))){
+            if(cita.getDoctor().getDNI().equals(String.valueOf(tabla_doctores.getValueAt(seleccion,0)))){
                 String fecha=objSDF.format(cita.getFecha_hora());
-                tabla_horario.addRow(new Object[]{cita.getDni_doctor(),cita.getDni_paciente(),fecha});
+                tabla_horario.addRow(new Object[]{cita.getDoctor().getDNI(),cita.getPaciente().getDNI(),fecha});
             }
         }
         tabla_doctores.setModel(tabla_horario);

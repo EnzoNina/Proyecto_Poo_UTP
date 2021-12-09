@@ -11,29 +11,36 @@ public class Administrador extends Persona{
     public static PreparedStatement sentencia_preparada;
     public static ResultSet resultado;
     private boolean EsAdmi=false;
+    //constructor
+
+    public Administrador() {
+    }
+
+    public Administrador(String DNI, String Usuario, String Contraseña, String Nombre, String Apellido, int Numero, Date fecha_naci) {
+        super(DNI, Usuario, Contraseña, Nombre, Apellido, Numero, fecha_naci);
+    }
     
     public boolean getAdmi()
     {   
         return EsAdmi=true;           //aca en el login miraremos la situacion si se convierto en verdadeo ara algo
     }
     //Metodos publicos
-    public int modificarCita(Connection conectar,ArrayList<Cita>arrayCita,Cita objetoCita,int nroCita,String dni_doctor,String nombreDoc,String apeDoc,
-        String dniPaciente,String nomPaciente,String apePaciente,Date fechaHora,boolean estado){
+    public int modificarCita(Connection conectar,ArrayList<Cita>arrayCita,Cita objetoCita,int nroCita){
         SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy HH:mm");
         Connection conexion=conectar;
         int rlt=-1;          
         try {
             //Sentencia para modificar los datos de la base de datos
             sentencia_preparada=conexion.prepareStatement("update cita set dni_doctor=?,nombredoctor=?,Apellidodoctor=?,dni_cliente=?,nombrepaciente=?,Apellidopaciente=?,fecha_hora=?,estado=? WHERE nro_cita=?");
-            sentencia_preparada.setString(1, dni_doctor);
-            sentencia_preparada.setString(2, nombreDoc);
-            sentencia_preparada.setString(3, apeDoc);
-            sentencia_preparada.setString(4, dniPaciente);
-            sentencia_preparada.setString(5, nomPaciente);
-            sentencia_preparada.setString(6, apePaciente);
-            String fecha=sdf.format(fechaHora);
+            sentencia_preparada.setString(1, objetoCita.getDoctor().getDNI());
+            sentencia_preparada.setString(2, objetoCita.getDoctor().getNombre());
+            sentencia_preparada.setString(3, objetoCita.getDoctor().getApellido());
+            sentencia_preparada.setString(4, objetoCita.getPaciente().getDNI());
+            sentencia_preparada.setString(5, objetoCita.getPaciente().getNombre());
+            sentencia_preparada.setString(6, objetoCita.getPaciente().getApellido());
+            String fecha=sdf.format(objetoCita.getFecha_hora());
             sentencia_preparada.setString(7, fecha);
-            sentencia_preparada.setBoolean(8, estado);
+            sentencia_preparada.setBoolean(8, objetoCita.getEstado());
             sentencia_preparada.setInt(9, objetoCita.getNro());
             rlt=sentencia_preparada.executeUpdate();            
         } catch (Exception e) {
@@ -55,28 +62,31 @@ public class Administrador extends Persona{
     }
     //Metodos implementados
     @Override
-    public String[] login(Connection conectar, String usuario, String contraseña) {
+    public Administrador login(Connection conectar, String usuario, String contraseña) {
         Connection conexion=conectar;
-        String idAdministrador=null;
-        String [] datos=new String[1];
+        Administrador obAdmi = null;
         try {
-            String sentencia_buscar = ("SELECT id,usuario,contraseña FROM Administrador WHERE usuario = '" + usuario + "' AND contraseña = '" + contraseña + "'");
+            String sentencia_buscar = ("SELECT * FROM Administrador WHERE usuario = '" + usuario + "' AND contraseña = '" + contraseña + "'");
             sentencia_preparada = conexion.prepareStatement(sentencia_buscar);
             resultado = sentencia_preparada.executeQuery();
             //condicion 
             if (resultado.next()) {                                
-                idAdministrador = resultado.getString("id");
-                datos[0]=idAdministrador;
-                String busqueda_usuario_doctor = ("Bienvenido Administrador " + idAdministrador);                
-                JOptionPane.showMessageDialog(null, busqueda_usuario_doctor);                
+                String idAdministrador = resultado.getString("dni");
+                String usuarioOb=resultado.getString("usuario");
+                String passOb=resultado.getString("contraseña");
+                String nombre=resultado.getString("nombre");
+                String apellido=resultado.getString("apellido");
+                Date fechaNac = resultado.getDate("fecha_nac");
+                int telefono=resultado.getInt("telefono");
+                String busqueda_usuario_doctor = ("Bienvenido Administrador " + idAdministrador);
+                JOptionPane.showMessageDialog(null, busqueda_usuario_doctor);
+                obAdmi = new Administrador(idAdministrador, usuario, contraseña, nombre, apellido, telefono, fechaNac);
             }
         } catch (Exception e) {
             System.out.println(e);
         }
-        return datos;
-    }
-    //Validacion      
-
+        return obAdmi;
+    }    
     @Override
     public int modificar(Connection cnctn, Persona prsn, ArrayList<Persona> al, Persona prsn1) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -91,4 +101,5 @@ public class Administrador extends Persona{
     public int registrar(Connection conectar, Persona objetoRegistrar,ArrayList<Persona>arrayPersona) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }       
+    
 }

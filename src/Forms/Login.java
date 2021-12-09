@@ -16,50 +16,54 @@ public class Login extends javax.swing.JFrame {
     public static PreparedStatement sentencia_preparada;
     public static ResultSet resultado;
     static Connection conexion;
-    Paciente obPaciente = new Paciente();  
+    Paciente obPaciente = new Paciente();
+    Administrador obAdmiPa;
+    Paciente obPaciPa;
+    Doctor obDocPa;
+    Cita obCita = new Cita();
     ArrayList<Persona> personas_array = new ArrayList<Persona>();//lista personas
-    ArrayList<Cita> array_cita = new ArrayList<Cita>();//lista citas
-   // ArrayList<historiaClinica> array_historiaClinica = new ArrayList<historiaClinica>();
-    ArrayList<historiaClinica> array_historiaClinica=new ArrayList<historiaClinica>();
-    //lista de historia clinica
-    //CONSTRCUTOR 
-    public void cargar() {
-        //Cargamos datos del array de la cita
+    ArrayList<Cita> array_cita=new ArrayList<Cita>();//lista citas
+    ArrayList<historiaClinica> array_historiaClinica = new ArrayList<historiaClinica>();
+
+    public void cargarCitas() {
+        Doctor odDocCita = null;
+        Paciente obPacCita = null;
         try {
-            PreparedStatement cita = conexion.prepareStatement("Select nro_cita,dni_doctor,dni_cliente,nombredoctor,nombrepaciente,Apellidodoctor,Apellidopaciente,fecha_hora,estado from cita");
+            PreparedStatement cita = conexion.prepareStatement("Select nro_cita,dni_doctor,dni_cliente,fecha_hora,estado from cita");
             ResultSet resultado_cita = cita.executeQuery();
             while (resultado_cita.next()) {
                 int nro_cita = resultado_cita.getInt("nro_cita");
                 String dni_doctor = resultado_cita.getString("dni_doctor");
                 String dni_cliente = resultado_cita.getString("dni_cliente");
-                String nombredoctor=resultado_cita.getString("nombredoctor");
-                String nombrepaciente=resultado_cita.getString("nombrepaciente");
-                String Apellidodoctor=resultado_cita.getString("Apellidodoctor");
-                String Apellidopaciente=resultado_cita.getString("Apellidopaciente");
-                String fecha_hora = resultado_cita.getString("fecha_hora");
+                String fecha_horaC = resultado_cita.getString("fecha_hora");
                 SimpleDateFormat formateo = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                Date fecha_formateada = formateo.parse(fecha_hora);
-                boolean estado = resultado_cita.getBoolean("estado");                
-                Cita obcita = new Cita(nro_cita, dni_doctor, dni_cliente,nombredoctor,Apellidodoctor,nombrepaciente,Apellidopaciente, fecha_formateada,estado);
+                Date fecha_formateada = formateo.parse(fecha_horaC);
+                boolean estadoC = resultado_cita.getBoolean("estado");
+                odDocCita=obCita.obtenerDoctor(personas_array, dni_doctor);
+                obPacCita=obCita.obtenerPaciente(personas_array, dni_cliente);               
+                Cita obcita = new Cita(nro_cita, odDocCita, obPacCita, estadoC, fecha_formateada);
                 array_cita.add(obcita);
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
+    }
+
+    public void cargar() {
         //Cargamos los datos de los pacientes
         try {
             PreparedStatement pacientes = conexion.prepareStatement("Select dni,usuario,contraseña,nombre,apellido,fecha_nac,telefono from paciente");
-            ResultSet resultado = pacientes.executeQuery();
-            while (resultado.next()) {
-                String dni = resultado.getString("dni");
-                String usuario_lista = resultado.getString("usuario");
-                String contraseña_lista = resultado.getString("contraseña");
-                String nombre = resultado.getString("nombre");
-                String apellido = resultado.getString("apellido");
-                String fecha_nac = resultado.getString("fecha_nac");
+            ResultSet resultadoPaci = pacientes.executeQuery();
+            while (resultadoPaci.next()) {
+                String dni = resultadoPaci.getString("dni");
+                String usuario_lista = resultadoPaci.getString("usuario");
+                String contraseña_lista = resultadoPaci.getString("contraseña");
+                String nombre = resultadoPaci.getString("nombre");
+                String apellido = resultadoPaci.getString("apellido");
+                String fecha_nac = resultadoPaci.getString("fecha_nac");
                 SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy");
                 Date fecha_date = objSDF.parse(fecha_nac);
-                String telefono = resultado.getString("telefono");
+                String telefono = resultadoPaci.getString("telefono");
                 Paciente personas = new Paciente(dni, usuario_lista, contraseña_lista, nombre, apellido, Integer.parseInt(telefono), fecha_date);
                 personas_array.add(personas);
             }
@@ -69,18 +73,18 @@ public class Login extends javax.swing.JFrame {
         //Cargamos informacion de los doctores
         try {
             PreparedStatement doctor = conexion.prepareStatement("Select dni,usuario,contraseña,nombre,apellido,fecha_nac,telefono,distrito from doctor");
-            ResultSet resultado = doctor.executeQuery();
-            while (resultado.next()) {
-                String dni = resultado.getString("dni");
-                String usuario_lista = resultado.getString("usuario");
-                String contraseña_lista = resultado.getString("contraseña");
-                String nombre = resultado.getString("nombre");
-                String apellido = resultado.getString("apellido");
-                String fecha_nac = resultado.getString("fecha_nac");
+            ResultSet resultadoDoc = doctor.executeQuery();
+            while (resultadoDoc.next()) {
+                String dni = resultadoDoc.getString("dni");
+                String usuario_lista = resultadoDoc.getString("usuario");
+                String contraseña_lista = resultadoDoc.getString("contraseña");
+                String nombre = resultadoDoc.getString("nombre");
+                String apellido = resultadoDoc.getString("apellido");
+                String fecha_nac = resultadoDoc.getString("fecha_nac");
                 SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy");
                 Date fecha_date = objSDF.parse(fecha_nac);
-                String telefono = resultado.getString("telefono");
-                String distrito = resultado.getString("distrito");
+                String telefono = resultadoDoc.getString("telefono");
+                String distrito = resultadoDoc.getString("distrito");
                 Doctor doctores = new Doctor(dni, usuario_lista, contraseña_lista, nombre, apellido, fecha_date, Integer.parseInt(telefono), distrito);
                 personas_array.add(doctores);
             }
@@ -90,65 +94,68 @@ public class Login extends javax.swing.JFrame {
         //Cargamos informacion de la historia Clinica
         try {
             PreparedStatement historiaClinica = conexion.prepareStatement("Select nro_historia,dni_doctor,dni_cliente,diagnostico,receta,Fecha from historia_clinica");
-            ResultSet resultado = historiaClinica.executeQuery();
-            while (resultado.next()) {
-                int nroHistoria = resultado.getInt("nro_historia");
-                String dni_doctor = resultado.getString("dni_doctor");
-                String dni_cliente = resultado.getString("dni_cliente");
-                String diagnostico = resultado.getString("diagnostico");  //CREo que es porque, no tiene datos la bsd 
-                String receta = resultado.getString("receta");
-                String Fecha = resultado.getString("Fecha");
+            ResultSet resultadoHisCli = historiaClinica.executeQuery();
+            while (resultadoHisCli.next()) {
+                int nroHistoria = resultadoHisCli.getInt("nro_historia");
+                String dni_doctor = resultadoHisCli.getString("dni_doctor");
+                String dni_cliente = resultadoHisCli.getString("dni_cliente");
+                String diagnostico = resultadoHisCli.getString("diagnostico");  //CREo que es porque, no tiene datos la bsd 
+                String receta = resultadoHisCli.getString("receta");
+                String Fecha = resultadoHisCli.getString("Fecha");
                 SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 Date fecha_date = objSDF.parse(Fecha);
-               // array_historiaClinica.add(new historiaClinica(nroHistoria, dni_cliente, dni_doctor, diagnostico, receta,fecha_date));
-               array_historiaClinica.add(new historiaClinica(nroHistoria,dni_cliente,dni_doctor,diagnostico,receta,fecha_date));
+                // array_historiaClinica.add(new historiaClinica(nroHistoria, dni_cliente, dni_doctor, diagnostico, receta,fecha_date));
+                array_historiaClinica.add(new historiaClinica(nroHistoria, dni_cliente, dni_doctor, diagnostico, receta, fecha_date));
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage().toString());
         }
     }
-    
+
     //Constructor
     public Login(Connection conectar) {
         initComponents();
         setLocationRelativeTo(null);//Posicion de la ventana en le medio de la ventana
-        conexion=conectar;
+        conexion = conectar;
         cargar();//CARGA DATOS
+        cargarCitas();
     }
 
     //buscando usuario en la base de datos VERIFICANDO 
     public void verificando_paciente(String usuario, String contraseña) {//verifico si es un paciente                       
-        String datos[]=obPaciente.login(conexion,usuario, contraseña);
-        if(datos[0]!=null){
-            Registro_Citas objregistro = new Registro_Citas(conexion, personas_array, array_cita, datos);        
+        obPaciPa = obPaciente.login(conexion, usuario, contraseña);        
+        if (obPaciPa != null) {
+            Registro_Citas objregistro = new Registro_Citas(conexion, personas_array, array_cita, obPaciPa, obDocPa);
             objregistro.setVisible(true);
-            this.dispose();        
-        }else
+            this.dispose();
+        } else {
             JOptionPane.showMessageDialog(null, "Usuario y contraseña incorrecta");//si no no entro
+        }
     }
-
     //Buscando en la base de datos si el usuario es un doctor 
-    public void verificando_Doctor(String usuario, String contraseña) {
-        Doctor obDoctor=new Doctor();
-        String datos[]=obDoctor.login(conexion,usuario, contraseña);
-        if(datos[0]!=null){
-            Atencion_Pacientes objPacientes = new Atencion_Pacientes(datos,conexion,array_cita,array_historiaClinica);//si no es doctor ,es un paciente
+    public void verificando_Doctor(String usuario, String contraseña){
+        Doctor obDoctor = new Doctor();
+        obDocPa = obDoctor.login(conexion, usuario, contraseña);
+        if (obDocPa != null) {
+            Atencion_Pacientes objPacientes = new Atencion_Pacientes(obDocPa, conexion, array_cita, array_historiaClinica);//si no es doctor ,es un paciente
             objPacientes.setVisible(true);
             this.dispose();
-        }else
+        } else {
             JOptionPane.showMessageDialog(null, "Usuario y contraseña incorrecta");
+        }
     }
 
     //MIRANDO SI ES UN Administrador 
     public void VerificandoAdministrador(String usuario, String contraseña) {
-        Administrador obadmi=new Administrador();
-        String datos[]=obadmi.login(conexion, usuario, contraseña);
-        if(datos[0]!=null){
-            Menu objmenu = new Menu(conexion,array_cita,personas_array);
+        Administrador obadmi = new Administrador();
+        obAdmiPa = obadmi.login(conexion, usuario, contraseña);
+        if (obAdmiPa != null) {
+            Menu objmenu = new Menu(conexion, array_cita, personas_array);
             objmenu.setVisible(true);
-            this.dispose(); 
-        }else
+            this.dispose();
+        } else {
             JOptionPane.showMessageDialog(null, "Usuario y contraseña incorrecta");
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -215,11 +222,12 @@ public class Login extends javax.swing.JFrame {
                         .addGap(142, 142, 142)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lbl_aviso)
-                            .addComponent(btn_crear_cuenta)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(154, 154, 154)
-                        .addComponent(btn_ingresar)))
-                .addGap(35, 35, 35))
+                            .addComponent(btn_crear_cuenta))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(154, 154, 154)
+                .addComponent(btn_ingresar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

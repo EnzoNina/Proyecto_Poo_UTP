@@ -19,7 +19,7 @@ public class Mante_Citas extends javax.swing.JFrame {
     ArrayList<Cita> arrayCita = new ArrayList<Cita>();//aqui creo un array list 
     ArrayList<Persona> arrayPersona= new ArrayList<Persona>();
     static Connection conexion;//statico la conexion
-    Cita objcita;
+    Cita objcita = new Cita();
     Administrador ob_administrador = new Administrador();
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     //Inicializo la tabla 
@@ -67,8 +67,8 @@ public class Mante_Citas extends javax.swing.JFrame {
         tabla.setRowCount(0);//primera fila
         for (Cita cita : arrayCita) {
             String fecha = sdf.format(cita.getFecha_hora());
-            tabla.addRow(new Object[]{cita.getNro(), cita.getDni_doctor(), cita.getNombredoctor(), cita.getApellidodoctor(), cita.getDni_paciente(),
-                cita.getNombrepaciente(), cita.getApellidopaciente(), fecha, cita.getEstado()});
+            tabla.addRow(new Object[]{cita.getNro(), cita.getDoctor().getDNI(), cita.getDoctor().getNombre(), cita.getDoctor().getApellido(), cita.getPaciente().getDNI(),
+                cita.getPaciente().getNombre(),cita.getPaciente().getApellido(), fecha, cita.getEstado()});
         }
         jtabla_citas.setModel(tabla);//Establemos el modelo de la tabla
 
@@ -387,12 +387,12 @@ public class Mante_Citas extends javax.swing.JFrame {
         String fecha = sdf.format(jdate_fechaHora.getDate());
         boolean estado = Boolean.parseBoolean(txt_estado.getText());
         int nroCita = Integer.parseInt(String.valueOf(jtabla_citas.getValueAt(seleccion, 0)));
-        String nombreDoctor = txtNombreDoctor.getText();
-        String ApellidoDoctor = txtApellidoDoctor.getText();
-        String nombrePaciente = txtNombrePaciente.getText();
-        String ApellidoPaciente = txtApellidoPaciente.getText();
-        Cita objetoNuevo = new Cita(nroCita,comboDoctor.getSelectedItem().toString(),comboPaciente.getSelectedItem().toString(), nombreDoctor, ApellidoDoctor, nombrePaciente, ApellidoPaciente, jdate_fechaHora.getDate(), estado);
-        ob_administrador.modificarCita(conexion, arrayCita, objetoNuevo, seleccion, comboDoctor.getSelectedItem().toString(),nombreDoctor,ApellidoDoctor,comboPaciente.getSelectedItem().toString(),nombrePaciente,ApellidoPaciente, jdate_fechaHora.getDate(), estado);
+        String dniDoc=comboDoctor.getSelectedItem().toString();
+        String dniPac=comboPaciente.getSelectedItem().toString();
+        Doctor obDoctorNuevo=objcita.obtenerDoctor(arrayPersona,dniDoc);
+        Paciente obPacienteNuevo=objcita.obtenerPaciente(arrayPersona,dniPac);
+        Cita objetoNuevo = new Cita(nroCita,obDoctorNuevo,obPacienteNuevo,estado,jdate_fechaHora.getDate());
+        ob_administrador.modificarCita(conexion,arrayCita,objetoNuevo,seleccion);
         mostrar();
     }//GEN-LAST:event_txt_editarActionPerformed
 
