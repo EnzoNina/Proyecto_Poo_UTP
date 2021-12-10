@@ -7,6 +7,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -28,7 +36,7 @@ public class Paciente extends Persona {
     }    
     //Metodos implementados    
     @Override
-    public Paciente login(Connection conectar, String usuario, String contraseña) {
+    public Paciente login(Connection conectar, String usuario, String contraseña){
         Paciente obPa=null;
         Connection conexion=conectar;//objeto conectar 
         try {
@@ -132,6 +140,34 @@ public class Paciente extends Persona {
         arrayPersona.set(posicion-1, obModificar);
         return rlt;
     }
+    //Metodos publicos
+    public void enviarCorreo(String Correo,String contenido){
+        Properties propiedad=new Properties();
+        propiedad.setProperty( "mail.smtp.host", "smtp.gmail.com");
+        propiedad.setProperty( "mail.smtp.starttls.enable", "true");
+        propiedad.setProperty( "mail.smtp.port", "587");
+        propiedad.setProperty( "mail.smtp.auth", "true");
+        Session sesion=Session.getDefaultInstance(propiedad);
+        String correoDesde="prueba022545@gmail.com";
+        String passDesde="prueba022";
+        String destino=Correo;
+        String asunto="CONFIRMACION DE CITA!!";
+        String texto=contenido;
+        MimeMessage mail = new MimeMessage(sesion);
+        try {
+            mail.setFrom(new InternetAddress(correoDesde));
+            mail.addRecipient(Message.RecipientType.TO, new InternetAddress(destino));
+            mail.setSubject(asunto);
+            mail.setText(texto);            
+            Transport transporte = sesion.getTransport("smtp");
+            transporte.connect(correoDesde,passDesde);
+            transporte.sendMessage(mail,mail.getRecipients(Message.RecipientType.TO));
+            transporte.close();
+            System.out.println("Correo Enviado");
+        } catch (MessagingException ex) {
+            Logger.getLogger(Paciente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     //Metodo para llenar la tabla de doctores
     public DefaultTableModel llenar(ArrayList<Persona>arrayList,DefaultTableModel tabla){
         //{"DNI","NOMBRE","APELLIDO","TELEFONO","FECHA NACIMIENTO","DISTRITO"};
@@ -145,10 +181,10 @@ public class Paciente extends Persona {
         }
         return tabla;
     }
-//Metodos QUE REGISTRA CITA
+    //Metodos QUE REGISTRA CITA
     public boolean registrarCita(ArrayList<Cita> array_cita, Cita nuevaCita) {        
         boolean seEncontro = false;        
-        for (Cita cita : array_cita) {  
+        for (Cita cita : array_cita){  
             if (cita.getFecha_hora().equals(nuevaCita.getFecha_hora())) {                
                 seEncontro = true;
             }            

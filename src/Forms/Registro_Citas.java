@@ -70,8 +70,7 @@ public class Registro_Citas extends javax.swing.JFrame {
             nro_cita=array_cita.size()+1;
         }        
         fecha=J_cho_cita.getDate();                
-        String fecha_String=objSDF.format(fecha);
-        //int nro, String dni_doctor, String dni_paciente,String nombredoctor,String nombrepaciente,String Apelldoctor,String Apellpaciente, Date fecha_hora, boolean estado        
+        String fecha_String=objSDF.format(fecha);        
         boolean estadoCita=obCliente.registrarCita(array_cita, new Cita(nro_cita,obDocPa,obCliente,true,fecha));
         //Ingresar a la base de datos
         if(estadoCita){
@@ -91,17 +90,12 @@ public class Registro_Citas extends javax.swing.JFrame {
             }catch (Exception e){            
                 JOptionPane.showMessageDialog(null,e);
             }
-            String aviso ="Cita registrada correctamente"+"\nNro de cita: "+nro_cita+"\nDni Doctor: " + String.valueOf(tabla_doctores.getValueAt(seleccion,0))
+            String contenido ="Cita registrada correctamente"+"\nNro de cita: "+nro_cita+"\nDni Doctor: " + String.valueOf(tabla_doctores.getValueAt(seleccion,0))
                     +"\nNombre Doctor: " + String.valueOf(tabla_doctores.getValueAt(seleccion,1))+"\nApellido Doctor: " + String.valueOf(tabla_doctores.getValueAt(seleccion,2))
                     +"\nDni paciente: "+obPa.getDNI()+"\nNombre paciente: "+obPa.getNombre()+"\nApellido paciente: "+obPa.getApellido()
                     + "\nFecha Cita: " +fecha_String;
-            JOptionPane.showMessageDialog(null, aviso,"Aviso",JOptionPane.INFORMATION_MESSAGE);
-        }
-    }
-    public void mostrarCita(){
-        for (Cita cita : array_cita) {
-            JOptionPane.showMessageDialog(null,cita.getNro() +  "\n"+cita.getDoctor().getDNI() +  
-                                "\n"+ cita.getPaciente().getDNI()+  "\n" + cita.getFecha_hora());
+            obCliente.enviarCorreo(txtCorreo.getText(), contenido);
+            //JOptionPane.showMessageDialog(null, contenido,"Aviso",JOptionPane.INFORMATION_MESSAGE);
         }
     }
     public void mostrarHorario(){
@@ -132,7 +126,8 @@ public class Registro_Citas extends javax.swing.JFrame {
         btn_buscar_doct = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         J_cho_cita = new com.toedter.calendar.JDateChooser();
-        btn_mostrarCita = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        txtCorreo = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -169,12 +164,7 @@ public class Registro_Citas extends javax.swing.JFrame {
 
         J_cho_cita.setDateFormatString("dd/MM/yyyy HH:mm");
 
-        btn_mostrarCita.setText("Mostrar Cita ");
-        btn_mostrarCita.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_mostrarCitaActionPerformed(evt);
-            }
-        });
+        jLabel3.setText("Correo electronico:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -197,16 +187,19 @@ public class Registro_Citas extends javax.swing.JFrame {
                         .addComponent(txt_buscador, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(61, 61, 61)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btn_mostrarCita)
-                            .addComponent(Btn_agendar_cita)))
+                        .addComponent(Btn_agendar_cita))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(69, 69, 69)
                         .addComponent(jLabel1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(61, 61, 61)
-                        .addComponent(btn_buscar_doct)))
-                .addGap(20, 20, 20)
+                        .addGap(63, 63, 63)
+                        .addComponent(btn_buscar_doct))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 626, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -220,8 +213,12 @@ public class Registro_Citas extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(txt_buscador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(15, 15, 15)
                 .addComponent(btn_buscar_doct)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_mostrar_horario)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
@@ -229,9 +226,7 @@ public class Registro_Citas extends javax.swing.JFrame {
                 .addComponent(J_cho_cita, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25)
                 .addComponent(Btn_agendar_cita)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btn_mostrarCita)
-                .addGap(13, 13, 13))
+                .addGap(53, 53, 53))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE)
@@ -255,16 +250,12 @@ public class Registro_Citas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void Btn_agendar_citaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_agendar_citaActionPerformed
-        agendarCita();
+        agendarCita();        
     }//GEN-LAST:event_Btn_agendar_citaActionPerformed
 
     private void btn_buscar_doctActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_buscar_doctActionPerformed
         buscarDoctor();
     }//GEN-LAST:event_btn_buscar_doctActionPerformed
-
-    private void btn_mostrarCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_mostrarCitaActionPerformed
-        mostrarCita();
-    }//GEN-LAST:event_btn_mostrarCitaActionPerformed
 
     private void btn_mostrar_horarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_mostrar_horarioActionPerformed
         mostrarHorario();
@@ -307,13 +298,14 @@ public class Registro_Citas extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser J_cho_cita;
     private javax.swing.JComboBox<String> Jcb_buscar;
     private javax.swing.JButton btn_buscar_doct;
-    private javax.swing.JButton btn_mostrarCita;
     private javax.swing.JButton btn_mostrar_horario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tabla_doctores;
+    private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txt_buscador;
     // End of variables declaration//GEN-END:variables
 }

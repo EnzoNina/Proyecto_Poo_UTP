@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public abstract class Persona implements actividadesPersona<Persona>{
-    private String DNI;
+    private String DNI;    
     private String Usuario;
     private String Contraseña;
     private String Nombre;

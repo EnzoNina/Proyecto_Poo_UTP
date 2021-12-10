@@ -123,7 +123,7 @@ public class Login extends javax.swing.JFrame {
 
     //buscando usuario en la base de datos VERIFICANDO 
     public void verificando_paciente(String usuario, String contraseña) {//verifico si es un paciente                       
-        obPaciPa = obPaciente.login(conexion, usuario, contraseña);        
+        obPaciPa = obPaciente.login(conexion, usuario, contraseña);
         if (obPaciPa != null) {
             Registro_Citas objregistro = new Registro_Citas(conexion, personas_array, array_cita, obPaciPa, obDocPa);
             objregistro.setVisible(true);

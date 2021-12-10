@@ -383,8 +383,7 @@ public class Mante_Citas extends javax.swing.JFrame {
     }//GEN-LAST:event_btnbuscarClienteActionPerformed
 
     private void txt_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_editarActionPerformed
-        int seleccion = jtabla_citas.getSelectedRow();//Atributo para escoger la fila de la tabla
-        String fecha = sdf.format(jdate_fechaHora.getDate());
+        int seleccion = jtabla_citas.getSelectedRow();//Atributo para escoger la fila de la tabla        
         boolean estado = Boolean.parseBoolean(txt_estado.getText());
         int nroCita = Integer.parseInt(String.valueOf(jtabla_citas.getValueAt(seleccion, 0)));
         String dniDoc=comboDoctor.getSelectedItem().toString();
