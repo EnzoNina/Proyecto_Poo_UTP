@@ -8320,9 +8320,9 @@
 										"$ref": "AAAAAAF9n6Ry1tLMx9c="
 									},
 									"font": "Arial;13;0",
-									"left": 540,
+									"left": 539,
 									"top": 1177,
-									"width": 5.05908203125,
+									"width": 6.5,
 									"height": 13,
 									"alpha": 0.5235987755982988,
 									"distance": 25,
@@ -8591,9 +8591,9 @@
 										"$ref": "AAAAAAF9n6R6UNNLKc0="
 									},
 									"font": "Arial;13;0",
-									"left": 707,
+									"left": 706,
 									"top": 1156,
-									"width": 5.05908203125,
+									"width": 6.5,
 									"height": 13,
 									"alpha": 0.5235987755982988,
 									"distance": 25,
@@ -8674,6 +8674,97 @@
 							"headQualifiersCompartment": {
 								"$ref": "AAAAAAF9n6R6UdNYnvo="
 							}
+						},
+						{
+							"_type": "UMLTextView",
+							"_id": "AAAAAAF9oWMUoSRZu34=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"font": "Arial;13;0",
+							"left": 424,
+							"top": 1144,
+							"width": 75.76806640625,
+							"height": 25,
+							"text": "Agregacion"
+						},
+						{
+							"_type": "UMLTextView",
+							"_id": "AAAAAAF9oWNVTSV+Mmc=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"font": "Arial;13;0",
+							"left": 480,
+							"top": 864,
+							"width": 96.71533203125,
+							"height": 25,
+							"text": "Generalizacion"
+						},
+						{
+							"_type": "UMLTextView",
+							"_id": "AAAAAAF9oWOaGCgdMy8=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"font": "Arial;13;0",
+							"left": 552,
+							"top": 688,
+							"width": 86.6162109375,
+							"height": 25,
+							"text": "Dependencia"
+						},
+						{
+							"_type": "UMLTextView",
+							"_id": "AAAAAAF9oWP+uC/x4/E=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"font": "Arial;13;0",
+							"left": 1200,
+							"top": 512,
+							"width": 86.6162109375,
+							"height": 25,
+							"text": "Dependencia"
+						},
+						{
+							"_type": "UMLTextView",
+							"_id": "AAAAAAF9oWQWETGV6z0=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"font": "Arial;13;0",
+							"left": 1376,
+							"top": 384,
+							"width": 86.6162109375,
+							"height": 25,
+							"text": "Dependencia"
+						},
+						{
+							"_type": "UMLTextView",
+							"_id": "AAAAAAF9oWQp1zZ0M6g=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"font": "Arial;13;0",
+							"left": 616,
+							"top": 280,
+							"width": 86.6162109375,
+							"height": 25,
+							"text": "Dependencia"
+						},
+						{
+							"_type": "UMLTextView",
+							"_id": "AAAAAAF9oWQ2cDdkUK0=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"font": "Arial;13;0",
+							"left": 488,
+							"top": 136,
+							"width": 86.6162109375,
+							"height": 25,
+							"text": "Dependencia"
 						}
 					]
 				},

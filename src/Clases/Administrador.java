@@ -76,11 +76,13 @@ public class Administrador extends Persona{
                 String passOb=resultado.getString("contraseña");
                 String nombre=resultado.getString("nombre");
                 String apellido=resultado.getString("apellido");
-                Date fechaNac = resultado.getDate("fecha_nac");
+                String fechaNac = resultado.getString("fecha_nac");
+                SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy");
+                Date fecha_date = objSDF.parse(fechaNac);
                 int telefono=resultado.getInt("telefono");
                 String busqueda_usuario_doctor = ("Bienvenido Administrador " + idAdministrador);
                 JOptionPane.showMessageDialog(null, busqueda_usuario_doctor);
-                obAdmi = new Administrador(idAdministrador, usuario, contraseña, nombre, apellido, telefono, fechaNac);
+                obAdmi = new Administrador(idAdministrador, usuario, contraseña, nombre, apellido, telefono, fecha_date);
             }
         } catch (Exception e) {
             System.out.println(e);

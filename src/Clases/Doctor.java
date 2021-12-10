@@ -58,13 +58,15 @@ public class Doctor extends Persona {
                 String passOb=resultado.getString("contraseña");
                 String nombre=resultado.getString("nombre");
                 String apellido=resultado.getString("apellido");
-                Date fechaNac = resultado.getDate("fecha_nac");
+                String fechaNac = resultado.getString("fecha_nac");
+                SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy");
+                Date fecha_date = objSDF.parse(fechaNac);
                 int telefono=resultado.getInt("telefono");
                 String distritoDo=resultado.getString("distrito");
                 String busqueda_usuario_doctor = ("Bienvenido Doctor " + nombre + " " + apellido);//CREO UN OBJETO DOCTOR ESTE DESPUE LLAMO AL METODO CARAGARDATOSDELDOCTOR Y PORFIN LO COMPLETO Y ASI ESTE PUEDE FUNCIONAR 
                 String dniDoctor = resultado.getString("dni");
                 JOptionPane.showMessageDialog(null, busqueda_usuario_doctor);
-                obDoc=new Doctor(DNI, usuarioOb, passOb, nombre, apellido, fechaNac, telefono, distritoDo);
+                obDoc=new Doctor(DNI, usuarioOb, passOb, nombre, apellido, fecha_date, telefono, distritoDo);
             }
         } catch (Exception e) {
             System.out.println(e);

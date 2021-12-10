@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
@@ -49,14 +50,18 @@ public class Paciente extends Persona {
                 String passOb=resultado.getString("contraseña");
                 String nombre=resultado.getString("nombre");
                 String apellido=resultado.getString("apellido");
-                Date fechaNac = resultado.getDate("fecha_nac");
+                String fechaNac = resultado.getString("fecha_nac");                
+                SimpleDateFormat objSDF = new SimpleDateFormat("dd/MM/yyyy");
+                Date fecha_date = objSDF.parse(fechaNac);
                 int telefono=resultado.getInt("telefono");
                 String busqueda_usuario = ("Bienvenido " + nombre + " " +apellido);
                 JOptionPane.showMessageDialog(null, busqueda_usuario);
-                obPa=new Paciente(DNI, usuario, contraseña, nombre, apellido, telefono, fechaNac);
+                obPa=new Paciente(DNI, usuario, contraseña, nombre, apellido, telefono, fecha_date);
             }
         } catch (HeadlessException | SQLException e) {
             System.out.println(e);
+        } catch (ParseException ex) {
+            Logger.getLogger(Paciente.class.getName()).log(Level.SEVERE, null, ex);
         }
         return obPa;
     }    
